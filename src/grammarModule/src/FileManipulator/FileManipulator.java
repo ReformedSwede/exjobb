@@ -9,7 +9,6 @@ public class FileManipulator {
 
     private File file;
     private LinkedHashMap<String, ArrayList<String>> fileContent;
-    private int index;
 
     private static final String[] sections = {"flags", "cat", "fun", "lincat", "lin", "params", "oper"};
 
@@ -69,13 +68,14 @@ public class FileManipulator {
                         break;
                 }
             }
-
-
         }catch (IOException e){
             e.printStackTrace();
         }
     }
 
+    /**
+     * Pretty prints a parsed file
+     */
     public void printFile(){
         for(Map.Entry<String, ArrayList<String>> element : fileContent.entrySet()){
             if(element.getKey().equals("title")){
@@ -90,41 +90,13 @@ public class FileManipulator {
     }
 
     /**
-     * Searches the file provided in the constructor, for the provided regular expression.
-     * @param regex The regular expression to search for.
-     * @param after If true, the method will insert the text after the found math, o/w before.
-     * @return True, if a match was found, false o/w
+     * Inserts a line of text at a specified section
+     * @param text The text to insert
+     * @param atSection The section to insert the text
      */
-    /*public boolean findPlace(String regex, boolean after){
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(fileContent);
-
-        boolean res = matcher.find();
-        if(res)
-            index = after ? matcher.end() : matcher.start();
-        return res;
-    }*/
-
-    /**
-     * Inserts some text at the match found with findPlace(), in the provided file.
-     * @param text The text to insert.
-     * @param newLine If true, a newLine will be inserted before the text.
-     */
-    /*public void insert(String text, boolean newLine){
-        StringBuilder string = new StringBuilder(fileContent);
-        string.insert(index, (newLine ? "\n" : "") + text);
-
-        try{
-            file.delete();
-            file.createNewFile();
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
-            bw.write(string.toString());
-            bw.flush();
-            bw.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }*/
+    public void insert(String text, String atSection){
+        fileContent.get(atSection).add(text);
+    }
 
     /**
      * Checks if source contains match for regex
@@ -135,5 +107,22 @@ public class FileManipulator {
     private Matcher regex(String regex, String source){
         Pattern pattern = Pattern.compile(regex);
         return pattern.matcher(source);
+    }
+
+    public void saveToFile(){
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(file))){
+            for(Map.Entry<String, ArrayList<String>> element : fileContent.entrySet()){
+                if(element.getKey().equals("title")){
+                    bw.write(element.getValue().get(0) + " {\n");
+                }else{
+                    bw.write("\n\t" + element.getKey() + "\n");
+                    for(String row : element.getValue())
+                        bw.write("\t\t" + row + " ;\n");
+                }
+            }
+            bw.write("}\n");
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }

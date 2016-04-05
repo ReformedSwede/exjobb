@@ -5,32 +5,30 @@ public class GfFileManipulator {
 
     /**
      * Inserts a new word of type 'cat' into the grammar.
-     * @param cat The type of the word
-     * @param word The word to enter
+     * @param cat The type of the word (Keep first letter capitalized!)
+     * @param word The word to enter (Keep all letters lowercase!)
      * @return True, if an insertion was made, False, o/w
      */
-    public boolean insertLin(String cat, String word){
+    public boolean insertWord(String cat, String word){
         String fun = Character.toUpperCase(word.charAt(0)) + word.toLowerCase().substring(1);
 
-        FileManipulator fm = new FileManipulator(files[1]);
-        fm.printFile();
+        //abstract
+        FileManipulator fm = new FileManipulator(files[0]);
+        fm.insert(fun + " : " + cat, "fun");
+        fm.saveToFile();
 
-        /*FileManipulator fm = new FileManipulator(files[1]);
-        if (fm.findPlace(" : ?(" + cat + ") ?;", false)) {
-            fm.insert(", " + fun, false);
+        //concrete
+        fm = new FileManipulator(files[1]);
+        fm.insert(fun + " = {s = \"" + word + "\"}", "lin");
 
-            fm = new FileManipulator(files[0]);
-            if (fm.findPlace(";\\s*(}|param)", false))
-                fm.insert("; \n" + fun + " = {s = \"" + word + "\"}", false);
-        }else {
-            System.out.println("Couldn't find " + cat);
-            return false;
-        }*/
+        fm.saveToFile();
         return true;
     }
 
     public void test(){
         FileManipulator fm = new FileManipulator(files[0]);
+        fm.printFile();
+        fm = new FileManipulator(files[1]);
         fm.printFile();
     }
 }
