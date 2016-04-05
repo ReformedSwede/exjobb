@@ -11,7 +11,7 @@ public class FileManipulator {
     private LinkedHashMap<String, ArrayList<String>> fileContent;
     private int index;
 
-    private static final String[] sections = {"flags", "cat", "fun", "lincat", "lin", "params", };
+    private static final String[] sections = {"flags", "cat", "fun", "lincat", "lin", "params", "oper"};
 
     /**
      * Creates a new instance of FileManipulator.
@@ -37,38 +37,36 @@ public class FileManipulator {
 
             //Put each section into map
             for(int i = 0; i < sections.length; i++) {
+                //Check if section exists
                 matcher = regex("\\s+" + sections[i] + "\\s", content);
                 if(!matcher.find())
                     continue;
+                //Create new entry in map
                 fileContent.put(sections[i], new ArrayList<>());
+                //Shorten content every time new data is added from content to map
                 content = content.substring(matcher.end(), content.length()).trim();
 
-                //Set variable so that while loop knows when to stop
-                int contentLengthAtNextSection;
+                //Set variable so that the while loop knows when to stop
+                int contentLengthAtNextSection = 2;
                 int j, lowest = Integer.MAX_VALUE;
-                for(j = 0; j < sections.length; j++){
+                for(j = i; j < sections.length; j++){
                     matcher = regex("\\s+" + sections[j] + "\\s", content);
                     if(matcher.find()){
                         if(matcher.start() < lowest) {
                             lowest = matcher.start();
-                            break;
+                            contentLengthAtNextSection = content.length() - matcher.start();
                         }
                     }
                 }
-                if(lowest == Integer.MAX_VALUE)
-                    contentLengthAtNextSection = 2;
-                else{
-                    matcher = regex("\\s+" + sections[j] + "\\s", content);
-                    matcher.find();
-                    contentLengthAtNextSection = content.length() - matcher.start();
-                }
 
                 //Put each line in this section into map
-                while (content.length() >= contentLengthAtNextSection) {
+                while (content.length() > contentLengthAtNextSection) {
                     matcher = regex(";", content);
-                    matcher.find();
-                    fileContent.get(sections[i]).add(content.substring(0, matcher.start()).trim());
-                    content = content.substring(matcher.end(), content.length()).trim();
+                    if (matcher.find()) {
+                        fileContent.get(sections[i]).add(content.substring(0, matcher.start()).trim());
+                        content = content.substring(matcher.end(), content.length());
+                    }else
+                        break;
                 }
             }
 
@@ -88,7 +86,7 @@ public class FileManipulator {
                     System.out.println("\t\t" + row + " ;");
             }
         }
-        System.out.println("\n}\n");
+        System.out.println("}\n");
     }
 
     /**
