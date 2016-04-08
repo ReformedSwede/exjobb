@@ -1,0 +1,22 @@
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Label?>
+
+<?import javafx.scene.control.TextField?>
+
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Button?>
+<VBox fx:controller="ui.Controller"
+      xmlns:fx="http://javafx.com/fxml">
+
+            <!--Input field-->
+    <TextField fx:id="input" promptText="Skriv nåt..."/>
+
+    <Button fx:id="insert" text="insert" onAction="#insert"/>
+    <Button fx:id="display" text="show" onAction="#display"/>
+
+            <!--Label-->
+    <Label fx:id="test" text="test"/>
+    <Label fx:id="languages" text="lang"/>
+
+</VBox>

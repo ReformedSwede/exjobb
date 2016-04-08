@@ -1,9 +1,0 @@
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Label?>
-
-<?import javafx.scene.layout.VBox?>
-
-<VBox fx:controller="javaGUI.Controller"
-      xmlns:fx="http://javafx.com/fxml">
-
-</VBox>
