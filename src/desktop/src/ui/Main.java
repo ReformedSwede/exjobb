@@ -1,13 +1,13 @@
 package ui;
 
-import grammar.PGFInterface;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.grammaticalframework.pgf.PGF;
 
-import java.io.File;
+import java.io.FileNotFoundException;
 
 public class Main extends Application {
 
@@ -25,7 +25,12 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-        PGFInterface.getAllLanguages();
+        try {
+            PGF pgf = PGF.readPGF("Words.pgf");
+            pgf.getCategories();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         //launch(args);
     }
 }

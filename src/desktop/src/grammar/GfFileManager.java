@@ -1,11 +1,11 @@
 package grammar;
 
-class GfFileManipulator {
+class GfFileManager {
 
     private String concreteGrammarFile;
-    private FileManipulator fm;
+    private GfFileEditor editor;
 
-    GfFileManipulator(String file){
+    GfFileManager(String file){
         concreteGrammarFile = file;
     }
 
@@ -19,22 +19,22 @@ class GfFileManipulator {
         String fun = Character.toUpperCase(word.charAt(0)) + word.toLowerCase().substring(1);
 
         //abstract
-        fm = new FileManipulator("src/grammar/Words.gf");
-        fm.insert(fun + " : " + cat, "fun");
-        fm.saveToFile();
+        editor = new GfFileEditor("src/grammar/Words.gf");
+        editor.insert(fun + " : " + cat, "fun");
+        editor.saveToFile();
 
         //concrete
-        fm = new FileManipulator(concreteGrammarFile);
-        fm.insert(fun + " = {s = \"" + word + "\"}", "lin");
+        editor = new GfFileEditor(concreteGrammarFile);
+        editor.insert(fun + " = {s = \"" + word + "\"}", "lin");
 
-        fm.saveToFile();
+        editor.saveToFile();
         return true;
     }
 
     void testPrint(){
-        fm = new FileManipulator("src/grammar/Words.gf");
-        fm.printFile();
-        fm = new FileManipulator(concreteGrammarFile);
-        fm.printFile();
+        editor = new GfFileEditor("src/grammar/Words.gf");
+        editor.printFile();
+        editor = new GfFileEditor(concreteGrammarFile);
+        editor.printFile();
     }
 }

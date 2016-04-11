@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.grammaticalframework.pgf.PGF;
 
-public class PGFInterface {
+public class GrammarManager {
 
 	public static void createLanguage(String languageName){
 		if(existsLanguage(languageName))
@@ -34,7 +34,7 @@ public class PGFInterface {
 					"Words" + language.substring(0, 1).toUpperCase() + language.substring(1, 3) + ".gf";
 
 			//Insert word
-			GfFileManipulator gf = new GfFileManipulator(file);
+			GfFileManager gf = new GfFileManager(file);
 			gf.insertWord(partOfSpeech, word);
 			
 			//Compile
@@ -67,7 +67,7 @@ public class PGFInterface {
 	public static List<String> getAllPartOfSpeech(String language){
 		try {
 			
-			return PGF.readPGF("Insert file name here").getCategories();
+			return PGF.readPGF("Words.pgf").getCategories();
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

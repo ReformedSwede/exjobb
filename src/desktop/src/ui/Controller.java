@@ -1,6 +1,6 @@
 package ui;
 
-import grammar.PGFInterface;
+import grammar.GrammarManager;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -20,7 +20,7 @@ public class Controller {
     public Button display;
 
     public void display(){
-        Collection<String> c = PGFInterface.getAllLanguages();
+        Collection<String> c = GrammarManager.getAllLanguages();
         for(String s : c)
                 languages.setText(languages.getText() + s);
     }
@@ -28,6 +28,6 @@ public class Controller {
     public void insert(){
         String text = input.getText();
         test.setText(text);
-        PGFInterface.addWord("Eng", "Kind", text);
+        GrammarManager.addWord("Eng", "Kind", text);
     }
 }

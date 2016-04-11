@@ -2,22 +2,22 @@ package grammar;
 
 import static org.junit.Assert.*;
 
-public class PGFInterfaceTest {
+public class GrammarManagerTest {
 
 
 
     @org.junit.Before
     public void setUp() throws Exception {
-        PGFInterface.createLanguage("klingon");
+        GrammarManager.createLanguage("klingon");
     }
 
 
     @org.junit.Test
     public void addWord() throws Exception {
-        PGFInterface.addWord("klingon", "Noun", "hello");
+        GrammarManager.addWord("klingon", "Noun", "hello");
 
         boolean test = false;
-        for(String s : PGFInterface.getAllWords("klingon", "Noun")){
+        for(String s : GrammarManager.getAllWords("klingon", "Noun")){
             if(s.equals("hello")){
                 test = true;
                 break;
@@ -29,13 +29,13 @@ public class PGFInterfaceTest {
     @org.junit.Test
     public void getAllPartOfSpeech() throws Exception {
         boolean test = false;
-        for(String s : PGFInterface.getAllPartOfSpeech("klingon")){
+        for(String s : GrammarManager.getAllPartOfSpeech("klingon")){
             if(s.equals("Noun")){
                 test = true;
                 break;
             }
         }
-        assertTrue(PGFInterface.getAllPartOfSpeech("klingon").size() == 1 && test);
+        assertTrue(GrammarManager.getAllPartOfSpeech("klingon").size() == 1 && test);
     }
 
     @org.junit.Test

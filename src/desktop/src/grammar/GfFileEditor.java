@@ -7,7 +7,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class FileManipulator {
+/**
+ * This class is for manipulating GF-files.
+ *
+ * It can parse an .gf file and read its data, insert new data, or change existing data.
+ */
+class GfFileEditor {
 
     private File file;
     private LinkedHashMap<String, ArrayList<String>> fileContent;
@@ -15,10 +20,10 @@ class FileManipulator {
     private static final String[] sections = {"open", "flags", "cat", "fun", "lincat", "lin", "params", "oper"};
 
     /**
-     * Creates a new instance of FileManipulator.
+     * Creates a new instance of GfFileEditor.
      * @param path Path of the file to manipulate.
      */
-    FileManipulator(String path){
+    GfFileEditor(String path){
         file = new File(path);
 
         try(BufferedReader br = new BufferedReader(
@@ -111,6 +116,9 @@ class FileManipulator {
         return pattern.matcher(source);
     }
 
+    /**
+     * Saves the data to disk
+     */
     void saveToFile(){
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(file))){
             for(Map.Entry<String, ArrayList<String>> element : fileContent.entrySet()){

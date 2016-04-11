@@ -1,15 +1,15 @@
 <component name="libraryTable">
   <library name="jpgf">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../../../GF/src/runtime/java/jpgf.jar!/" />
-      <root url="file://$PROJECT_DIR$/../../../../GF/src/runtime/java/org" />
+      <root url="file://$PROJECT_DIR$/../../../../../GF/GF/src/runtime/java/org" />
+      <root url="jar://$PROJECT_DIR$/../../../../../GF/GF/src/runtime/java/jpgf.jar!/" />
     </CLASSES>
     <JAVADOC />
     <NATIVE>
       <root url="file:///usr/local/lib" />
     </NATIVE>
     <SOURCES>
-      <root url="file://$PROJECT_DIR$/../../../../GF/src/runtime/java" />
+      <root url="file://$PROJECT_DIR$/../../../../../GF/GF/src/runtime/java" />
     </SOURCES>
   </library>
 </component>
