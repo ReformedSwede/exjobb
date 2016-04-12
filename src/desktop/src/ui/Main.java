@@ -4,20 +4,20 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import org.grammaticalframework.pgf.PGF;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("main-window.fxml"));
         primaryStage.setTitle("Hello World");
 
         Scene scene = new Scene(root, 1000, 800);
-        scene.getStylesheets().add("/src/resources/style.css");
+        scene.getStylesheets().add("/resources/style.css");
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -25,12 +25,7 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-        try {
-            PGF pgf = PGF.readPGF("Words.pgf");
-            pgf.getCategories();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        //launch(args);
+        launch(args);
+
     }
 }

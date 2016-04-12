@@ -4,9 +4,13 @@
 }
 
 *{
--fx-padding: 5 5 5 5;
+-fx-padding: 5 20 5 20;
 }
 
 .label{
 -fx-text-fill: #ffffff;
+}
+#foreignWord{
+-fx-font-size: 50pt;
+-fx-padding: 0 0 50 0
 }

@@ -1,33 +1,29 @@
 package ui;
 
-import grammar.GrammarManager;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
-import java.util.Collection;
+import java.util.Random;
+
 
 public class Controller {
 
-    public Label languages;
-
-    public Label test;
+    public Label foreignWord;
 
     public TextField input;
 
-    public Button insert;
+    public Label info;
 
-    public Button display;
+    public ImageView image;
 
-    public void display(){
-        Collection<String> c = new GrammarManager("Swedish", "English").getAllLanguages();
-        for(String s : c)
-                languages.setText(languages.getText() + s);
-    }
+    public void submit(KeyEvent e){
+        if (e.getCode().equals(KeyCode.ENTER)){
 
-    public void insert(){
-        String text = input.getText();
-        test.setText(text);
-        new GrammarManager("Swedish", "English").addWord("Eng", "Kind", text);
+            image.setImage(new Image((new Random().nextBoolean()) ? "/resources/x.png" : "/resources/checkmark.png"));
+        }
     }
 }
