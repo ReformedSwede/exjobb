@@ -9,36 +9,89 @@ import org.grammaticalframework.pgf.PGF;
 
 public class GrammarManager {
 
-	public static void createLanguage(String languageName){
-		if(existsLanguage(languageName))
-			return;
+	private String dir;
+	private String nativeLang;
+	private String foreignLang;
 
-		//TODO Create new folder. Create abstract & concrete grammar files.
-		new File(languageName).mkdir();
-	}
+	public GrammarManager(String nativeLang, String foreignLang){
+		//TODO: Insert checks for directory access. For now, assume directories exist
+		dir = System.getProperty("user.home") + File.separator + "grammar" +
+				File.separator + nativeLang.substring(0, 3).toLowerCase() + foreignLang.substring(0, 3).toLowerCase();
+		this.nativeLang = nativeLang;
+		this.foreignLang = foreignLang;
 
-	private static boolean existsLanguage(String language){
-		return new File(language).exists();
+		//Create PGF file
+		String file = dir + File.separator +
+				"Words" + foreignLang.substring(0, 1).toUpperCase() + foreignLang.substring(1, 3) + ".gf";
+		if(!new File(file).exists()) {
+			try {
+				Process pro = new ProcessBuilder("gf", "-make", file).start();
+				printCompileLog(pro);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
 	 * Inserts a new word into the file system.
-	 * @param language The language that the word belongs to
 	 * @param partOfSpeech The type of the word (Keep first letter capitalized!)
-	 * @param word The word to enter (Keep all letters lowercase!)
+	 * @param nativeWord The new word in the user's native language
+	 * @param foreignWord The new word in the foreign language
 	 */
-	public static void addWord(String language, String partOfSpeech, String word){
-		//TODO check if files for language already exists. If so, run code below. o/w, autogenerate new files
+	public void addWord(String partOfSpeech, String nativeWord, String foreignWord){
 		try{
-			String file = "src/grammar/" +
-					"Words" + language.substring(0, 1).toUpperCase() + language.substring(1, 3) + ".gf";
+			//Define file paths and names
+			String abstractFile = dir + File.separator + "Words.gf";
+			String nativeConcreteFile = dir + File.separator + "Words" +
+					nativeLang.substring(0, 1).toUpperCase() + nativeLang.substring(1, 3) + ".gf";
+			String foreignConcreteFile = dir + File.separator + "Words" +
+					foreignLang.substring(0, 1).toUpperCase() + foreignLang.substring(1, 3) + ".gf";
+			String fun = Character.toUpperCase(foreignWord.charAt(0)) + foreignWord.toLowerCase().substring(1);
 
-			//Insert word
-			GfFileManager gf = new GfFileManager(file);
-			gf.insertWord(partOfSpeech, word);
-			
+			//Insert into abstract
+			GfFileEditor editor = new GfFileEditor(abstractFile);
+			editor.insert(fun + " : " + partOfSpeech, "fun");
+			editor.saveToFile();
+
+			//Insert into native concrete
+			editor = new GfFileEditor(nativeConcreteFile);
+			editor.insert(fun + " = {s = \"" + nativeWord + "\"}", "lin");
+			editor.saveToFile();
+
+			//Insert into foreign concrete
+			editor = new GfFileEditor(foreignConcreteFile);
+			editor.insert(fun + " = {s = \"" + foreignWord + "\"}", "lin");
+			editor.saveToFile();
+
 			//Compile
-			Process pro = new ProcessBuilder("gf", "-make", file).start();
+			Process pro = new ProcessBuilder("gf", "-make", nativeConcreteFile).start();
+			printCompileLog(pro);
+			pro = new ProcessBuilder("gf", "-make", foreignConcreteFile).start();
+			printCompileLog(pro);
+
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+
+	public void removeWord(String partOfSpeech, String foreignWord){
+		try{
+			//Define file paths and names
+			String abstractFile = dir + File.separator + "Words.gf";
+			String nativeConcreteFile = dir + File.separator + "Words" +
+					nativeLang.substring(0, 1).toUpperCase() + nativeLang.substring(1, 3) + ".gf";
+			String foreignConcreteFile = dir + File.separator + "Words" +
+					foreignLang.substring(0, 1).toUpperCase() + foreignLang.substring(1, 3) + ".gf";
+			String fun = Character.toUpperCase(foreignWord.charAt(0)) + foreignWord.toLowerCase().substring(1);
+
+			//Remove word
+			//TODO: remove
+
+			//Compile
+			Process pro = new ProcessBuilder("gf", "-make", nativeConcreteFile).start();
+			printCompileLog(pro);
+			pro = new ProcessBuilder("gf", "-make", foreignConcreteFile).start();
 			printCompileLog(pro);
 
 		}catch(IOException e){
@@ -50,7 +103,7 @@ public class GrammarManager {
 	 * Returns a list of all languages in the pgf file
 	 * @return List of all languages
      */
-	public static Collection<String> getAllLanguages(){
+	public Collection<String> getAllLanguages(){
 		try {
 			
 			return PGF.readPGF("Words.pgf").getLanguages().keySet();
@@ -64,7 +117,7 @@ public class GrammarManager {
 	/**
 	 * Return a list of all languages, i.e. GF categories
      */
-	public static List<String> getAllPartOfSpeech(String language){
+	public List<String> getAllPartOfSpeech(String language){
 		try {
 			
 			return PGF.readPGF("Words.pgf").getCategories();
@@ -75,16 +128,16 @@ public class GrammarManager {
 		return new ArrayList<String>();
 	}
 	
-	public static List<String> getAllWords(String language, String partOfSpeech){
+	public List<String> getAllWords(String language, String partOfSpeech){
 		try {
-			return PGF.readPGF("Insert file name here").getFunctionsByCat(partOfSpeech);
+			return PGF.readPGF("Words.pgf").getFunctionsByCat(partOfSpeech);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		return new ArrayList<String>();
 	}
 	
-	private static void printCompileLog(Process pro) throws IOException{
+	private void printCompileLog(Process pro) throws IOException{
 		BufferedReader reader =	new BufferedReader(new InputStreamReader(pro.getInputStream()));
 		StringBuilder builder = new StringBuilder();
 		String line;

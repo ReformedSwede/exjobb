@@ -106,6 +106,14 @@ class GfFileEditor {
     }
 
     /**
+     * Removes an entry from the file
+     * @param args
+     */
+    void delete(String... args){
+        //TODO: remove
+    }
+
+    /**
      * Checks if source contains match for regex
      * @param regex Regular expression to search for
      * @param source The source in which to check for matches

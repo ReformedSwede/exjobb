@@ -4,20 +4,21 @@ import static org.junit.Assert.*;
 
 public class GrammarManagerTest {
 
-
+    GrammarManager gm;
 
     @org.junit.Before
     public void setUp() throws Exception {
-        GrammarManager.createLanguage("klingon");
+        gm = new GrammarManager("Swedish", "English");
     }
 
 
     @org.junit.Test
     public void addWord() throws Exception {
-        GrammarManager.addWord("klingon", "Noun", "hello");
+        System.out.println("***Test: addWord***");
+        gm.addWord("Noun", "hallå", "hello");
 
         boolean test = false;
-        for(String s : GrammarManager.getAllWords("klingon", "Noun")){
+        for(String s : gm.getAllWords("English", "Noun")){
             if(s.equals("hello")){
                 test = true;
                 break;
@@ -28,19 +29,23 @@ public class GrammarManagerTest {
 
     @org.junit.Test
     public void getAllPartOfSpeech() throws Exception {
+        System.out.println("***Test: getAllPartsOfSpeech***");
+        int prevSize = gm.getAllPartOfSpeech("English").size();
+
         boolean test = false;
-        for(String s : GrammarManager.getAllPartOfSpeech("klingon")){
+        for(String s : gm.getAllPartOfSpeech("English")){
             if(s.equals("Noun")){
                 test = true;
                 break;
             }
         }
-        assertTrue(GrammarManager.getAllPartOfSpeech("klingon").size() == 1 && test);
+        assertTrue(gm.getAllPartOfSpeech("English").size() == prevSize + 1 && test);
     }
 
     @org.junit.Test
     public void getAllWords() throws Exception {
-
+        System.out.println("***Test: getAllWords***");
+        assertTrue(true);
     }
 
 

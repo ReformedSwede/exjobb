@@ -20,4 +20,9 @@ abstract Words = {
 		Test : Kind ;
 		Igen : Kind ;
 		Nytt : Kind ;
+		Hello : Noun ;
+		Hello : Noun ;
+		Hello : Noun ;
+		Hello : Noun ;
+		Hello : Noun ;
 }

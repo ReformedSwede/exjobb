@@ -20,7 +20,7 @@ public class Controller {
     public Button display;
 
     public void display(){
-        Collection<String> c = GrammarManager.getAllLanguages();
+        Collection<String> c = new GrammarManager("Swedish", "English").getAllLanguages();
         for(String s : c)
                 languages.setText(languages.getText() + s);
     }
@@ -28,6 +28,6 @@ public class Controller {
     public void insert(){
         String text = input.getText();
         test.setText(text);
-        GrammarManager.addWord("Eng", "Kind", text);
+        new GrammarManager("Swedish", "English").addWord("Eng", "Kind", text);
     }
 }
