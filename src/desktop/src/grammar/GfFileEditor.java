@@ -84,6 +84,7 @@ class GfFileEditor {
      * Pretty prints a parsed file
      */
     void printFile(){
+        System.out.println("Printing " + file.getAbsolutePath());
         for(Map.Entry<String, ArrayList<String>> element : fileContent.entrySet()){
             if(element.getKey().equals("title")){
                 System.out.println(element.getValue().get(0) + " {");
@@ -107,10 +108,15 @@ class GfFileEditor {
 
     /**
      * Removes an entry from the file
-     * @param args
+     * @param fun The function to remove
+     * @param atSection The section from where to remove
      */
-    void delete(String... args){
-        //TODO: remove
+    void delete(String fun, String atSection){
+        int i;
+        for(i = 0; i < fileContent.get(atSection).size(); i++)
+            if(fileContent.get(atSection).get(i).startsWith(fun))
+                break;
+        fileContent.get(atSection).remove(i);
     }
 
     /**

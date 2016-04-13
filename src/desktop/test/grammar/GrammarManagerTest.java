@@ -11,20 +11,36 @@ public class GrammarManagerTest {
         gm = new GrammarManager("Swedish", "English");
     }
 
-
     @org.junit.Test
     public void addWord() throws Exception {
         System.out.println("***Test: addWord***");
         gm.addWord("Noun", "hallå", "hello");
 
-        boolean test = false;
+        boolean added = false;
         for(String s : gm.getAllWords("English", "Noun")){
             if(s.equals("hello")){
-                test = true;
+                added = true;
                 break;
             }
         }
-        assertTrue(test);
+        assertTrue(added);
+    }
+
+    @org.junit.Test
+    public void removeWord() throws  Exception{
+        System.out.println("***Test: removeWord***");
+        gm.addWord("Noun", "test", "test");
+        gm.removeWord("Noun", "test");
+
+        boolean removed = true;
+        for(String s : gm.getAllWords("English", "Noun")){
+            if(s.equals("hello")){
+                removed = false;
+                break;
+            }
+        }
+        assertTrue(removed);
+
     }
 
     @org.junit.Test
@@ -46,6 +62,12 @@ public class GrammarManagerTest {
     public void getAllWords() throws Exception {
         System.out.println("***Test: getAllWords***");
         assertTrue(true);
+    }
+
+    @org.junit.Test
+    public void gradeAnswer() throws Exception{
+        System.out.println("***Test: gradeAnswer***");
+        assertTrue(gm.gradeAnswer("fish", "fisk"));
     }
 
 

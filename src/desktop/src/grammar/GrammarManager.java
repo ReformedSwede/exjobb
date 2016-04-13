@@ -4,8 +4,12 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
+import javafx.util.Pair;
+import org.grammaticalframework.pgf.Concr;
 import org.grammaticalframework.pgf.PGF;
+import org.grammaticalframework.pgf.ParseError;
 
 public class GrammarManager {
 
@@ -20,7 +24,7 @@ public class GrammarManager {
 		this.nativeLang = nativeLang;
 		this.foreignLang = foreignLang;
 
-		//Create PGF file
+		//Create PGF file TODO: compile to correct directory with correct filename
 		String file = dir + File.separator +
 				"Words" + foreignLang.substring(0, 1).toUpperCase() + foreignLang.substring(1, 3) + ".gf";
 		if(!new File(file).exists()) {
@@ -31,6 +35,18 @@ public class GrammarManager {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	/**
+	 * Lists all sessions.
+	 * @return A list of all sessions. Each element is a pair on the form (nativeLang, foreignLang)
+     */
+	public static List<Pair<String, String>> getSessions(){
+		ArrayList<Pair<String, String>> sessions = new ArrayList<>();
+		String path = System.getProperty("user.home") + File.separator + "grammar";
+		for(String folder : new File(path).list())
+			sessions.add(new Pair<>(folder.substring(0, 3), folder.substring(3, 6)));
+		return sessions;
 	}
 
 	/**
@@ -85,8 +101,17 @@ public class GrammarManager {
 					foreignLang.substring(0, 1).toUpperCase() + foreignLang.substring(1, 3) + ".gf";
 			String fun = Character.toUpperCase(foreignWord.charAt(0)) + foreignWord.toLowerCase().substring(1);
 
-			//Remove word
-			//TODO: remove
+			//Remove from abstract
+			GfFileEditor editor = new GfFileEditor(abstractFile);
+			editor.delete(fun, "fun");
+
+			//Remove from native concrete
+			editor = new GfFileEditor(nativeConcreteFile);
+			editor.delete(fun, "lin");
+
+			//Remove from foreign concrete
+			editor = new GfFileEditor(foreignConcreteFile);
+			editor.delete(fun, "lin");
 
 			//Compile
 			Process pro = new ProcessBuilder("gf", "-make", nativeConcreteFile).start();
@@ -136,6 +161,29 @@ public class GrammarManager {
 		}
 		return new ArrayList<String>();
 	}
+
+
+	public String getRandomWord(){
+		int nrOfCats = getAllPartOfSpeech(foreignLang).size();
+		String randPartOfSpeech = getAllPartOfSpeech(foreignLang).get(new Random().nextInt(nrOfCats));
+		int nrOfWords = getAllWords(foreignLang, randPartOfSpeech).size();
+		return getAllWords(foreignLang, randPartOfSpeech).get(new Random().nextInt(nrOfWords));
+	}
+
+	public boolean gradeAnswer(String foreignWord, String usersAnswer){
+		boolean correct = false;
+		try {
+			Concr c = PGF.readPGF("Words.pgf").getLanguages().get(foreignLang);
+			String linearization = c.linearize(c.parse("Noun", usersAnswer).iterator().next().getExpr());
+			correct = linearization.equals(foreignWord);
+		} catch (FileNotFoundException | ParseError e) {
+			e.printStackTrace();
+		}
+		return correct;
+	}
+
+
+	/*****Private methods******/
 	
 	private void printCompileLog(Process pro) throws IOException{
 		BufferedReader reader =	new BufferedReader(new InputStreamReader(pro.getInputStream()));
