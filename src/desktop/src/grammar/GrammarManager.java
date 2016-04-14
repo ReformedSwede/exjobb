@@ -7,26 +7,33 @@ import java.util.List;
 import java.util.Random;
 
 import javafx.util.Pair;
+import javafx.util.converter.NumberStringConverter;
+import main.Utils;
 import org.grammaticalframework.pgf.Concr;
+import org.grammaticalframework.pgf.Expr;
 import org.grammaticalframework.pgf.PGF;
 import org.grammaticalframework.pgf.ParseError;
 
 public class GrammarManager {
 
 	private String dir;
-	private String nativeLang;
-	private String foreignLang;
+	private String nativeLangCode;
+	private String foreignLangCode;
 
+	/**
+	 * Initializes the grammar manager for this session. Finds the session's folder and compiles necessary files.
+	 * @param nativeLang The language native to the user. Preferably a three letter abbreviation.
+	 * @param foreignLang The language foreign to the user. Preferably a three letter abbreviation.
+     */
 	public GrammarManager(String nativeLang, String foreignLang){
 		//TODO: Insert checks for directory access. For now, assume directories exist
 		dir = System.getProperty("user.home") + File.separator + "grammar" +
 				File.separator + nativeLang.substring(0, 3).toLowerCase() + foreignLang.substring(0, 3).toLowerCase();
-		this.nativeLang = nativeLang;
-		this.foreignLang = foreignLang;
+		this.nativeLangCode = nativeLang.substring(0, 3).toLowerCase();
+		this.foreignLangCode = foreignLang.substring(0, 3).toLowerCase();
 
-		//Create PGF file TODO: compile to correct directory with correct filename
-		String file = dir + File.separator +
-				"Words" + foreignLang.substring(0, 1).toUpperCase() + foreignLang.substring(1, 3) + ".gf";
+		//Create PGF file TODO: compile correct file in correct directory with correct filename
+		String file = dir + File.separator + Utils.codeToGF(foreignLang) + ".gf";
 		if(!new File(file).exists()) {
 			try {
 				Process pro = new ProcessBuilder("gf", "-make", file).start();
@@ -39,7 +46,7 @@ public class GrammarManager {
 
 	/**
 	 * Lists all sessions.
-	 * @return A list of all sessions. Each element is a pair on the form (nativeLang, foreignLang)
+	 * @return A list of all sessions. Each element is a pair on the form (nativeLangCode, foreignLangCode)
      */
 	public static List<Pair<String, String>> getSessions(){
 		ArrayList<Pair<String, String>> sessions = new ArrayList<>();
@@ -59,10 +66,8 @@ public class GrammarManager {
 		try{
 			//Define file paths and names
 			String abstractFile = dir + File.separator + "Words.gf";
-			String nativeConcreteFile = dir + File.separator + "Words" +
-					nativeLang.substring(0, 1).toUpperCase() + nativeLang.substring(1, 3) + ".gf";
-			String foreignConcreteFile = dir + File.separator + "Words" +
-					foreignLang.substring(0, 1).toUpperCase() + foreignLang.substring(1, 3) + ".gf";
+			String nativeConcreteFile = dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf";
+			String foreignConcreteFile = dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf";
 			String fun = Character.toUpperCase(foreignWord.charAt(0)) + foreignWord.toLowerCase().substring(1);
 
 			//Insert into abstract
@@ -95,10 +100,8 @@ public class GrammarManager {
 		try{
 			//Define file paths and names
 			String abstractFile = dir + File.separator + "Words.gf";
-			String nativeConcreteFile = dir + File.separator + "Words" +
-					nativeLang.substring(0, 1).toUpperCase() + nativeLang.substring(1, 3) + ".gf";
-			String foreignConcreteFile = dir + File.separator + "Words" +
-					foreignLang.substring(0, 1).toUpperCase() + foreignLang.substring(1, 3) + ".gf";
+			String nativeConcreteFile = dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf";
+			String foreignConcreteFile = dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf";
 			String fun = Character.toUpperCase(foreignWord.charAt(0)) + foreignWord.toLowerCase().substring(1);
 
 			//Remove from abstract
@@ -162,21 +165,35 @@ public class GrammarManager {
 		return new ArrayList<String>();
 	}
 
-
+	/**
+	 * Returns a random word from the grammar files
+     */
 	public String getRandomWord(){
-		int nrOfCats = getAllPartOfSpeech(foreignLang).size();
-		String randPartOfSpeech = getAllPartOfSpeech(foreignLang).get(new Random().nextInt(nrOfCats));
-		int nrOfWords = getAllWords(foreignLang, randPartOfSpeech).size();
-		return getAllWords(foreignLang, randPartOfSpeech).get(new Random().nextInt(nrOfWords));
+		int nrOfCats = getAllPartOfSpeech(Utils.codeToGF(foreignLangCode)).size();
+		String randPartOfSpeech = getAllPartOfSpeech(Utils.codeToGF(foreignLangCode))
+				.get(new Random().nextInt(nrOfCats));
+		int nrOfWords = getAllWords(Utils.codeToGF(foreignLangCode), randPartOfSpeech).size();
+		return getAllWords(Utils.codeToGF(foreignLangCode), randPartOfSpeech).get(new Random().nextInt(nrOfWords));
+	}
+
+	/**
+	 * Returns a random word from a specified part of speech
+     */
+	public String getRandomWord(String partOfSpeech){
+		int nrOfWords = getAllWords(Utils.codeToGF(foreignLangCode), partOfSpeech).size();
+		return getAllWords(Utils.codeToGF(foreignLangCode), partOfSpeech).get(new Random().nextInt(nrOfWords));
 	}
 
 	public boolean gradeAnswer(String foreignWord, String usersAnswer){
 		boolean correct = false;
 		try {
-			Concr c = PGF.readPGF("Words.pgf").getLanguages().get(foreignLang);
-			String linearization = c.linearize(c.parse("Noun", usersAnswer).iterator().next().getExpr());
+			Concr cn = PGF.readPGF("Words.pgf").getLanguages().get(Utils.codeToGF(foreignLangCode));
+			Concr cf = PGF.readPGF("Words.pgf").getLanguages().get(Utils.codeToGF(nativeLangCode));
+
+			Expr expr = cn.parse("Noun", usersAnswer).iterator().next().getExpr();
+			String linearization = cf.linearize(expr);
 			correct = linearization.equals(foreignWord);
-		} catch (FileNotFoundException | ParseError e) {
+		} catch (FileNotFoundException | ParseError | NullPointerException e) {
 			e.printStackTrace();
 		}
 		return correct;

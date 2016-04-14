@@ -4,11 +4,11 @@ import static org.junit.Assert.*;
 
 public class GrammarManagerTest {
 
-    GrammarManager gm;
+    private GrammarManager gm;
 
     @org.junit.Before
     public void setUp() throws Exception {
-        gm = new GrammarManager("Swedish", "English");
+        gm = new GrammarManager("swe", "eng");
     }
 
     @org.junit.Test
@@ -29,8 +29,7 @@ public class GrammarManagerTest {
     @org.junit.Test
     public void removeWord() throws  Exception{
         System.out.println("***Test: removeWord***");
-        gm.addWord("Noun", "test", "test");
-        gm.removeWord("Noun", "test");
+        gm.removeWord("Noun", "hello");
 
         boolean removed = true;
         for(String s : gm.getAllWords("English", "Noun")){
