@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <language name="English" gf="WordsEng" short="eng"/>
+    <language name="Swedish" gf="WordsSwe" short="swe"/>
+</resources>

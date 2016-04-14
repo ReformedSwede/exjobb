@@ -1,0 +1,33 @@
+*{
+-fx-padding: 3 10 3 10;
+}
+.root{
+-fx-background-color: radial-gradient(center 50% 20%, radius 40%, #585858,#454545);
+-fx-font-size: 20pt;
+}
+.label{
+-fx-text-fill: #ffffff;
+}
+.button{
+-fx-background-radius: 30;
+-fx-background-insets: 0;
+}
+
+/******IDs******/
+#foreignWordLbl{
+-fx-font-size: 50pt;
+-fx-padding: 0 0 50 0
+}
+#sessionsGrid{
+-fx-background-color:#aaaaaa;
+-fx-padding: 30;
+-fx-background-radius: 20;
+}
+#practice{
+-fx-background-color: radial-gradient(center 50% 50%, radius 40%, #616161, #494949);
+-fx-padding: 40;
+-fx-background-radius: 20;
+}
+#topBar{
+-fx-font-size: 12pt;
+}
