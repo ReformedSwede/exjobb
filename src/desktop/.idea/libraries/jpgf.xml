@@ -2,14 +2,17 @@
   <library name="jpgf">
     <CLASSES>
       <root url="file://$PROJECT_DIR$/../../../../../GF/GF/src/runtime/java/org" />
-      <root url="jar://$PROJECT_DIR$/../../../../../GF/GF/src/runtime/java/jpgf.jar!/" />
+      <root url="jar:///usr/lib/jpgf.jar!/" />
+      <root url="file:///usr/lib" />
+      <root url="file:///usr/lib" />
     </CLASSES>
     <JAVADOC />
     <NATIVE>
-      <root url="file:///usr/local/lib" />
+      <root url="file:///usr/lib" />
     </NATIVE>
     <SOURCES>
       <root url="file://$PROJECT_DIR$/../../../../../GF/GF/src/runtime/java" />
     </SOURCES>
+    <jarDirectory url="file:///usr/lib" recursive="false" />
   </library>
 </component>

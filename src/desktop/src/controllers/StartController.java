@@ -30,7 +30,8 @@ public class StartController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         List<Pair<String, String>> sessions = GrammarManager.getSessions();
-        for (Pair<String, String> session : sessions) {
+
+        sessions.forEach((session) -> {
             HBox box = new HBox();
             box.getChildren().add(new Label(Utils.codeToName(session.getKey())));
             box.getChildren().add(new Label(Utils.codeToName(session.getValue())));
@@ -38,7 +39,7 @@ public class StartController implements Initializable {
             b.setOnAction(event -> startPractice(session.getKey(), session.getValue()));
             box.getChildren().add(b);
             sessionsGrid.getChildren().add(box);
-        }
+        });
     }
 
     public void startPractice(String nativeLang, String foreignLang){

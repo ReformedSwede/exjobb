@@ -22,7 +22,6 @@ public class PracticeController{
 
     public void submit(KeyEvent e){
         if (e.getCode().equals(KeyCode.ENTER)){
-
             //grade answer
             boolean correct = model.gradeAnswer(foreignWordLbl.getText(), inputFld.getText().trim());
 
@@ -35,15 +34,16 @@ public class PracticeController{
                         "\" is not \"" + inputFld.getText() + "\".");
             }
             inputFld.clear();
+            foreignWordLbl.setText(model.getRandomWord());
         }
     }
 
     public void init(Model model){
         this.model = model;
-        //foreignWordLbl.setText(model.getRandomWord());
+        foreignWordLbl.setText(model.getRandomWord());
 
         sessionTitle.setText("Current session: " + Utils.codeToName(model.getNativeLangCode()) +
-                " -> " + Utils.codeToName(model.getForeignLangCode()));
+                " speaker practising " + Utils.codeToName(model.getForeignLangCode()));
     }
 
     public void exitSession(){

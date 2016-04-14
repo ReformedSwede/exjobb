@@ -43,6 +43,11 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Converts a short language code to the name of the corresponding .gf file (e.g. eng -> WordsEng)
+     * @param language A three letter language code
+     * @return The name of the language
+     */
     public static String codeToGF(String language){
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -59,6 +64,36 @@ public class Utils {
                     Element eElement = (Element) nNode;
                     if(eElement.getAttribute("short").equals(language)){
                         return eElement.getAttribute("gf");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Converts a name of a gf language to its real name(e.g. WordsEng -> English)
+     * @param language A name of a gf language
+     * @return The name of the language
+     */
+    public static String gfToName(String language){
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(xmlFile);
+            doc.getDocumentElement().normalize();
+
+            NodeList nList = doc.getElementsByTagName("language");
+
+            for (int i = 0; i < nList.getLength(); i++) {
+                Node nNode = nList.item(i);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+
+                    Element eElement = (Element) nNode;
+                    if(eElement.getAttribute("gf").equals(language)){
+                        return eElement.getAttribute("name");
                     }
                 }
             }

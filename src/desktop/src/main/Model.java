@@ -2,6 +2,7 @@ package main;
 
 
 import grammar.GrammarManager;
+import org.grammaticalframework.pgf.ParseError;
 
 /**
  * Model for MVC design pattern. Provides data for views and controllers.

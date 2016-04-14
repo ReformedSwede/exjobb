@@ -4,20 +4,20 @@ import static org.junit.Assert.*;
 
 public class GrammarManagerTest {
 
-    private GrammarManager gm;
+    private GrammarManager manager;
 
     @org.junit.Before
     public void setUp() throws Exception {
-        gm = new GrammarManager("swe", "eng");
+        manager = new GrammarManager("swe", "eng");
     }
 
     @org.junit.Test
     public void addWord() throws Exception {
         System.out.println("***Test: addWord***");
-        gm.addWord("Noun", "hallå", "hello");
+        manager.addWord("Noun", "hallå", "hello");
 
         boolean added = false;
-        for(String s : gm.getAllWords("English", "Noun")){
+        for(String s : manager.getAllWords("eng", "Noun")){
             if(s.equals("hello")){
                 added = true;
                 break;
@@ -29,10 +29,10 @@ public class GrammarManagerTest {
     @org.junit.Test
     public void removeWord() throws  Exception{
         System.out.println("***Test: removeWord***");
-        gm.removeWord("Noun", "hello");
+        manager.removeWord("Noun", "hello");
 
         boolean removed = true;
-        for(String s : gm.getAllWords("English", "Noun")){
+        for(String s : manager.getAllWords("eng", "Noun")){
             if(s.equals("hello")){
                 removed = false;
                 break;
@@ -45,16 +45,16 @@ public class GrammarManagerTest {
     @org.junit.Test
     public void getAllPartOfSpeech() throws Exception {
         System.out.println("***Test: getAllPartsOfSpeech***");
-        int prevSize = gm.getAllPartOfSpeech("English").size();
+        int prevSize = manager.getAllPartOfSpeech("eng").size();
 
         boolean test = false;
-        for(String s : gm.getAllPartOfSpeech("English")){
+        for(String s : manager.getAllPartOfSpeech("eng")){
             if(s.equals("Noun")){
                 test = true;
                 break;
             }
         }
-        assertTrue(gm.getAllPartOfSpeech("English").size() == prevSize + 1 && test);
+        assertTrue(manager.getAllPartOfSpeech("eng").size() == prevSize + 1 && test);
     }
 
     @org.junit.Test
@@ -66,13 +66,13 @@ public class GrammarManagerTest {
     @org.junit.Test
     public void gradeAnswer() throws Exception{
         System.out.println("***Test: gradeAnswer***");
-        assertTrue(gm.gradeAnswer("fish", "fisk"));
+        assertTrue(manager.gradeAnswer("fish", "fisk"));
     }
 
 
-    @org.junit.After
-    public void tearDown() throws Exception{
-
+    @org.junit.Test
+    public void tmp() throws Exception{
+        manager.getAllWords("swe", "Adjective").forEach(System.out::println);
     }
 
 }
