@@ -57,6 +57,6 @@ public class StartController implements Initializable {
         }
 
         model.initialize(nativeLang, foreignLang);
-        ((PracticeController)fxmlloader.getController()).init(model);
+        ((PracticeController)fxmlloader.getController()).init(model, pContent);
     }
 }

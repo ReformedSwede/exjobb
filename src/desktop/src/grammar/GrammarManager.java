@@ -1,10 +1,8 @@
 package grammar;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import javafx.util.Pair;
 import javafx.util.converter.NumberStringConverter;
@@ -35,8 +33,8 @@ public class GrammarManager {
 		//Create PGF file TODO: compile correct file in correct directory with correct filename
 		/*String file = dir + File.separator + Utils.codeToGF(foreignLang) + ".gf";
 		if(!new File(file).exists())*/
-		compilePGF(dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf",
-				dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf");
+		//compilePGF(dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf",
+		//		dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf");
 	}
 
 	/**
@@ -132,21 +130,25 @@ public class GrammarManager {
      */
 	public List<String> getAllPartOfSpeech(String language){
 		try {
-			List<String> parts = new ArrayList<>();
-			PGF.readPGF("Words.pgf").getCategories().forEach((category) -> {
-				if(!category.equals("Int")&&!category.equals("String")&&!category.equals("Float"))
-					parts.add(category);
-			});
+			List<String> parts;
+			parts = PGF.readPGF("Words.pgf").getCategories().stream().filter((category) ->
+					!category.equals("Int")&&!category.equals("String")&&!category.equals("Float"))
+					.collect(Collectors.toList());
 			return parts;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		return new ArrayList<String>();
+		return new ArrayList<>();
 	}
 	
 	public List<String> getAllWords(String language, String partOfSpeech){
 		try {
+			/*Concr cf = PGF.readPGF("Words.pgf").getLanguages().get(Utils.codeToGF(language));
+			List<String> functions = PGF.readPGF("Words.pgf").getFunctionsByCat(partOfSpeech);
+			List<Expr> expressions = functions.stream().map(Expr::new).collect(Collectors.toList());
+			return expressions.stream().map((cf::linearize)).collect(Collectors.toList());*/
 			return PGF.readPGF("Words.pgf").getFunctionsByCat(partOfSpeech);
+
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -155,29 +157,29 @@ public class GrammarManager {
 
 	/**
 	 * Returns a random word from the grammar files
+	 * Each string is actually the name of a gf function
      */
-	public String getRandomWord(){
-		int nrOfCats = getAllPartOfSpeech(Utils.codeToGF(foreignLangCode)).size();
-		String randPartOfSpeech = getAllPartOfSpeech(Utils.codeToGF(foreignLangCode))
+	public String getRandomWord(String language){
+		int nrOfCats = getAllPartOfSpeech(Utils.codeToGF(language)).size();
+		String randPartOfSpeech = getAllPartOfSpeech(Utils.codeToGF(language))
 				.get(new Random().nextInt(nrOfCats));
-		int nrOfWords = getAllWords(Utils.codeToGF(foreignLangCode), randPartOfSpeech).size();
-		return getAllWords(Utils.codeToGF(foreignLangCode), randPartOfSpeech).get(new Random().nextInt(nrOfWords));
+		List<String> allWords = getAllWords(language, randPartOfSpeech);
+		return allWords.get(new Random().nextInt(allWords.size()));
 	}
 
 	/**
-	 * Returns a random word from a specified part of speech
+	 * Returns a random word from a specified part of speech.
+	 * Each string is actually the name of a gf function
      */
-	public String getRandomWord(String partOfSpeech){
-		int nrOfWords = getAllWords(Utils.codeToGF(foreignLangCode), partOfSpeech).size();
-		return getAllWords(Utils.codeToGF(foreignLangCode), partOfSpeech).get(new Random().nextInt(nrOfWords));
+	public String getRandomWord(String language, String partOfSpeech){
+		int nrOfWords = getAllWords(Utils.codeToGF(language), partOfSpeech).size();
+		return getAllWords(Utils.codeToGF(language), partOfSpeech).get(new Random().nextInt(nrOfWords));
 	}
 
 	public boolean gradeAnswer(String foreignWord, String usersAnswer){
 		try {
 			Concr cn = PGF.readPGF("Words.pgf").getLanguages().get(Utils.codeToGF(nativeLangCode));
 			Concr cf = PGF.readPGF("Words.pgf").getLanguages().get(Utils.codeToGF(foreignLangCode));
-			System.out.println("**" + cn.linearize(cf.parse("Noun", foreignWord).iterator().next().getExpr()));
-
 
 			Expr expr = cn.parse("Noun", usersAnswer).iterator().next().getExpr();
 			String linearization = cf.linearize(expr);
@@ -190,6 +192,20 @@ public class GrammarManager {
 		return false;
 	}
 
+	/*ublic void tmp(){
+		try {
+			Concr cn = PGF.readPGF("Words.pgf").getLanguages().get(Utils.codeToGF(nativeLangCode));
+			Concr cf = PGF.readPGF("Words.pgf").getLanguages().get(Utils.codeToGF(foreignLangCode));
+
+			Expr e = new Expr(getRandomWord("eng", "V"));
+			cf.tabularLinearize(e).entrySet().forEach((entry) -> {
+				System.out.println("key: " + entry.getKey() + " value: " + entry.getValue());
+			});
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}*/
 
 	/*****Private methods******/
 

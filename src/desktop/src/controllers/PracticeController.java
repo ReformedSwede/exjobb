@@ -1,5 +1,8 @@
 package controllers;
 
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.layout.Pane;
 import main.Utils;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -8,6 +11,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import main.Model;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class PracticeController{
 
@@ -19,6 +25,7 @@ public class PracticeController{
     public TextField inputFld;
     public Label infoLbl;
     public ImageView imageView;
+    Pane pContent;
 
     public void submit(KeyEvent e){
         if (e.getCode().equals(KeyCode.ENTER)){
@@ -38,8 +45,9 @@ public class PracticeController{
         }
     }
 
-    public void init(Model model){
+    public void init(Model model, Pane content){
         this.model = model;
+        this.pContent = content;
         foreignWordLbl.setText(model.getRandomWord());
 
         sessionTitle.setText("Current session: " + Utils.codeToName(model.getNativeLangCode()) +
@@ -48,5 +56,21 @@ public class PracticeController{
 
     public void exitSession(){
 
+    }
+
+    public void editSession(){
+        URL url = getClass().getResource("/resources/view/edit-window.fxml");
+
+        FXMLLoader fxmlloader = new FXMLLoader();
+        fxmlloader.setLocation(url);
+        fxmlloader.setBuilderFactory(new JavaFXBuilderFactory());
+
+        pContent.getChildren().clear();
+        try {
+            pContent.getChildren().add(fxmlloader.load(url.openStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ((EditController)fxmlloader.getController()).init(model, pContent);
     }
 }

@@ -8,7 +8,7 @@
 <StackPane fx:id="pContent" fx:controller="controllers.StartController"
            xmlns:fx="http://javafx.com/fxml" prefHeight="400" prefWidth="700">
     <VBox>
-        <Label text="Sessions"/>
+        <Label styleClass="title" text="Sessions"/>
         <TilePane fx:id="sessionsGrid" prefColumns="1"/>
     </VBox>
 </StackPane>

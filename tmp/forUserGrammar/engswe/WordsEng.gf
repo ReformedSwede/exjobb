@@ -13,5 +13,4 @@ concrete WordsEng of Words = {
 		Expensive = {s = "expensive"} ;
 		Delicious = {s = "delicious"} ;
 		Boring = {s = "boring"} ;
-		Hello = {s = "hello"} ;
 }

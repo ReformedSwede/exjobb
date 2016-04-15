@@ -9,15 +9,16 @@
 
 <?import javafx.scene.layout.TilePane?>
 <BorderPane fx:controller="controllers.PracticeController"
-            xmlns:fx="http://javafx.com/fxml" prefHeight="400" prefWidth="700">
+            xmlns:fx="http://javafx.com/fxml" prefHeight="700" prefWidth="700">
         <top>
             <HBox fx:id="topBar">
                 <Button text="Exit session" onAction="#exitSession"/>
                 <Label fx:id="sessionTitle"/>
+                <Button text="Edit session" onAction="#editSession"/>
             </HBox>
         </top>
         <center>
-            <VBox fx:id="practice">
+            <VBox>
                 <Label fx:id="foreignWordLbl" text="λόγος"/>
 
                 <TextField fx:id="inputFld" promptText="Write something..." onKeyPressed="#submit"/>

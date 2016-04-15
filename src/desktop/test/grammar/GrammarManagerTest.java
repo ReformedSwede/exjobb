@@ -72,7 +72,7 @@ public class GrammarManagerTest {
 
     @org.junit.Test
     public void tmp() throws Exception{
-        manager.getAllWords("swe", "Adjective").forEach(System.out::println);
+        //manager.tmp();
     }
 
 }
