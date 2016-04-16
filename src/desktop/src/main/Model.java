@@ -48,4 +48,9 @@ public class Model {
         getAllPartOfSpeech().forEach((part) -> words.addAll(manager.getAllWords(foreignLangCode, part)));
         return words;
     }
+
+    public void endSession(){
+        nativeLangCode = foreignLangCode = null;
+        manager = null;
+    }
 }

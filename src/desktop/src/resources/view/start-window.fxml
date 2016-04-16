@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.TilePane?>
 
 <StackPane fx:id="pContent" fx:controller="controllers.StartController"
-           xmlns:fx="http://javafx.com/fxml" prefHeight="400" prefWidth="700">
+           xmlns:fx="http://javafx.com/fxml">
     <VBox>
         <Label styleClass="title" text="Sessions"/>
         <TilePane fx:id="sessionsGrid" prefColumns="1"/>

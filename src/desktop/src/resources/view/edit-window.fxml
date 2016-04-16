@@ -8,12 +8,17 @@
 <?import javafx.scene.layout.BorderPane?>
 
 <?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.image.Image?>
 <BorderPane fx:controller="controllers.EditController"
-            xmlns:fx="http://javafx.com/fxml" prefHeight="700" prefWidth="700">
+            xmlns:fx="http://javafx.com/fxml">
     <top>
         <HBox fx:id="topBar">
-            <Button text="Exit session" onAction="#exitSession"/>
             <Label fx:id="sessionTitle"/>
+            <ImageView fx:id="exit">
+                <image>
+                    <Image url="/resources/images/exit.png" backgroundLoading="true"/>
+                </image>
+            </ImageView>
         </HBox>
     </top>
     <center>

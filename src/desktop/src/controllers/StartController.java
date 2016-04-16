@@ -1,6 +1,7 @@
 package controllers;
 
 import grammar.GrammarManager;
+import javafx.stage.Stage;
 import main.Utils;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,6 +30,7 @@ public class StartController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        sessionsGrid.getChildren().clear();
         List<Pair<String, String>> sessions = GrammarManager.getSessions();
 
         sessions.forEach((session) -> {

@@ -1,8 +1,11 @@
 package controllers;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import main.Utils;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -25,6 +28,7 @@ public class PracticeController{
     public TextField inputFld;
     public Label infoLbl;
     public ImageView imageView;
+    public ImageView exit;
     Pane pContent;
 
     public void submit(KeyEvent e){
@@ -48,14 +52,37 @@ public class PracticeController{
     public void init(Model model, Pane content){
         this.model = model;
         this.pContent = content;
-        foreignWordLbl.setText(model.getRandomWord());
+        pContent.getScene().getWindow().setHeight(700);
+        pContent.getScene().getWindow().setWidth(900);
+
+        exit.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+            exitSession();
+            event.consume();
+        });
 
         sessionTitle.setText("Current session: " + Utils.codeToName(model.getNativeLangCode()) +
                 " speaker practising " + Utils.codeToName(model.getForeignLangCode()));
+
+
+
+        foreignWordLbl.setText(model.getRandomWord());
     }
 
     public void exitSession(){
+        model.endSession();
+        URL url = getClass().getResource("/resources/view/start-window.fxml");
 
+        FXMLLoader fxmlloader = new FXMLLoader();
+        fxmlloader.setLocation(url);
+        fxmlloader.setBuilderFactory(new JavaFXBuilderFactory());
+
+        pContent.getChildren().clear();
+        try {
+            pContent.getChildren().add(fxmlloader.load(url.openStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ((StartController)fxmlloader.getController()).initialize(null, null);
     }
 
     public void editSession(){

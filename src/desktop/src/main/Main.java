@@ -1,5 +1,6 @@
 package main;
 
+import controllers.StartController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
