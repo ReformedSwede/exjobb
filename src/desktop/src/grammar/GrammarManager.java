@@ -192,7 +192,7 @@ public class GrammarManager {
 		return false;
 	}
 
-	/*ublic void tmp(){
+	/*public void tmp(){
 		try {
 			Concr cn = PGF.readPGF("Words.pgf").getLanguages().get(Utils.codeToGF(nativeLangCode));
 			Concr cf = PGF.readPGF("Words.pgf").getLanguages().get(Utils.codeToGF(foreignLangCode));

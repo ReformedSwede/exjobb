@@ -9,28 +9,27 @@
 
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.image.Image?>
+
 <BorderPane fx:controller="controllers.PracticeController"
             xmlns:fx="http://javafx.com/fxml">
-        <top>
-            <HBox fx:id="topBar">
+    <top>
+        <VBox fx:id="topBar">
+            <Label fx:id="sessionTitle"/>
+            <HBox spacing="20">
+                <Button text="Exit" onAction="#exit"/>
                 <Button text="Edit session" onAction="#editSession"/>
-                <Label fx:id="sessionTitle"/>
-                <ImageView fx:id="exit">
-                    <image>
-                        <Image url="/resources/images/exit.png" backgroundLoading="true"/>
-                    </image>
-                </ImageView>
             </HBox>
-        </top>
-        <center>
-            <VBox>
-                <Label fx:id="foreignWordLbl" text="λόγος"/>
+        </VBox>
+    </top>
+    <center>
+        <VBox styleClass="center">
+            <Label fx:id="foreignWordLbl" text="λόγος"/>
 
-                <TextField fx:id="inputFld" promptText="Write something..." onKeyPressed="#submit"/>
+            <TextField fx:id="inputFld" promptText="Write something..." onKeyPressed="#submit"/>
 
-                <Label fx:id="infoLbl" text="Extra information is shown here"/>
+            <Label fx:id="infoLbl" text="Extra information is shown here"/>
 
-                <ImageView fx:id="imageView"/>
-            </VBox>
-        </center>
-    </BorderPane>
+            <ImageView fx:id="imageView"/>
+        </VBox>
+    </center>
+</BorderPane>

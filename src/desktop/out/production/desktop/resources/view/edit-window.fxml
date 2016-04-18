@@ -9,20 +9,20 @@
 
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.image.Image?>
+
 <BorderPane fx:controller="controllers.EditController"
             xmlns:fx="http://javafx.com/fxml">
     <top>
-        <HBox fx:id="topBar">
+        <VBox fx:id="topBar">
             <Label fx:id="sessionTitle"/>
-            <ImageView fx:id="exit">
-                <image>
-                    <Image url="/resources/images/exit.png" backgroundLoading="true"/>
-                </image>
-            </ImageView>
-        </HBox>
+            <HBox spacing="20">
+                <Button text="Exit" onAction="#exit"/>
+                <Button text="Practice" onAction="#practice"/>
+            </HBox>
+        </VBox>
     </top>
     <center>
-        <HBox>
+        <HBox styleClass="center">
             <VBox>
                 <Label styleClass="title" text="List of all parts of speech"/>
                 <TilePane fx:id="posList"/>

@@ -3,6 +3,7 @@ package controllers;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -28,7 +29,7 @@ public class PracticeController{
     public TextField inputFld;
     public Label infoLbl;
     public ImageView imageView;
-    public ImageView exit;
+    public Button exit;
     Pane pContent;
 
     public void submit(KeyEvent e){
@@ -55,11 +56,6 @@ public class PracticeController{
         pContent.getScene().getWindow().setHeight(700);
         pContent.getScene().getWindow().setWidth(900);
 
-        exit.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            exitSession();
-            event.consume();
-        });
-
         sessionTitle.setText("Current session: " + Utils.codeToName(model.getNativeLangCode()) +
                 " speaker practising " + Utils.codeToName(model.getForeignLangCode()));
 
@@ -68,7 +64,7 @@ public class PracticeController{
         foreignWordLbl.setText(model.getRandomWord());
     }
 
-    public void exitSession(){
+    public void exit(){
         model.endSession();
         URL url = getClass().getResource("/resources/view/start-window.fxml");
 
