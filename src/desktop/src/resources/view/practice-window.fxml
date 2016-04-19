@@ -10,6 +10,8 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.image.Image?>
 
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.ListView?>
 <BorderPane fx:controller="controllers.PracticeController"
             xmlns:fx="http://javafx.com/fxml">
     <top>
@@ -22,14 +24,36 @@
         </VBox>
     </top>
     <center>
-        <VBox styleClass="center">
-            <Label fx:id="foreignWordLbl" text="λόγος"/>
+        <GridPane styleClass="center" hgap="200">
+            <Label fx:id="foreignWordLbl" text="λόγος"
+                    GridPane.columnIndex="0"
+                    GridPane.rowIndex="0"
+                    GridPane.columnSpan="3"/>
 
-            <TextField fx:id="inputFld" promptText="Write something..." onKeyPressed="#submit"/>
+            <TextField fx:id="inputFld"
+                       promptText="Write something..."
+                       onKeyPressed="#submit"
+                   GridPane.columnIndex="0"
+                   GridPane.rowIndex="1"
+                   GridPane.columnSpan="3"/>
 
-            <Label fx:id="infoLbl" text="Extra information is shown here"/>
+            <Label fx:id="infoLbl"
+                   text="Extra information is shown here"
+                   GridPane.columnIndex="0"
+                   GridPane.rowIndex="2"
+                   GridPane.columnSpan="3"/>
 
-            <ImageView fx:id="imageView"/>
-        </VBox>
+            <ImageView fx:id="imageView"
+               GridPane.columnIndex="0"
+               GridPane.rowIndex="3"
+               GridPane.columnSpan="3"/>
+
+            <VBox fx:id="posRadioList"
+                  GridPane.columnIndex="3"
+                    GridPane.rowIndex="0"
+                    GridPane.rowSpan="2">
+                <Label text="Used speech to practice"/>
+            </VBox>
+        </GridPane>
     </center>
 </BorderPane>

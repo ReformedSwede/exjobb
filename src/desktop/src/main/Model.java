@@ -4,8 +4,8 @@ package main;
 import grammar.GrammarManager;
 import grammar.Word;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Model for MVC design pattern. Provides data for views and controllers.
@@ -38,8 +38,19 @@ public class Model {
         return foreignLangCode;
     }
 
-    public Word getRandomWord(){
-        return manager.getRandomWord();
+    /**
+     * Returns a random word, but not from the specified parts of speech
+     */
+    public Word getRandomWord(String... doNotInclude){
+        List<String> posToInclude = manager.getAllPartsOfSpeech();
+        if(doNotInclude.length != 0) {
+            final List<String> list = Arrays.asList(doNotInclude);
+            posToInclude = posToInclude.stream().filter((o) -> !list.contains(o)).collect(Collectors.toList());
+        }
+
+        List<Word> words = new ArrayList<>();
+        posToInclude.forEach(s -> words.addAll(manager.getAllWords(s)));
+        return words.get(new Random().nextInt(words.size()));
     }
 
     public List<String> getAllPartOfSpeech(){

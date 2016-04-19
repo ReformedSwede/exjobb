@@ -1,16 +1,12 @@
 package controllers;
 
 import grammar.Word;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
-import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
+import javafx.scene.layout.VBox;
 import main.Utils;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -19,33 +15,47 @@ import main.Model;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PracticeController{
 
     private Model model;
     private Word currentWord;
     private String inflectionForm;
+    private Set<String> unusedPartsOfSpeech = new HashSet<>();
 
     //UI components
+    Pane pContent;
     public Label sessionTitle;
     public Label foreignWordLbl;
     public TextField inputFld;
     public Label infoLbl;
     public ImageView imageView;
     public Button exit;
-    Pane pContent;
+    public VBox posRadioList;
 
 
     public void init(Model model, Pane content){
         this.model = model;
         this.pContent = content;
+
+        //Init window
         pContent.getScene().getWindow().setHeight(700);
         pContent.getScene().getWindow().setWidth(1000);
 
+        //Init components
         sessionTitle.setText("Current session: " + Utils.codeToName(model.getNativeLangCode()) +
                 " speaker practising " + Utils.codeToName(model.getForeignLangCode()));
 
+        model.getAllPartOfSpeech().forEach(s -> {
+            RadioButton rb = new RadioButton(s);
+            rb.setSelected(true);
+            rb.setOnAction(event -> posRadioSelected(rb));
+            posRadioList.getChildren().add(rb);
+        });
 
+        //Start!
         setNextWord();
     }
 
@@ -70,6 +80,18 @@ public class PracticeController{
                         "\".");
             }
             setNextWord();
+        }
+    }
+
+    private void posRadioSelected(RadioButton rb){
+        if(rb.isSelected()){
+            unusedPartsOfSpeech.remove(rb.getText());
+        }else{
+            if(unusedPartsOfSpeech.size() + 1 == model.getAllPartOfSpeech().size()) {
+                rb.setSelected(true);
+                return;
+            }
+            unusedPartsOfSpeech.add(rb.getText());
         }
     }
 
@@ -108,11 +130,11 @@ public class PracticeController{
 
     private void setNextWord(){
         inputFld.clear();
-        if((currentWord = model.getRandomWord()).hasInflections()) {
+        if((currentWord = model.getRandomWord(unusedPartsOfSpeech.toArray(new String[0]))).hasInflections()) {
             inflectionForm = currentWord.getRandomInflectionName();
                     foreignWordLbl.setText(currentWord.getForeignInflectionFormByName(inflectionForm));
         }else {
-            foreignWordLbl.setText((currentWord = model.getRandomWord()).getForeign());
+            foreignWordLbl.setText(currentWord.getForeign());
             inflectionForm = null;
         }
     }

@@ -152,28 +152,10 @@ public class GrammarManager {
         return functions.stream().map(fun -> new Word(nativeConcr, foreignConcr, fun)).collect(Collectors.toList());
 	}
 
-	/**
-	 * Returns a random word from the database
-     */
-	public Word getRandomWord(){
-		int nrOfCats = getAllPartsOfSpeech().size();
-		String randPartOfSpeech = getAllPartsOfSpeech().get(new Random().nextInt(nrOfCats));
-        return getRandomWord(randPartOfSpeech);
-	}
-
-	/**
-	 * Returns a random word from a specified part of speech.
-     * @param partOfSpeech
-     */
-	public Word getRandomWord(String partOfSpeech){
-		int nrOfWords = getAllWords(partOfSpeech).size();
-		return getAllWords(partOfSpeech).get(new Random().nextInt(nrOfWords));
-	}
-
-	public void tmp(){
+	/*public void tmp(){
 		Word word = new Word(nativeConcr, foreignConcr, "Go");
         nativeConcr.tabularLinearize(word.getExpr()).forEach((key, value) -> {System.out.println(key + value);});
-	}
+	}*/
 
 	/*****Private methods******/
 
