@@ -17,8 +17,8 @@ public class GrammarManagerTest {
         manager.addWord("Noun", "hallå", "hello");
 
         boolean added = false;
-        for(String s : manager.getAllWords("eng", "Noun")){
-            if(s.equals("hello")){
+        for(Word s : manager.getAllWords()){
+            if(s.getForeign().equals("hello")){
                 added = true;
                 break;
             }
@@ -32,8 +32,8 @@ public class GrammarManagerTest {
         manager.removeWord("Noun", "hello");
 
         boolean removed = true;
-        for(String s : manager.getAllWords("eng", "Noun")){
-            if(s.equals("hello")){
+        for(Word s : manager.getAllWords()){
+            if(s.getForeign().equals("hello")){
                 removed = false;
                 break;
             }
@@ -45,34 +45,35 @@ public class GrammarManagerTest {
     @org.junit.Test
     public void getAllPartOfSpeech() throws Exception {
         System.out.println("***Test: getAllPartsOfSpeech***");
-        int prevSize = manager.getAllPartOfSpeech("eng").size();
+        int prevSize = manager.getAllPartsOfSpeech().size();
 
         boolean test = false;
-        for(String s : manager.getAllPartOfSpeech("eng")){
+        for(String s : manager.getAllPartsOfSpeech()){
             if(s.equals("Noun")){
                 test = true;
                 break;
             }
         }
-        assertTrue(manager.getAllPartOfSpeech("eng").size() == prevSize + 1 && test);
+        assertTrue(manager.getAllPartsOfSpeech().size() == prevSize + 1 && test);
     }
 
     @org.junit.Test
     public void getAllWords() throws Exception {
         System.out.println("***Test: getAllWords***");
-        assertTrue(true);
+        manager.getAllWords().forEach(word -> System.out.println(word.getForeign()));
+        assertTrue(manager.getAllWords().size() > 0);
     }
 
     @org.junit.Test
-    public void gradeAnswer() throws Exception{
-        System.out.println("***Test: gradeAnswer***");
-        assertTrue(manager.gradeAnswer("fish", "fisk"));
+    public void getAllWordsPos() throws Exception {
+        System.out.println("***Test: getAllWords***");
+        manager.getAllWords("V").forEach(word -> System.out.println(word.getForeign()));
+        assertTrue(manager.getAllWords().size() > 0);
     }
-
 
     @org.junit.Test
     public void tmp() throws Exception{
-        //manager.tmp();
+        manager.tmp();
     }
 
 }

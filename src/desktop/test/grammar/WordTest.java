@@ -7,21 +7,28 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static org.junit.Assert.*;
 
 public class WordTest {
 
-    Word word;
+    Word noun;
+    Word verb;
 
     @Before
     public void setUp(){
         try {
             PGF pgf = PGF.readPGF("Words.pgf");
-            word = new Word(
+            noun = new Word(
                     pgf.getLanguages().get(Utils.codeToGF("swe")),
                     pgf.getLanguages().get(Utils.codeToGF("eng")),
                     "Car");
+            verb = new Word(
+                    pgf.getLanguages().get(Utils.codeToGF("swe")),
+                    pgf.getLanguages().get(Utils.codeToGF("eng")),
+                    "Eat");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -29,7 +36,18 @@ public class WordTest {
 
     @Test
     public void checkAnswer() throws Exception {
-        assertTrue(word.checkAnswer("bil"));
+        assertTrue(noun.checkAnswer("bil"));
+    }
+
+    @Test
+    public void getAllInflectionNames(){
+        noun.getAllInflectionNames().forEach(System.out::println);
+        verb.getAllInflectionNames().forEach(System.out::println);
+    }
+
+    @Test
+    public void checkInflectedAnswer(){
+        assertTrue(verb.checkInflectedAnswer("åt", "s VPast"));
     }
 
 }

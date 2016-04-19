@@ -2,7 +2,7 @@ package main;
 
 
 import grammar.GrammarManager;
-import org.grammaticalframework.pgf.ParseError;
+import grammar.Word;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +23,13 @@ public class Model {
         manager = new GrammarManager(nativeLang, foreignLang);
     }
 
+    public void endSession(){
+        nativeLangCode = foreignLangCode = null;
+        manager = null;
+    }
+
+    /*****Getters*****/
+
     public String getNativeLangCode() {
         return nativeLangCode;
     }
@@ -31,26 +38,26 @@ public class Model {
         return foreignLangCode;
     }
 
-    public String getRandomWord(){
-        return manager.getRandomWord(foreignLangCode);
-    }
-
-    public boolean gradeAnswer(String foreignWord, String usersAnswer){
-        return manager.gradeAnswer(foreignWord, usersAnswer);
+    public Word getRandomWord(){
+        return manager.getRandomWord();
     }
 
     public List<String> getAllPartOfSpeech(){
-        return manager.getAllPartOfSpeech(foreignLangCode);
+        return manager.getAllPartsOfSpeech();
     }
 
-    public List<String> getAllForeignWords(){
-        List<String> words = new ArrayList<>();
-        getAllPartOfSpeech().forEach((part) -> words.addAll(manager.getAllWords(foreignLangCode, part)));
-        return words;
+    public List<Word> getAllWords(){
+        return manager.getAllWords();
     }
 
-    public void endSession(){
-        nativeLangCode = foreignLangCode = null;
-        manager = null;
+    public List<Word> getAllWords(String partOfSpeech){
+        return manager.getAllWords(partOfSpeech);
     }
+
+    /*****Setters******/
+
+    public void addNewWord(String pos, String nativeWord, String foreignWord){
+        manager.addWord(pos, nativeWord, foreignWord);
+    }
+
 }

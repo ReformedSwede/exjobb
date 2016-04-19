@@ -1,5 +1,6 @@
 package controllers;
 
+import grammar.Word;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -22,6 +23,8 @@ import java.net.URL;
 public class PracticeController{
 
     private Model model;
+    private Word currentWord;
+    private String inflectionForm;
 
     //UI components
     public Label sessionTitle;
@@ -32,10 +35,28 @@ public class PracticeController{
     public Button exit;
     Pane pContent;
 
+
+    public void init(Model model, Pane content){
+        this.model = model;
+        this.pContent = content;
+        pContent.getScene().getWindow().setHeight(700);
+        pContent.getScene().getWindow().setWidth(1000);
+
+        sessionTitle.setText("Current session: " + Utils.codeToName(model.getNativeLangCode()) +
+                " speaker practising " + Utils.codeToName(model.getForeignLangCode()));
+
+
+        setNextWord();
+    }
+
     public void submit(KeyEvent e){
         if (e.getCode().equals(KeyCode.ENTER)){
             //grade answer
-            boolean correct = model.gradeAnswer(foreignWordLbl.getText(), inputFld.getText().trim());
+            boolean correct;
+            if(inflectionForm == null)
+                correct = currentWord.checkAnswer(inputFld.getText().trim());
+            else
+                correct = currentWord.checkInflectedAnswer(inputFld.getText().trim(), inflectionForm);
 
             if(correct){
                 imageView.setImage(new Image("/resources/images/checkmark.png"));
@@ -43,25 +64,13 @@ public class PracticeController{
             }else{
                 imageView.setImage(new Image("/resources/images/x.png"));
                 infoLbl.setText("Incorrect! \"" + foreignWordLbl.getText() +
-                        "\" is not \"" + inputFld.getText() + "\".");
+                    "\" is not \"" + inputFld.getText() + "\".\n" + "The correct answer was \"" +
+                    (inflectionForm == null ?
+                            currentWord.getNative() : currentWord.getNativeInflectionFormByName(inflectionForm)) +
+                        "\".");
             }
-            inputFld.clear();
-            foreignWordLbl.setText(model.getRandomWord());
+            setNextWord();
         }
-    }
-
-    public void init(Model model, Pane content){
-        this.model = model;
-        this.pContent = content;
-        pContent.getScene().getWindow().setHeight(700);
-        pContent.getScene().getWindow().setWidth(900);
-
-        sessionTitle.setText("Current session: " + Utils.codeToName(model.getNativeLangCode()) +
-                " speaker practising " + Utils.codeToName(model.getForeignLangCode()));
-
-
-
-        foreignWordLbl.setText(model.getRandomWord());
     }
 
     public void exit(){
@@ -95,5 +104,16 @@ public class PracticeController{
             e.printStackTrace();
         }
         ((EditController)fxmlloader.getController()).init(model, pContent);
+    }
+
+    private void setNextWord(){
+        inputFld.clear();
+        if((currentWord = model.getRandomWord()).hasInflections()) {
+            inflectionForm = currentWord.getRandomInflectionName();
+                    foreignWordLbl.setText(currentWord.getForeignInflectionFormByName(inflectionForm));
+        }else {
+            foreignWordLbl.setText((currentWord = model.getRandomWord()).getForeign());
+            inflectionForm = null;
+        }
     }
 }

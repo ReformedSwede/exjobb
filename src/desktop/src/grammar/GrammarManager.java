@@ -5,7 +5,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import javafx.util.Pair;
-import javafx.util.converter.NumberStringConverter;
 import main.Utils;
 import org.grammaticalframework.pgf.Concr;
 import org.grammaticalframework.pgf.Expr;
@@ -15,8 +14,11 @@ import org.grammaticalframework.pgf.ParseError;
 public class GrammarManager {
 
 	private String dir;
+    private PGF pgf;
 	private String nativeLangCode;
 	private String foreignLangCode;
+    private Concr nativeConcr;
+    private Concr foreignConcr;
 
 	/**
 	 * Initializes the grammar manager for this session. Finds the session's folder and compiles necessary files.
@@ -29,8 +31,15 @@ public class GrammarManager {
 				File.separator + nativeLang.substring(0, 3).toLowerCase() + foreignLang.substring(0, 3).toLowerCase();
 		this.nativeLangCode = nativeLang.substring(0, 3).toLowerCase();
 		this.foreignLangCode = foreignLang.substring(0, 3).toLowerCase();
+        try {
+            pgf = PGF.readPGF("Words.pgf");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        nativeConcr = pgf.getLanguages().get(Utils.codeToGF(nativeLang));
+        foreignConcr = pgf.getLanguages().get(Utils.codeToGF(foreignLang));
 
-		//Create PGF file TODO: compile correct file in correct directory with correct filename
+        //Create PGF file TODO: compile correct file in correct directory with correct filename
 		/*String file = dir + File.separator + Utils.codeToGF(foreignLang) + ".gf";
 		if(!new File(file).exists())*/
 		//compilePGF(dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf",
@@ -112,100 +121,59 @@ public class GrammarManager {
 	 * @return List of all languages
      */
 	public Collection<String> getAllLanguages(){
-		try {
-			Collection<String> langs = PGF.readPGF("Words.pgf").getLanguages().keySet();
-			langs.forEach((s -> {
-				s = Utils.gfToName(s);
-			}));
-			return langs;
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		return new ArrayList<String>();
+        Collection<String> langs = pgf.getLanguages().keySet();
+        langs.forEach((s -> {
+            s = Utils.gfToName(s);
+        }));
+        return langs;
 	}
 
 	/**
 	 * Return a list of all languages, i.e. GF categories
      */
-	public List<String> getAllPartOfSpeech(String language){
-		try {
-			List<String> parts;
-			parts = PGF.readPGF("Words.pgf").getCategories().stream().filter((category) ->
-					!category.equals("Int")&&!category.equals("String")&&!category.equals("Float"))
-					.collect(Collectors.toList());
-			return parts;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		return new ArrayList<>();
+	public List<String> getAllPartsOfSpeech(){
+        List<String> parts;
+        parts = pgf.getCategories().stream().filter((category) ->
+                !category.equals("Int")&&!category.equals("String")&&!category.equals("Float"))
+                .collect(Collectors.toList());
+        return parts;
 	}
-	
-	public List<String> getAllWords(String language, String partOfSpeech){
-		try {
-			/*Concr cf = PGF.readPGF("Words.pgf").getLanguages().get(Utils.codeToGF(language));
-			List<String> functions = PGF.readPGF("Words.pgf").getFunctionsByCat(partOfSpeech);
-			List<Expr> expressions = functions.stream().map(Expr::new).collect(Collectors.toList());
-			return expressions.stream().map((cf::linearize)).collect(Collectors.toList());*/
-			return PGF.readPGF("Words.pgf").getFunctionsByCat(partOfSpeech);
 
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		return new ArrayList<String>();
+    public List<Word> getAllWords(){
+        List<Word> list = new ArrayList<>();
+        getAllPartsOfSpeech().forEach(pos -> {
+            list.addAll(getAllWords(pos));
+        });
+        return list;
+    }
+
+	public List<Word> getAllWords(String partOfSpeech){
+        List<String> functions = pgf.getFunctionsByCat(partOfSpeech);
+        return functions.stream().map(fun -> new Word(nativeConcr, foreignConcr, fun)).collect(Collectors.toList());
 	}
 
 	/**
-	 * Returns a random word from the grammar files
-	 * Each string is actually the name of a gf function
+	 * Returns a random word from the database
      */
-	public String getRandomWord(String language){
-		int nrOfCats = getAllPartOfSpeech(Utils.codeToGF(language)).size();
-		String randPartOfSpeech = getAllPartOfSpeech(Utils.codeToGF(language))
-				.get(new Random().nextInt(nrOfCats));
-		List<String> allWords = getAllWords(language, randPartOfSpeech);
-		return allWords.get(new Random().nextInt(allWords.size()));
+	public Word getRandomWord(){
+		int nrOfCats = getAllPartsOfSpeech().size();
+		String randPartOfSpeech = getAllPartsOfSpeech().get(new Random().nextInt(nrOfCats));
+        return getRandomWord(randPartOfSpeech);
 	}
 
 	/**
 	 * Returns a random word from a specified part of speech.
-	 * Each string is actually the name of a gf function
+     * @param partOfSpeech
      */
-	public String getRandomWord(String language, String partOfSpeech){
-		int nrOfWords = getAllWords(Utils.codeToGF(language), partOfSpeech).size();
-		return getAllWords(Utils.codeToGF(language), partOfSpeech).get(new Random().nextInt(nrOfWords));
+	public Word getRandomWord(String partOfSpeech){
+		int nrOfWords = getAllWords(partOfSpeech).size();
+		return getAllWords(partOfSpeech).get(new Random().nextInt(nrOfWords));
 	}
 
-	public boolean gradeAnswer(String foreignWord, String usersAnswer){
-		try {
-			Concr cn = PGF.readPGF("Words.pgf").getLanguages().get(Utils.codeToGF(nativeLangCode));
-			Concr cf = PGF.readPGF("Words.pgf").getLanguages().get(Utils.codeToGF(foreignLangCode));
-
-			Expr expr = cn.parse("Noun", usersAnswer).iterator().next().getExpr();
-			String linearization = cf.linearize(expr);
-			return linearization.equals(foreignWord);
-		} catch(ParseError e){
-			return false;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		return false;
+	public void tmp(){
+		Word word = new Word(nativeConcr, foreignConcr, "Go");
+        nativeConcr.tabularLinearize(word.getExpr()).forEach((key, value) -> {System.out.println(key + value);});
 	}
-
-	/*public void tmp(){
-		try {
-			Concr cn = PGF.readPGF("Words.pgf").getLanguages().get(Utils.codeToGF(nativeLangCode));
-			Concr cf = PGF.readPGF("Words.pgf").getLanguages().get(Utils.codeToGF(foreignLangCode));
-
-			Expr e = new Expr(getRandomWord("eng", "V"));
-			cf.tabularLinearize(e).entrySet().forEach((entry) -> {
-				System.out.println("key: " + entry.getKey() + " value: " + entry.getValue());
-			});
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-	}*/
 
 	/*****Private methods******/
 
@@ -215,18 +183,19 @@ public class GrammarManager {
      */
 	private void compilePGF(String... files){
 		try {
-			for (String file : files) {
-				String[] args = new String[files.length + 2];
-				args[0] = "gf";
-				args[1] = "-make";
-				System.arraycopy(files, 0, args, 2, files.length);
-				Process builder = new ProcessBuilder(args).start();
-				printCompileLog(builder);
-			}
+			String[] args = new String[files.length + 2];
+			args[0] = "gf";
+			args[1] = "-make";
+			System.arraycopy(files, 0, args, 2, files.length);
+			Process builder = new ProcessBuilder(args).start();
+			printCompileLog(builder);
+
+            pgf = PGF.readPGF("Words.pgf");
+            nativeConcr = pgf.getLanguages().get(Utils.codeToGF(nativeLangCode));
+            foreignConcr = pgf.getLanguages().get(Utils.codeToGF(foreignLangCode));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-
 	}
 
 	private void printCompileLog(Process pro) throws IOException{

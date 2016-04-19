@@ -10,6 +10,9 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.image.Image?>
 
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.GridPane?>
 <BorderPane fx:controller="controllers.EditController"
             xmlns:fx="http://javafx.com/fxml">
     <top>
@@ -24,13 +27,38 @@
     <center>
         <HBox styleClass="center">
             <VBox>
-                <Label styleClass="title" text="List of all parts of speech"/>
-                <TilePane fx:id="posList"/>
+                <Label styleClass="title" text="List of words"/>
+                <ComboBox fx:id="posBox"/>
+                <ListView fx:id="wordList"/>
             </VBox>
-            <VBox>
-                <Label styleClass="title" text="List of all words"/>
-                <TilePane fx:id="wordList"/>
-            </VBox>
+            <GridPane vgap="4">
+                <Label styleClass="title" text="Add new word"
+                       GridPane.columnIndex="0"
+                       GridPane.columnSpan="2"
+                       GridPane.rowIndex="0"/>
+
+                <Label text="Part of speech: "
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="1"/>
+                <TextField fx:id="posField"
+                           GridPane.columnIndex="1"
+                           GridPane.rowIndex="1"/>
+                <Label text="Word in native language: "
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="2"/>
+                <TextField fx:id="nativeField"
+                        GridPane.columnIndex="1"
+                        GridPane.rowIndex="2"/>
+                <Label text="Word in foreign language: "
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="3"/>
+                <TextField fx:id="foreignField"
+                        GridPane.columnIndex="1"
+                        GridPane.rowIndex="3"/>
+                <Button text="Add" onAction="#addNewWord"
+                        GridPane.columnIndex="0"
+                        GridPane.rowIndex="4"/>
+            </GridPane>
         </HBox>
     </center>
 </BorderPane>

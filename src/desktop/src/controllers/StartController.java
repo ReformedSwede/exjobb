@@ -45,7 +45,7 @@ public class StartController implements Initializable {
     }
 
     public void startPractice(String nativeLang, String foreignLang){
-        URL url = getClass().getResource("/resources/view/practice-window.fxml");
+        URL url = getClass().getResource("/resources/view/edit-window.fxml");
 
         FXMLLoader fxmlloader = new FXMLLoader();
         fxmlloader.setLocation(url);
@@ -59,6 +59,6 @@ public class StartController implements Initializable {
         }
 
         model.initialize(nativeLang, foreignLang);
-        ((PracticeController)fxmlloader.getController()).init(model, pContent);
+        ((EditController)fxmlloader.getController()).init(model, pContent);
     }
 }

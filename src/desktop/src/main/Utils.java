@@ -1,5 +1,6 @@
 package main;
 
+import com.sun.istack.internal.NotNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -40,7 +41,7 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return "";
     }
 
     /**
@@ -70,7 +71,7 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return "";
     }
 
     /**
@@ -100,6 +101,36 @@ public class Utils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return "";
+    }
+
+    /**
+     * Converts a name of a gf language to its short code(e.g. WordsEng -> eng)
+     * @param language A name of a gf language
+     * @return The code for the language
+     */
+    public static String gfToCode(String language){
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(xmlFile);
+            doc.getDocumentElement().normalize();
+
+            NodeList nList = doc.getElementsByTagName("language");
+
+            for (int i = 0; i < nList.getLength(); i++) {
+                Node nNode = nList.item(i);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+
+                    Element eElement = (Element) nNode;
+                    if(eElement.getAttribute("gf").equals(language)){
+                        return eElement.getAttribute("short");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
