@@ -11,11 +11,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 import main.Model;
 import main.Utils;
 
+import javax.print.DocFlavor;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class EditController {
@@ -27,9 +30,11 @@ public class EditController {
     public Label sessionTitle;
     public ComboBox<String> posBox;
     public ListView<String> wordList;
-    public TextField posField;
+    public ComboBox<String> posField;
     public TextField nativeField;
     public TextField foreignField;
+    public Button removeBtn;
+    public VBox infoPanel;
 
     public void init(Model model, Pane content){
         //Set important vars
@@ -38,14 +43,16 @@ public class EditController {
 
         //Set windows size
         pContent.getScene().getWindow().setHeight(700);
-        pContent.getScene().getWindow().setWidth(1000);
+        pContent.getScene().getWindow().setWidth(1200);
 
         //Init components
         sessionTitle.setText("Current session: " + Utils.codeToName(model.getNativeLangCode()) +
                 " speaker practising " + Utils.codeToName(model.getForeignLangCode()));
 
+        //Init both comboboxes with all parts of speech
         ObservableList<String> posList = FXCollections.observableArrayList();
         posList.addAll(model.getAllPartOfSpeech());
+        posField.setItems(posList);
         posBox.setItems(posList);
         posBox.setOnAction(event -> {
             ObservableList<String> list = FXCollections.observableArrayList();
@@ -55,25 +62,61 @@ public class EditController {
         });
         posBox.setValue(posBox.getItems().get(0));
 
+        //Init list of words
         ObservableList<String> list = FXCollections.observableArrayList();
         list.addAll(model.getAllWords(posBox.getValue()).stream()
                 .map(Word::getForeign).collect(Collectors.toList()));
         wordList.setItems(list);
     }
 
-    public void addNewWord(){
-        //Add to model
-        model.addNewWord(posField.getText().trim(), nativeField.getText().trim(), foreignField.getText().trim());
-
-        //Refresh view
-        posBox.setValue(posField.getText().trim());
-
-        posField.clear();
-        foreignField.clear();
-        nativeField.clear();
+    public void wordInListSelected(){
+        if(wordList.getSelectionModel().getSelectedItem() != null) {
+            removeBtn.setVisible(true);
+            //Display info panel
+            infoPanel.getChildren().clear();
+            Word selectedWord = model.getWordByString(
+                    posBox.getValue(),
+                    wordList.getSelectionModel().getSelectedItem());
+            List<String> info = selectedWord.getAllInflectionNames().stream()
+                    .map(i -> selectedWord.getForeignInflectionFormByName(i) +
+                            " = " + selectedWord.getNativeInflectionFormByName(i))
+                    .collect(Collectors.toList());
+            infoPanel.getChildren().addAll(info.stream().map(Label::new).collect(Collectors.toList()));
+        }
     }
 
+    public void addNewWord(){
+        //Add to model
+        model.addNewWord(posField.getValue(), nativeField.getText().trim(), foreignField.getText().trim());
 
+        //Refresh view
+        if(posBox.getValue().equals(posField.getValue()))
+            refreshWordList();
+        else
+            posBox.setValue(posField.getValue());
+
+        //Clean up gui
+        foreignField.clear();
+        nativeField.clear();
+        removeBtn.setVisible(false);
+    }
+
+    public void removeWord(){
+        //Remove from file
+        model.removeWord(posBox.getValue(), wordList.getSelectionModel().getSelectedItem());
+
+        //Clean up gui
+        infoPanel.getChildren().clear();
+        refreshWordList();
+        removeBtn.setVisible(false);
+    }
+
+    private void refreshWordList(){
+        ObservableList<String> list = FXCollections.observableArrayList();
+        list.addAll(model.getAllWords(posBox.getValue()).stream()
+                .map(Word::getForeign).collect(Collectors.toList()));
+        wordList.setItems(list);
+    }
 
     /****Navigation Methods****/
 

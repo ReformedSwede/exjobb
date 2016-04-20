@@ -17,11 +17,11 @@
             xmlns:fx="http://javafx.com/fxml">
     <top>
         <VBox fx:id="topBar">
-            <Label fx:id="sessionTitle"/>
             <HBox spacing="20">
                 <Button text="Exit" onAction="#exit"/>
                 <Button text="Practice" onAction="#practice"/>
             </HBox>
+            <Label fx:id="sessionTitle"/>
         </VBox>
     </top>
     <center>
@@ -29,8 +29,11 @@
             <VBox>
                 <Label styleClass="title" text="List of words"/>
                 <ComboBox fx:id="posBox"/>
-                <ListView fx:id="wordList"/>
+                <ListView fx:id="wordList" onKeyReleased="#wordInListSelected" onMouseClicked="#wordInListSelected"/>
+                <Button fx:id="removeBtn" text="Delete"
+                        onAction="#removeWord" visible="false"/>
             </VBox>
+            <VBox fx:id="infoPanel"/>
             <GridPane vgap="4">
                 <Label styleClass="title" text="Add new word"
                        GridPane.columnIndex="0"
@@ -40,7 +43,7 @@
                 <Label text="Part of speech: "
                        GridPane.columnIndex="0"
                        GridPane.rowIndex="1"/>
-                <TextField fx:id="posField"
+                <ComboBox fx:id="posField"
                            GridPane.columnIndex="1"
                            GridPane.rowIndex="1"/>
                 <Label text="Word in native language: "

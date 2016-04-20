@@ -36,7 +36,7 @@ public class WordTest {
 
     @Test
     public void checkAnswer() throws Exception {
-        assertTrue(noun.checkAnswer("bil"));
+        assertTrue(noun.checkAnswer("bil", true));
     }
 
     @Test
@@ -47,7 +47,7 @@ public class WordTest {
 
     @Test
     public void checkInflectedAnswer(){
-        assertTrue(verb.checkInflectedAnswer("åt", "s VPast"));
+        assertTrue(verb.checkInflectedAnswer("åt", "s VPast", true));
     }
 
 }

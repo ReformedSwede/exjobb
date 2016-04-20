@@ -12,23 +12,24 @@
 
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ToggleButton?>
 <BorderPane fx:controller="controllers.PracticeController"
             xmlns:fx="http://javafx.com/fxml">
     <top>
         <VBox fx:id="topBar">
-            <Label fx:id="sessionTitle"/>
             <HBox spacing="20">
                 <Button text="Exit" onAction="#exit"/>
                 <Button text="Edit session" onAction="#editSession"/>
             </HBox>
+            <Label fx:id="sessionTitle"/>
         </VBox>
     </top>
     <center>
         <GridPane styleClass="center" hgap="200">
-            <Label fx:id="foreignWordLbl" text="λόγος"
-                    GridPane.columnIndex="0"
-                    GridPane.rowIndex="0"
-                    GridPane.columnSpan="3"/>
+            <Label fx:id="practiceWordLbl" text="λόγος"
+                   GridPane.columnIndex="0"
+                   GridPane.rowIndex="0"
+                   GridPane.columnSpan="3"/>
 
             <TextField fx:id="inputFld"
                        promptText="Write something..."
@@ -38,7 +39,6 @@
                    GridPane.columnSpan="3"/>
 
             <Label fx:id="infoLbl"
-                   text="Extra information is shown here"
                    GridPane.columnIndex="0"
                    GridPane.rowIndex="2"
                    GridPane.columnSpan="3"/>
@@ -54,6 +54,10 @@
                     GridPane.rowSpan="2">
                 <Label text="Used speech to practice"/>
             </VBox>
+            <ToggleButton fx:id="langToggle" text="Translate to native"
+                GridPane.columnIndex="3"
+                GridPane.rowIndex="3"
+                onAction="#toggleLanguage"/>
         </GridPane>
     </center>
 </BorderPane>

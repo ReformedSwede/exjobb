@@ -21,19 +21,21 @@ import java.util.Set;
 public class PracticeController{
 
     private Model model;
-    private Word currentWord;
+    private Word currentWord, prevWord = null;
     private String inflectionForm;
     private Set<String> unusedPartsOfSpeech = new HashSet<>();
+    private boolean translateToNative = true;
 
     //UI components
     Pane pContent;
     public Label sessionTitle;
-    public Label foreignWordLbl;
+    public Label practiceWordLbl;
     public TextField inputFld;
     public Label infoLbl;
     public ImageView imageView;
     public Button exit;
     public VBox posRadioList;
+    public ToggleButton langToggle;
 
 
     public void init(Model model, Pane content){
@@ -42,11 +44,11 @@ public class PracticeController{
 
         //Init window
         pContent.getScene().getWindow().setHeight(700);
-        pContent.getScene().getWindow().setWidth(1000);
+        pContent.getScene().getWindow().setWidth(1200);
 
         //Init components
-        sessionTitle.setText("Current session: " + Utils.codeToName(model.getNativeLangCode()) +
-                " speaker practising " + Utils.codeToName(model.getForeignLangCode()));
+        sessionTitle.setText("Native language: " + Utils.codeToName(model.getNativeLangCode()) +
+                ", foreign language: " + Utils.codeToName(model.getForeignLangCode()));
 
         model.getAllPartOfSpeech().forEach(s -> {
             RadioButton rb = new RadioButton(s);
@@ -54,6 +56,8 @@ public class PracticeController{
             rb.setOnAction(event -> posRadioSelected(rb));
             posRadioList.getChildren().add(rb);
         });
+
+        langToggle.setSelected(translateToNative = true);
 
         //Start!
         setNextWord();
@@ -64,19 +68,21 @@ public class PracticeController{
             //grade answer
             boolean correct;
             if(inflectionForm == null)
-                correct = currentWord.checkAnswer(inputFld.getText().trim());
+                correct = currentWord.checkAnswer(inputFld.getText().trim(), translateToNative);
             else
-                correct = currentWord.checkInflectedAnswer(inputFld.getText().trim(), inflectionForm);
+                correct = currentWord.checkInflectedAnswer(inputFld.getText().trim(), inflectionForm, translateToNative);
 
             if(correct){
                 imageView.setImage(new Image("/resources/images/checkmark.png"));
-                infoLbl.setText("Correct! \"" + foreignWordLbl.getText() + "\" is \"" + inputFld.getText() + "\".");
+                infoLbl.setText("Correct! \"" + practiceWordLbl.getText() +
+                        "\" translates to \"" + inputFld.getText() + "\".");
             }else{
                 imageView.setImage(new Image("/resources/images/x.png"));
-                infoLbl.setText("Incorrect! \"" + foreignWordLbl.getText() +
-                    "\" is not \"" + inputFld.getText() + "\".\n" + "The correct answer was \"" +
+                infoLbl.setText("Incorrect! \"" + practiceWordLbl.getText() +
+                    "\" does not translate to  \"" + inputFld.getText() + "\".\n" + "The correct answer was \"" +
                     (inflectionForm == null ?
-                            currentWord.getNative() : currentWord.getNativeInflectionFormByName(inflectionForm)) +
+                            currentWord.getWord(translateToNative) :
+                            currentWord.getWordInflectionFormByName(inflectionForm, translateToNative)) +
                         "\".");
             }
             setNextWord();
@@ -92,8 +98,34 @@ public class PracticeController{
                 return;
             }
             unusedPartsOfSpeech.add(rb.getText());
+            setNextWord();
         }
     }
+
+    public void toggleLanguage(){
+        langToggle.setText(langToggle.isSelected() ? "Translate to native" : "Translate to foreign");
+        translateToNative = langToggle.isSelected();
+        setNextWord();
+    }
+
+    private void setNextWord(){
+        inputFld.clear();
+        do{
+            currentWord = model.getRandomWord(unusedPartsOfSpeech.toArray(new String[0]));
+        }while(currentWord.equals(prevWord));
+        prevWord = currentWord;
+
+        if(currentWord.hasInflections()) {
+            inflectionForm = currentWord.getRandomInflectionName();
+            practiceWordLbl.setText(currentWord.getWordInflectionFormByName(inflectionForm, !translateToNative));
+        }else {
+            practiceWordLbl.setText(currentWord.getWord(!translateToNative));
+            inflectionForm = null;
+        }
+    }
+
+
+    /****Navigation methods****/
 
     public void exit(){
         model.endSession();
@@ -126,16 +158,5 @@ public class PracticeController{
             e.printStackTrace();
         }
         ((EditController)fxmlloader.getController()).init(model, pContent);
-    }
-
-    private void setNextWord(){
-        inputFld.clear();
-        if((currentWord = model.getRandomWord(unusedPartsOfSpeech.toArray(new String[0]))).hasInflections()) {
-            inflectionForm = currentWord.getRandomInflectionName();
-                    foreignWordLbl.setText(currentWord.getForeignInflectionFormByName(inflectionForm));
-        }else {
-            foreignWordLbl.setText(currentWord.getForeign());
-            inflectionForm = null;
-        }
     }
 }

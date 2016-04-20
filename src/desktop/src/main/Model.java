@@ -65,10 +65,21 @@ public class Model {
         return manager.getAllWords(partOfSpeech);
     }
 
+    public Word getWordByString(String partOfSpeech, String foreignWord){
+        for (Word w : manager.getAllWords(partOfSpeech)){
+            if(w.getForeign().equals(foreignWord))
+                return w;
+        }
+        return null;
+    }
+
     /*****Setters******/
 
     public void addNewWord(String pos, String nativeWord, String foreignWord){
         manager.addWord(pos, nativeWord, foreignWord);
     }
 
+    public void removeWord(String pos, String word){
+        manager.removeWord(pos, word);
+    }
 }

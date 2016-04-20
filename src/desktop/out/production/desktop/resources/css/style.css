@@ -23,7 +23,7 @@
 }
 
 /******IDs******/
-#foreignWordLbl{
+#practiceWordLbl{
 -fx-font-size: 50pt;
 -fx-padding: 0 0 50 0
 }
@@ -35,4 +35,15 @@
 #topBar{
 -fx-background-color: #333333;
 -fx-font-size: 12pt;
+}
+#removeBtn{
+-fx-background-color: #cc5555;
+-fx-padding: 10px;
+-fx-border-insets: 5px;
+-fx-background-insets: 5px;
+}
+#infoPanel{
+-fx-border-color: #55aa77;
+-fx-border-width: 5;
+-fx-border-radius: 10;
 }
