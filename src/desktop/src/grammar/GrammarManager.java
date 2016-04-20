@@ -87,9 +87,14 @@ public class GrammarManager {
 		editor.saveToFile();
 
 		//Compile
-		compilePGF(nativeConcreteFile, foreignConcreteFile);
+		compilePGF(true, nativeConcreteFile, foreignConcreteFile);
 	}
 
+	/**
+	 * Removes a word from the file system.
+	 * @param partOfSpeech The type of the word (Keep first letter capitalized!)
+	 * @param foreignWord The word in the foreign language
+	 */
 	public void removeWord(String partOfSpeech, String foreignWord){
 		//Define file paths and names
 		String abstractFile = dir + File.separator + "Words.gf";
@@ -113,7 +118,7 @@ public class GrammarManager {
 		editor.saveToFile();
 
 		//Compile
-		compilePGF(nativeConcreteFile, foreignConcreteFile);
+		compilePGF(true, nativeConcreteFile, foreignConcreteFile);
 	}
 
 	/**
@@ -139,6 +144,9 @@ public class GrammarManager {
         return parts;
 	}
 
+	/**
+	 * Returns a list of all words in the file system
+     */
     public List<Word> getAllWords(){
         List<Word> list = new ArrayList<>();
         getAllPartsOfSpeech().forEach(pos -> {
@@ -147,6 +155,9 @@ public class GrammarManager {
         return list;
     }
 
+	/**
+	 * Returns a list of all words of the specified part of speech
+     */
 	public List<Word> getAllWords(String partOfSpeech){
         List<String> functions = pgf.getFunctionsByCat(partOfSpeech);
         return functions.stream().map(fun -> new Word(nativeConcr, foreignConcr, fun)).collect(Collectors.toList());
@@ -163,23 +174,38 @@ public class GrammarManager {
 	 * Compiles .gf files to .pgf files
 	 * @param files The files to compile
      */
-	private void compilePGF(String... files){
-		try {
-			String[] args = new String[files.length + 2];
-			args[0] = "gf";
-			args[1] = "-make";
-			System.arraycopy(files, 0, args, 2, files.length);
-			Process builder = new ProcessBuilder(args).start();
-			printCompileLog(builder);
+	private void compilePGF(boolean compileLocally, String... files) {
+        if (compileLocally){
+            try {
+                String[] args = new String[files.length + 2];
+                args[0] = "gf";
+                args[1] = "-make";
+                System.arraycopy(files, 0, args, 2, files.length);
+                Process builder = new ProcessBuilder(args).start();
+                printCompileLog(builder);
 
-            pgf = PGF.readPGF("Words.pgf");
-            nativeConcr = pgf.getLanguages().get(Utils.codeToGF(nativeLangCode));
-            foreignConcr = pgf.getLanguages().get(Utils.codeToGF(foreignLangCode));
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+                pgf = PGF.readPGF("Words.pgf");
+                nativeConcr = pgf.getLanguages().get(Utils.codeToGF(nativeLangCode));
+                foreignConcr = pgf.getLanguages().get(Utils.codeToGF(foreignLangCode));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else{
+            GfCloudProxy proxy = new GfCloudProxy();
+            //remove old files
+
+            //upload new files
+
+            //compile
+
+            //download pgf
+        }
 	}
 
+	/**
+	 * Prints all output from the specified process
+	 * @throws IOException
+     */
 	private void printCompileLog(Process pro) throws IOException{
 		BufferedReader reader =	new BufferedReader(new InputStreamReader(pro.getInputStream()));
 		StringBuilder builder = new StringBuilder();
