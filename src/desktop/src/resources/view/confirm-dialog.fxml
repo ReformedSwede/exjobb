@@ -1,0 +1,24 @@
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<GridPane>
+    <Label text="Does this look alright?"
+    GridPane.columnIndex="0"
+           GridPane.columnSpan="2"
+    GridPane.rowIndex="0"/>
+
+    <GridPane GridPane.columnIndex="0"
+    GridPane.columnSpan="2"
+    GridPane.rowIndex="1">
+        <!--Insert label displaying language, category
+            Insert text fields displaying all possible forms-->
+    </GridPane>
+
+
+    <Button text="OK"
+    GridPane.columnIndex="0"
+    GridPane.rowIndex="2"/>
+    <Button text="Edit"
+    GridPane.columnIndex="1"
+    GridPane.rowIndex="2"/>
+</GridPane>

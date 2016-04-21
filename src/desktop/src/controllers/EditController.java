@@ -5,9 +5,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.Group;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import main.Model;
 import main.Utils;
 
@@ -83,6 +88,7 @@ public class EditController {
     public void addNewWord(){
         //Add to model
         model.addNewWord(catField.getValue(), nativeField.getText().trim(), foreignField.getText().trim());
+        openConfirmDialog();
 
         //Refresh view
         if(catBox.getValue().equals(catField.getValue()))
@@ -104,6 +110,24 @@ public class EditController {
         infoPanel.getChildren().clear();
         refreshWordList();
         removeBtn.setVisible(false);
+    }
+
+
+    private void openConfirmDialog() {
+        try {
+        Stage dialog = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("/resources/view/confirm-dialog.fxml"));
+        dialog.setTitle("Confirm");
+        Scene scene = new Scene(root, 400, 200);
+        dialog.setScene(scene);
+        dialog.show();
+
+        //TODO If user clicks OK, do nothing
+        //TODO If user clicks edit, let him edit all fields, then rewrite new data to GF files
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void refreshWordList(){
