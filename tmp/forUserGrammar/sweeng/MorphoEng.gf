@@ -3,7 +3,17 @@ resource MorphoEng = open Prelude in{
 		VForm = VInf | VPres | VPast | VPastPart | VPresPart ;
 
 	oper 
+		Noun : Type = {s : Str};
+		Adjective : Type = {s : Str};
 		Verb : Type = {s : VForm => Str} ;
+
+	mkN : Str -> Noun = \word -> {
+		s = word
+	};
+
+	mkA : Str -> Adjective = \big -> {
+		s = big
+	};
 
 	mkVerb : (_,_,_,_,_ : Str) -> Verb = \go,goes,went,gone,going -> {
 		s = table {

@@ -5,17 +5,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
-import javafx.scene.Cursor;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import main.Model;
 import main.Utils;
 
-import javax.print.DocFlavor;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -28,9 +23,9 @@ public class EditController {
     //UI components
     public Pane pContent;
     public Label sessionTitle;
-    public ComboBox<String> posBox;
+    public ComboBox<String> catBox;
     public ListView<String> wordList;
-    public ComboBox<String> posField;
+    public ComboBox<String> catField;
     public TextField nativeField;
     public TextField foreignField;
     public Button removeBtn;
@@ -46,25 +41,25 @@ public class EditController {
         pContent.getScene().getWindow().setWidth(1200);
 
         //Init components
-        sessionTitle.setText("Current session: " + Utils.codeToName(model.getNativeLangCode()) +
-                " speaker practising " + Utils.codeToName(model.getForeignLangCode()));
+        sessionTitle.setText("Native language: " + Utils.codeToName(model.getNativeLangCode()) +
+                ", foreign language: " + Utils.codeToName(model.getForeignLangCode()));
 
         //Init both comboboxes with all parts of speech
         ObservableList<String> posList = FXCollections.observableArrayList();
-        posList.addAll(model.getAllPartOfSpeech());
-        posField.setItems(posList);
-        posBox.setItems(posList);
-        posBox.setOnAction(event -> {
+        posList.addAll(model.getAllCategories());
+        catField.setItems(posList);
+        catBox.setItems(posList);
+        catBox.setOnAction(event -> {
             ObservableList<String> list = FXCollections.observableArrayList();
-            list.addAll(model.getAllWords(posBox.getValue()).stream()
+            list.addAll(model.getAllWords(catBox.getValue()).stream()
                     .map(Word::getForeign).collect(Collectors.toList()));
             wordList.setItems(list);
         });
-        posBox.setValue(posBox.getItems().get(0));
+        catBox.setValue(catBox.getItems().get(0));
 
         //Init list of words
         ObservableList<String> list = FXCollections.observableArrayList();
-        list.addAll(model.getAllWords(posBox.getValue()).stream()
+        list.addAll(model.getAllWords(catBox.getValue()).stream()
                 .map(Word::getForeign).collect(Collectors.toList()));
         wordList.setItems(list);
     }
@@ -75,7 +70,7 @@ public class EditController {
             //Display info panel
             infoPanel.getChildren().clear();
             Word selectedWord = model.getWordByString(
-                    posBox.getValue(),
+                    catBox.getValue(),
                     wordList.getSelectionModel().getSelectedItem());
             List<String> info = selectedWord.getAllInflectionNames().stream()
                     .map(i -> selectedWord.getForeignInflectionFormByName(i) +
@@ -87,13 +82,13 @@ public class EditController {
 
     public void addNewWord(){
         //Add to model
-        model.addNewWord(posField.getValue(), nativeField.getText().trim(), foreignField.getText().trim());
+        model.addNewWord(catField.getValue(), nativeField.getText().trim(), foreignField.getText().trim());
 
         //Refresh view
-        if(posBox.getValue().equals(posField.getValue()))
+        if(catBox.getValue().equals(catField.getValue()))
             refreshWordList();
         else
-            posBox.setValue(posField.getValue());
+            catBox.setValue(catField.getValue());
 
         //Clean up gui
         foreignField.clear();
@@ -103,7 +98,7 @@ public class EditController {
 
     public void removeWord(){
         //Remove from file
-        model.removeWord(posBox.getValue(), wordList.getSelectionModel().getSelectedItem());
+        model.removeWord(catBox.getValue(), wordList.getSelectionModel().getSelectedItem());
 
         //Clean up gui
         infoPanel.getChildren().clear();
@@ -113,7 +108,7 @@ public class EditController {
 
     private void refreshWordList(){
         ObservableList<String> list = FXCollections.observableArrayList();
-        list.addAll(model.getAllWords(posBox.getValue()).stream()
+        list.addAll(model.getAllWords(catBox.getValue()).stream()
                 .map(Word::getForeign).collect(Collectors.toList()));
         wordList.setItems(list);
     }

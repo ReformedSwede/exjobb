@@ -4,6 +4,16 @@ resource MorphoSwe = open Prelude in{
 
 	oper 
 		Verb : Type = {s : VForm => Str} ;
+		Adjective : Type = {s : Str};
+		Noun : Type = {s : Str};
+
+	mkN : Str -> Noun = \ord -> {
+		s = ord;
+	};
+
+	mkA : Str -> Adjective = \stor -> {
+		s = stor;
+	};
 
 	mkVerb : (_,_,_,_,_ : Str) -> Verb = \gå,går,gick,gått,gående -> {
 		s = table {

@@ -44,17 +44,17 @@ public class GrammarManagerTest {
 
     @org.junit.Test
     public void getAllPartOfSpeech() throws Exception {
-        System.out.println("***Test: getAllPartsOfSpeech***");
-        int prevSize = manager.getAllPartsOfSpeech().size();
+        System.out.println("***Test: getAllCategories***");
+        int prevSize = manager.getAllCategories().size();
 
         boolean test = false;
-        for(String s : manager.getAllPartsOfSpeech()){
+        for(String s : manager.getAllCategories()){
             if(s.equals("Noun")){
                 test = true;
                 break;
             }
         }
-        assertTrue(manager.getAllPartsOfSpeech().size() == prevSize + 1 && test);
+        assertTrue(manager.getAllCategories().size() == prevSize + 1 && test);
     }
 
     @org.junit.Test

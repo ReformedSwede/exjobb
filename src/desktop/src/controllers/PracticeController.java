@@ -23,7 +23,7 @@ public class PracticeController{
     private Model model;
     private Word currentWord, prevWord = null;
     private String inflectionForm;
-    private Set<String> unusedPartsOfSpeech = new HashSet<>();
+    private Set<String> unusedCategories = new HashSet<>();
     private boolean translateToNative = true;
 
     //UI components
@@ -34,7 +34,7 @@ public class PracticeController{
     public Label infoLbl;
     public ImageView imageView;
     public Button exit;
-    public VBox posRadioList;
+    public VBox catRadioList;
     public ToggleButton langToggle;
 
 
@@ -50,11 +50,11 @@ public class PracticeController{
         sessionTitle.setText("Native language: " + Utils.codeToName(model.getNativeLangCode()) +
                 ", foreign language: " + Utils.codeToName(model.getForeignLangCode()));
 
-        model.getAllPartOfSpeech().forEach(s -> {
+        model.getAllCategories().forEach(s -> {
             RadioButton rb = new RadioButton(s);
             rb.setSelected(true);
-            rb.setOnAction(event -> posRadioSelected(rb));
-            posRadioList.getChildren().add(rb);
+            rb.setOnAction(event -> catRadioSelected(rb));
+            catRadioList.getChildren().add(rb);
         });
 
         langToggle.setSelected(translateToNative = true);
@@ -89,15 +89,15 @@ public class PracticeController{
         }
     }
 
-    private void posRadioSelected(RadioButton rb){
+    private void catRadioSelected(RadioButton rb){
         if(rb.isSelected()){
-            unusedPartsOfSpeech.remove(rb.getText());
+            unusedCategories.remove(rb.getText());
         }else{
-            if(unusedPartsOfSpeech.size() + 1 == model.getAllPartOfSpeech().size()) {
+            if(unusedCategories.size() + 1 == model.getAllCategories().size()) {
                 rb.setSelected(true);
                 return;
             }
-            unusedPartsOfSpeech.add(rb.getText());
+            unusedCategories.add(rb.getText());
             setNextWord();
         }
     }
@@ -111,7 +111,7 @@ public class PracticeController{
     private void setNextWord(){
         inputFld.clear();
         do{
-            currentWord = model.getRandomWord(unusedPartsOfSpeech.toArray(new String[0]));
+            currentWord = model.getRandomWord(unusedCategories.toArray(new String[0]));
         }while(currentWord.equals(prevWord));
         prevWord = currentWord;
 

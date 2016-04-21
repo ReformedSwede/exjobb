@@ -39,22 +39,22 @@ public class Model {
     }
 
     /**
-     * Returns a random word, but not from the specified parts of speech
+     * Returns a random word, but not from the specified categories
      */
     public Word getRandomWord(String... doNotInclude){
-        List<String> posToInclude = manager.getAllPartsOfSpeech();
+        List<String> catsToInclude = manager.getAllCategories();
         if(doNotInclude.length != 0) {
             final List<String> list = Arrays.asList(doNotInclude);
-            posToInclude = posToInclude.stream().filter((o) -> !list.contains(o)).collect(Collectors.toList());
+            catsToInclude = catsToInclude.stream().filter((o) -> !list.contains(o)).collect(Collectors.toList());
         }
 
         List<Word> words = new ArrayList<>();
-        posToInclude.forEach(s -> words.addAll(manager.getAllWords(s)));
+        catsToInclude.forEach(s -> words.addAll(manager.getAllWords(s)));
         return words.get(new Random().nextInt(words.size()));
     }
 
-    public List<String> getAllPartOfSpeech(){
-        return manager.getAllPartsOfSpeech();
+    public List<String> getAllCategories(){
+        return manager.getAllCategories();
     }
 
     public List<Word> getAllWords(){
@@ -65,8 +65,8 @@ public class Model {
         return manager.getAllWords(partOfSpeech);
     }
 
-    public Word getWordByString(String partOfSpeech, String foreignWord){
-        for (Word w : manager.getAllWords(partOfSpeech)){
+    public Word getWordByString(String category, String foreignWord){
+        for (Word w : manager.getAllWords(category)){
             if(w.getForeign().equals(foreignWord))
                 return w;
         }
@@ -75,11 +75,11 @@ public class Model {
 
     /*****Setters******/
 
-    public void addNewWord(String pos, String nativeWord, String foreignWord){
-        manager.addWord(pos, nativeWord, foreignWord);
+    public void addNewWord(String cat, String nativeWord, String foreignWord){
+        manager.addWord(cat, nativeWord, foreignWord);
     }
 
-    public void removeWord(String pos, String word){
-        manager.removeWord(pos, word);
+    public void removeWord(String cat, String word){
+        manager.removeWord(cat, word);
     }
 }

@@ -1,22 +1,26 @@
-concrete WordsSwe of Words = open MorphoSwe in{
+concrete WordsSwe of Words = open MorphoSwe in {
 
 	lincat
-		Noun, Adjective = {s : Str} ;
-		V = Verb ;
+		NounCat = Noun ;
+		AdjectiveCat = Adjective ;
+		VerbCat = Verb ;
 
 	lin
-		Wine = {s = "vin"} ;
-		Cheese = {s = "ost"} ;
-		Fish = {s = "fisk"} ;
-		Fresh = {s = "fräsch"} ;
-		Warm = {s = "varm"} ;
-		Italian = {s = "italiensk"} ;
-		Expensive = {s = "dyr"} ;
-		Delicious = {s = "utsökt"} ;
-		Boring = {s = "tråkig"} ;
-		Car = {s = "bil"} ;
+		Wine = mkN "vin" ;
+		Cheese = mkN "ost" ;
+		Fish = mkN "fisk" ;
+		Fresh = mkA "fräsch" ;
+		Warm = mkA "varm" ;
+		Italian = mkA "italiensk" ;
+		Expensive = mkA "dyr" ;
+		Delicious = mkA "utsökt" ;
+		Boring = mkA "tråkig" ;
+		Car = mkN "bil" ;
 		Play = mkV "leka" ;
 		Run = mkV "springa" "sprang" "sprungit" ;
 		Go = mkV "gå" "gick" "gått" ;
 		Eat = mkV "äta" "åt" "ätit" ;
+		Sound = mkN "ljud" ;
+		Big = mkA "stor" ;
+		Write = mkV "skriva" ;
 }

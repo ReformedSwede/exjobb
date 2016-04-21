@@ -2,4 +2,5 @@
 <resources>
     <language name="English" gf="WordsEng" short="eng"/>
     <language name="Swedish" gf="WordsSwe" short="swe"/>
+    <language name="Koine Greek" gf="WordsKoi" short="koi"/>
 </resources>

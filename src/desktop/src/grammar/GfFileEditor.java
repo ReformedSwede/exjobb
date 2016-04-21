@@ -100,7 +100,7 @@ class GfFileEditor {
     /**
      * Inserts a line of text at a specified section
      * @param text The text to insert
-     * @param atSection The section to insert the text
+     * @param atSection The section to insert the text into
      */
     void insert(String text, String atSection){
         fileContent.get(atSection).add(text);

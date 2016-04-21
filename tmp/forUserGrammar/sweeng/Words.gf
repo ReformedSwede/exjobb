@@ -4,12 +4,15 @@ abstract Words = {
 		startcat = Phrase ;
 
 	cat
-		Noun ;
-		Adjective ;
-		V ;
+		NounCat ;
+		AdjectiveCat ;
+		VerbCat ;
 
 	fun
-		Wine, Cheese, Fish, Car : Noun ;
-		Fresh, Warm, Italian, Expensive, Delicious, Boring : Adjective ;
-		Play, Run, Go, Eat : V ;
+		Wine, Cheese, Fish, Car : NounCat ;
+		Fresh, Warm, Italian, Expensive, Delicious, Boring : AdjectiveCat ;
+		Play, Run, Go, Eat : VerbCat ;
+		Sound : NounCat ;
+		Big : AdjectiveCat ;
+		Write : VerbCat ;
 }

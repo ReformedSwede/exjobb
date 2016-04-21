@@ -1,7 +1,6 @@
 <component name="libraryTable">
   <library name="jpgf">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/../../../../../GF/GF/src/runtime/java/org" />
       <root url="jar:///usr/lib/jpgf.jar!/" />
       <root url="file:///usr/lib" />
       <root url="file:///usr/lib" />
@@ -10,9 +9,7 @@
     <NATIVE>
       <root url="file:///usr/lib" />
     </NATIVE>
-    <SOURCES>
-      <root url="file://$PROJECT_DIR$/../../../../../GF/GF/src/runtime/java" />
-    </SOURCES>
+    <SOURCES />
     <jarDirectory url="file:///usr/lib" recursive="false" />
   </library>
 </component>

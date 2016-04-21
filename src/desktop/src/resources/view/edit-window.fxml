@@ -28,7 +28,7 @@
         <HBox styleClass="center">
             <VBox>
                 <Label styleClass="title" text="List of words"/>
-                <ComboBox fx:id="posBox"/>
+                <ComboBox fx:id="catBox"/>
                 <ListView fx:id="wordList" onKeyReleased="#wordInListSelected" onMouseClicked="#wordInListSelected"/>
                 <Button fx:id="removeBtn" text="Delete"
                         onAction="#removeWord" visible="false"/>
@@ -40,10 +40,10 @@
                        GridPane.columnSpan="2"
                        GridPane.rowIndex="0"/>
 
-                <Label text="Part of speech: "
+                <Label text="Category: "
                        GridPane.columnIndex="0"
                        GridPane.rowIndex="1"/>
-                <ComboBox fx:id="posField"
+                <ComboBox fx:id="catField"
                            GridPane.columnIndex="1"
                            GridPane.rowIndex="1"/>
                 <Label text="Word in native language: "

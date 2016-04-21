@@ -7,9 +7,7 @@ import java.util.stream.Collectors;
 import javafx.util.Pair;
 import main.Utils;
 import org.grammaticalframework.pgf.Concr;
-import org.grammaticalframework.pgf.Expr;
 import org.grammaticalframework.pgf.PGF;
-import org.grammaticalframework.pgf.ParseError;
 
 public class GrammarManager {
 
@@ -42,8 +40,8 @@ public class GrammarManager {
         //Create PGF file TODO: compile correct file in correct directory with correct filename
 		/*String file = dir + File.separator + Utils.codeToGF(foreignLang) + ".gf";
 		if(!new File(file).exists())*/
-		//compilePGF(dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf",
-		//		dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf");
+		compilePGF(true, dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf",
+				dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf");
 	}
 
 	/**
@@ -60,11 +58,11 @@ public class GrammarManager {
 
 	/**
 	 * Inserts a new word into the file system.
-	 * @param partOfSpeech The type of the word (Keep first letter capitalized!)
+	 * @param category The type of the word, gf category (Keep first letter capitalized!)
 	 * @param nativeWord The new word in the user's native language
 	 * @param foreignWord The new word in the foreign language
 	 */
-	public void addWord(String partOfSpeech, String nativeWord, String foreignWord){
+	public void addWord(String category, String nativeWord, String foreignWord){
 		//Define file paths and names
 		String abstractFile = dir + File.separator + "Words.gf";
 		String nativeConcreteFile = dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf";
@@ -73,17 +71,17 @@ public class GrammarManager {
 
 		//Insert into abstract
 		GfFileEditor editor = new GfFileEditor(abstractFile);
-		editor.insert(fun + " : " + partOfSpeech, "fun");
+		editor.insert(fun + " : " + category, "fun");
 		editor.saveToFile();
 
 		//Insert into native concrete
 		editor = new GfFileEditor(nativeConcreteFile);
-		editor.insert(fun + " = {s = \"" + nativeWord + "\"}", "lin");
+		editor.insert(fun + " = mk" + category.charAt(0) + " \"" + nativeWord + "\"", "lin");
 		editor.saveToFile();
 
 		//Insert into foreign concrete
 		editor = new GfFileEditor(foreignConcreteFile);
-		editor.insert(fun + " = {s = \"" + foreignWord + "\"}", "lin");
+		editor.insert(fun + " = mk" + category.charAt(0) + " \"" + foreignWord + "\"", "lin");
 		editor.saveToFile();
 
 		//Compile
@@ -92,10 +90,10 @@ public class GrammarManager {
 
 	/**
 	 * Removes a word from the file system.
-	 * @param partOfSpeech The type of the word (Keep first letter capitalized!)
+	 * @param category The type of the word (Keep first letter capitalized!)
 	 * @param foreignWord The word in the foreign language
 	 */
-	public void removeWord(String partOfSpeech, String foreignWord){
+	public void removeWord(String category, String foreignWord){
 		//Define file paths and names
 		String abstractFile = dir + File.separator + "Words.gf";
 		String nativeConcreteFile = dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf";
@@ -134,14 +132,14 @@ public class GrammarManager {
 	}
 
 	/**
-	 * Return a list of all languages, i.e. GF categories
+	 * Return a list of all categories
      */
-	public List<String> getAllPartsOfSpeech(){
-        List<String> parts;
-        parts = pgf.getCategories().stream().filter((category) ->
+	public List<String> getAllCategories(){
+        List<String> cats;
+        cats = pgf.getCategories().stream().filter((category) ->
                 !category.equals("Int")&&!category.equals("String")&&!category.equals("Float"))
                 .collect(Collectors.toList());
-        return parts;
+        return cats;
 	}
 
 	/**
@@ -149,17 +147,17 @@ public class GrammarManager {
      */
     public List<Word> getAllWords(){
         List<Word> list = new ArrayList<>();
-        getAllPartsOfSpeech().forEach(pos -> {
-            list.addAll(getAllWords(pos));
+        getAllCategories().forEach(cat -> {
+            list.addAll(getAllWords(cat));
         });
         return list;
     }
 
 	/**
-	 * Returns a list of all words of the specified part of speech
+	 * Returns a list of all words of the specified category
      */
-	public List<Word> getAllWords(String partOfSpeech){
-        List<String> functions = pgf.getFunctionsByCat(partOfSpeech);
+	public List<Word> getAllWords(String category){
+        List<String> functions = pgf.getFunctionsByCat(category);
         return functions.stream().map(fun -> new Word(nativeConcr, foreignConcr, fun)).collect(Collectors.toList());
 	}
 

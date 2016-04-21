@@ -48,11 +48,11 @@
                GridPane.rowIndex="3"
                GridPane.columnSpan="3"/>
 
-            <VBox fx:id="posRadioList"
+            <VBox fx:id="catRadioList"
                   GridPane.columnIndex="3"
                     GridPane.rowIndex="0"
                     GridPane.rowSpan="2">
-                <Label text="Parts of speech to practice"/>
+                <Label text="Categories to practice"/>
             </VBox>
             <ToggleButton fx:id="langToggle" text="Translate to native"
                 GridPane.columnIndex="3"
