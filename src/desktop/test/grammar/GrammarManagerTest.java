@@ -71,9 +71,9 @@ public class GrammarManagerTest {
         assertTrue(manager.getAllWords().size() > 0);
     }
 
-    /*@org.junit.Test
+    @org.junit.Test
     public void tmp() throws Exception{
-        manager.tmp();
-    }*/
+        //manager.tmp();
+    }
 
 }

@@ -35,7 +35,7 @@ class GfFileEditor {
 
             //Put first line into map
             fileContent = new LinkedHashMap<>();
-            Matcher matcher = regex("\\{", content);
+            Matcher matcher = matchRegex("\\{", content);
             matcher.find();
             fileContent.put("title", new ArrayList<>());
             fileContent.get("title").add(content.substring(0, matcher.start()).trim());
@@ -44,7 +44,7 @@ class GfFileEditor {
             //Put each section into map
             for(int i = 0; i < sections.length; i++) {
                 //Check if section exists
-                matcher = regex("\\s+" + sections[i] + "\\s", content);
+                matcher = matchRegex("\\s+" + sections[i] + "\\s", content);
                 if(!matcher.find())
                     continue;
                 //Create new entry in map
@@ -56,7 +56,7 @@ class GfFileEditor {
                 int contentLengthAtNextSection = 2;
                 int j, lowest = Integer.MAX_VALUE;
                 for(j = i; j < sections.length; j++){
-                    matcher = regex("\\s+" + sections[j] + "\\s", content);
+                    matcher = matchRegex("\\s+" + sections[j] + "\\s", content);
                     if(matcher.find()){
                         if(matcher.start() < lowest) {
                             lowest = matcher.start();
@@ -67,7 +67,7 @@ class GfFileEditor {
 
                 //Put each line in this section into map
                 while (content.length() > contentLengthAtNextSection) {
-                    matcher = regex(";", content);
+                    matcher = matchRegex(";", content);
                     if (matcher.find()) {
                         fileContent.get(sections[i]).add(content.substring(0, matcher.start()).trim());
                         content = content.substring(matcher.end(), content.length());
@@ -120,12 +120,26 @@ class GfFileEditor {
     }
 
     /**
-     * Checks if source contains match for regex
+     * Checks whether the text already exists in the file or not.
+     * @param text The text for which to look
+     * @param atSection The section at which the text should be inserted
+     * @return The duplicate line, if any. Otherwise null
+     */
+    String isDuplicateInsertion(String text, String atSection){
+        for(String line : fileContent.get(atSection)){
+            if(line.startsWith(text))
+                return line;
+        }
+        return null;
+    }
+
+    /**
+     * Checks if source contains match for matchRegex
      * @param regex Regular expression to search for
      * @param source The source in which to check for matches
      * @return A Matcher object
      */
-    private Matcher regex(String regex, String source){
+    private Matcher matchRegex(String regex, String source){
         Pattern pattern = Pattern.compile(regex);
         return pattern.matcher(source);
     }

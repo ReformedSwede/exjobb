@@ -1,24 +1,33 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Button?>
-<GridPane>
-    <Label text="Does this look alright?"
-    GridPane.columnIndex="0"
-           GridPane.columnSpan="2"
-    GridPane.rowIndex="0"/>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-    <GridPane GridPane.columnIndex="0"
-    GridPane.columnSpan="2"
-    GridPane.rowIndex="1">
-        <!--Insert label displaying language, category
-            Insert text fields displaying all possible forms-->
-    </GridPane>
+<GridPane fx:controller="controllers.DialogController"
+          xmlns:fx="http://javafx.com/fxml">
 
+    <Label fx:id="catLbl"
+           GridPane.rowIndex="0"
+           GridPane.columnIndex="0"
+           GridPane.columnSpan="2"/>
+
+    <HBox GridPane.columnIndex="0"
+          GridPane.columnSpan="3"
+          GridPane.rowIndex="2">
+        <VBox spacing="9" fx:id="inflectionPanel"/>
+        <VBox fx:id="nativePanel"/>
+        <VBox fx:id="foreignPanel"/>
+    </HBox>
 
     <Button text="OK"
-    GridPane.columnIndex="0"
-    GridPane.rowIndex="2"/>
-    <Button text="Edit"
+            onAction="#ok"
     GridPane.columnIndex="1"
-    GridPane.rowIndex="2"/>
+    GridPane.rowIndex="3"/>
+
+    <Button fx:id="editBtn"
+            text="Edit"
+            onAction="#edit"
+    GridPane.columnIndex="2"
+    GridPane.rowIndex="3"/>
 </GridPane>

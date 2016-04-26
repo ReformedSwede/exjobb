@@ -24,11 +24,11 @@ public class WordTest {
             noun = new Word(
                     pgf.getLanguages().get(Utils.codeToGF("swe")),
                     pgf.getLanguages().get(Utils.codeToGF("eng")),
-                    "Car");
+                    "Car", "Noun");
             verb = new Word(
                     pgf.getLanguages().get(Utils.codeToGF("swe")),
                     pgf.getLanguages().get(Utils.codeToGF("eng")),
-                    "Eat");
+                    "Eat","Noun");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

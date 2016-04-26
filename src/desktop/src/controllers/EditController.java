@@ -5,14 +5,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
-import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import main.InflectionCallback;
 import main.Model;
 import main.Utils;
 
@@ -21,7 +19,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EditController {
+public class EditController implements InflectionCallback {
 
     private Model model;
 
@@ -86,9 +84,14 @@ public class EditController {
     }
 
     public void addNewWord(){
+        if(catField.getValue() == null) return;
+
         //Add to model
-        model.addNewWord(catField.getValue(), nativeField.getText().trim(), foreignField.getText().trim());
-        openConfirmDialog();
+        boolean addSuccess =
+                model.addNewWord(catField.getValue(), nativeField.getText().trim(), foreignField.getText().trim());
+        if(!addSuccess)
+            return;        //TODO Notify user that insertion failed!
+        openConfirmDialog(model.getWordByString(catField.getValue(), foreignField.getText().trim()));
 
         //Refresh view
         if(catBox.getValue().equals(catField.getValue()))
@@ -104,7 +107,8 @@ public class EditController {
 
     public void removeWord(){
         //Remove from file
-        model.removeWord(catBox.getValue(), wordList.getSelectionModel().getSelectedItem());
+        model.removeWord(catBox.getValue(),
+                model.getWordByString(catBox.getValue(), wordList.getSelectionModel().getSelectedItem()).getFunction());
 
         //Clean up gui
         infoPanel.getChildren().clear();
@@ -113,21 +117,39 @@ public class EditController {
     }
 
 
-    private void openConfirmDialog() {
+    private void openConfirmDialog(Word word) {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("/resources/view/confirm-dialog.fxml"));
+        fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
         try {
-        Stage dialog = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/resources/view/confirm-dialog.fxml"));
-        dialog.setTitle("Confirm");
-        Scene scene = new Scene(root, 400, 200);
-        dialog.setScene(scene);
-        dialog.show();
-
-        //TODO If user clicks OK, do nothing
-        //TODO If user clicks edit, let him edit all fields, then rewrite new data to GF files
-
+            fxmlLoader.setRoot(
+                    fxmlLoader.load(getClass().getResource("/resources/view/confirm-dialog.fxml").openStream()));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Scene scene = new Scene(fxmlLoader.getRoot(), 400, 200);
+
+        Stage dialog = new Stage();
+        dialog.setTitle("Does this look alright?");
+        dialog.setScene(scene);
+        dialog.show();
+
+        ((DialogController)fxmlLoader.getController()).init(word, this, dialog);
+    }
+
+    /**
+     * This is a callback method for the confirm dialog. If the user edits the words in the confirm dialog,
+     * This method is called.
+     * @param foreignInflections
+     * @param nativeInflections
+     */
+    @Override
+    public void call(String category, String function, List<String> nativeInflections, List<String> foreignInflections) {
+        model.removeWord(category, function);
+        model.addWordWithInflections(category, nativeInflections, foreignInflections);
+
+        //Refresh view
+        refreshWordList();
     }
 
     private void refreshWordList(){
@@ -174,5 +196,4 @@ public class EditController {
         }
         ((PracticeController)fxmlloader.getController()).init(model, pContent);
     }
-
 }

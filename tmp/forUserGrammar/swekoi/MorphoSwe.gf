@@ -46,7 +46,7 @@ resource MorphoSwe = open Prelude in{
 
 
 
-	mkVerb : (_,_,_ : Str) -> Verb = \gå,går,gick -> {
+	mkVerb : (_,_ : Str) -> Verb = \går,gick -> {
 		s = table {
 			VPres => går;
 			VImp => gick
@@ -56,10 +56,10 @@ resource MorphoSwe = open Prelude in{
 	regVerb : Str -> Verb = \öppna ->
 		let öppn = init öppna 
 		in
-		mkVerb öppna (öppn + "ar") (öppn + "ade");
+		mkVerb (öppn + "ar") (öppn + "ade");
 
 	oper mkV = overload {
 		mkV : (leta : Str) -> Verb = regVerb ;
-		mkV : (gå,går,gick : Str) -> Verb = mkVerb ;
+		mkV : (går,gick : Str) -> Verb = mkVerb ;
 	};
 }

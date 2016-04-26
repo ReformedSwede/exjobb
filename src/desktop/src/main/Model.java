@@ -15,14 +15,22 @@ public class Model {
 
     private String nativeLangCode;
     private String foreignLangCode;
-    GrammarManager manager;
+    private GrammarManager manager;
 
+    /**
+     *
+     * @param nativeLang
+     * @param foreignLang
+     */
     public void initialize(String nativeLang, String foreignLang){
         this.nativeLangCode = nativeLang;
         this.foreignLangCode = foreignLang;
         manager = new GrammarManager(nativeLang, foreignLang);
     }
 
+    /**
+     *
+     */
     public void endSession(){
         nativeLangCode = foreignLangCode = null;
         manager = null;
@@ -30,10 +38,18 @@ public class Model {
 
     /*****Getters*****/
 
+    /**
+     *
+     * @return
+     */
     public String getNativeLangCode() {
         return nativeLangCode;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getForeignLangCode() {
         return foreignLangCode;
     }
@@ -53,18 +69,37 @@ public class Model {
         return words.get(new Random().nextInt(words.size()));
     }
 
+    /**
+     *
+     * @return
+     */
     public List<String> getAllCategories(){
         return manager.getAllCategories();
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Word> getAllWords(){
         return manager.getAllWords();
     }
 
+    /**
+     *
+     * @param partOfSpeech
+     * @return
+     */
     public List<Word> getAllWords(String partOfSpeech){
         return manager.getAllWords(partOfSpeech);
     }
 
+    /**
+     *
+     * @param category
+     * @param foreignWord
+     * @return
+     */
     public Word getWordByString(String category, String foreignWord){
         for (Word w : manager.getAllWords(category)){
             if(w.getForeign().equals(foreignWord))
@@ -75,11 +110,34 @@ public class Model {
 
     /*****Setters******/
 
-    public void addNewWord(String cat, String nativeWord, String foreignWord){
-        manager.addWord(cat, nativeWord, foreignWord);
+    /**
+     * Inserts a new word into the file system.
+     * @param cat The type of the word, gf category (Keep first letter capitalized!)
+     * @param nativeWord The new word in the user's native language
+     * @param foreignWord The new word in the foreign language
+     * @return True, if the insertion succeeded
+     */
+    public boolean addNewWord(String cat, String nativeWord, String foreignWord){
+        return manager.addWord(cat, nativeWord, foreignWord);
     }
 
-    public void removeWord(String cat, String word){
-        manager.removeWord(cat, word);
+    /**
+     * Inserts a new word into the file system.
+     * @param category The type of the word, gf category (Keep first letter capitalized!)
+     * @param nativeWords All inflection forms of the new word in the user's native language
+     * @param foreignWords All inflection forms of the new word in the foreign language
+     * @return True, if the insertion succeeded
+     */
+    public boolean addWordWithInflections(String category, List<String> nativeWords, List<String> foreignWords){
+        return manager.addWordWithInflections(category, nativeWords, foreignWords);
+    }
+
+    /**
+    * Removes a word from the file system.
+    * @param cat The type of the word (Keep first letter capitalized!)
+    * @param fun The GF function of the word
+    */
+    public void removeWord(String cat, String fun){
+        manager.removeWord(cat, fun);
     }
 }

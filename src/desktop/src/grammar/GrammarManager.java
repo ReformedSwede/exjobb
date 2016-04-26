@@ -29,19 +29,21 @@ public class GrammarManager {
 				File.separator + nativeLang.substring(0, 3).toLowerCase() + foreignLang.substring(0, 3).toLowerCase();
 		this.nativeLangCode = nativeLang.substring(0, 3).toLowerCase();
 		this.foreignLangCode = foreignLang.substring(0, 3).toLowerCase();
+
         try {
-            pgf = PGF.readPGF("Words.pgf");
+            pgf = PGF.readPGF(dir + File.separator + "Words.pgf");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         nativeConcr = pgf.getLanguages().get(Utils.codeToGF(nativeLang));
         foreignConcr = pgf.getLanguages().get(Utils.codeToGF(foreignLang));
 
-        //Create PGF file TODO: compile correct file in correct directory with correct filename
+        //Create PGF file TODO: compile correct file in correct directory with correct funfilename
 		/*String file = dir + File.separator + Utils.codeToGF(foreignLang) + ".gf";
 		if(!new File(file).exists())*/
-		compilePGF(true, dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf",
-				dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf");
+
+        compilePGF(true, new File(dir), dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf",
+              dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf");
 	}
 
 	/**
@@ -61,16 +63,25 @@ public class GrammarManager {
 	 * @param category The type of the word, gf category (Keep first letter capitalized!)
 	 * @param nativeWord The new word in the user's native language
 	 * @param foreignWord The new word in the foreign language
+     * @return True if an insertion was made, false o/w
 	 */
-	public void addWord(String category, String nativeWord, String foreignWord){
+	public boolean addWord(String category, String nativeWord, String foreignWord){
 		//Define file paths and names
 		String abstractFile = dir + File.separator + "Words.gf";
 		String nativeConcreteFile = dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf";
 		String foreignConcreteFile = dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf";
 		String fun = Character.toUpperCase(foreignWord.charAt(0)) + foreignWord.toLowerCase().substring(1);
+        fun = convertToASCII(fun);
 
 		//Insert into abstract
 		GfFileEditor editor = new GfFileEditor(abstractFile);
+        //Check for duplicate entry
+        String duplicate;
+        if((duplicate = editor.isDuplicateInsertion(fun, "fun")) != null){
+            if(duplicate.endsWith(category))
+                return false;
+            fun = fun + category.substring(0, 1).toUpperCase();
+        }
 		editor.insert(fun + " : " + category, "fun");
 		editor.saveToFile();
 
@@ -85,38 +96,86 @@ public class GrammarManager {
 		editor.saveToFile();
 
 		//Compile
-		compilePGF(true, nativeConcreteFile, foreignConcreteFile);
+		compilePGF(true, new File(dir), nativeConcreteFile, foreignConcreteFile);
+        return true;
+	}
+
+	/**
+	 * Inserts a new word into the file system.
+	 * @param category The type of the word, gf category (Keep first letter capitalized!)
+	 * @param nativeWords All inflection forms of the new word in the user's native language
+	 * @param foreignWords All inflection forms of the new word in the foreign language
+     * @return True if an insertion was made, false o/w
+	 */
+	public boolean addWordWithInflections(String category, List<String> nativeWords, List<String> foreignWords){
+		//Define file paths and names
+		String abstractFile = dir + File.separator + "Words.gf";
+		String nativeConcreteFile = dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf";
+		String foreignConcreteFile = dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf";
+		String fun = Character.toUpperCase(foreignWords.get(0).charAt(0)) + foreignWords.get(0).toLowerCase().substring(1);
+        fun = convertToASCII(fun);
+
+		//Insert into abstract
+		GfFileEditor editor = new GfFileEditor(abstractFile);
+        //Check for duplicate entry
+        String duplicate;
+        if((duplicate = editor.isDuplicateInsertion(fun, "fun")) != null){
+            if(duplicate.endsWith(category))
+                return false;
+            fun = fun + category.substring(0, 1).toUpperCase();
+        }
+		editor.insert(fun + " : " + category, "fun");
+		editor.saveToFile();
+
+		//Insert into native concrete
+		editor = new GfFileEditor(nativeConcreteFile);
+        StringBuilder stringToInsert = new StringBuilder(fun + " = mk" + category.charAt(0)); //e.g. "mkV" for verbs
+        for(String word : nativeWords)
+            stringToInsert.append(" \"").append(word).append("\"");
+		editor.insert(stringToInsert.toString(), "lin");
+		editor.saveToFile();
+
+		//Insert into foreign concrete
+		editor = new GfFileEditor(foreignConcreteFile);
+        stringToInsert = new StringBuilder(fun + " = mk" + category.charAt(0));
+        for(String word : foreignWords)
+            stringToInsert.append(" \"").append(word).append("\"");
+		editor.insert(stringToInsert.toString(), "lin");
+		editor.saveToFile();
+
+		//Compile
+		compilePGF(true, new File(dir), nativeConcreteFile, foreignConcreteFile);
+        return true;
 	}
 
 	/**
 	 * Removes a word from the file system.
 	 * @param category The type of the word (Keep first letter capitalized!)
-	 * @param foreignWord The word in the foreign language
+	 * @param function The word in the foreign language
 	 */
-	public void removeWord(String category, String foreignWord){
+	public void removeWord(String category, String function){
 		//Define file paths and names
 		String abstractFile = dir + File.separator + "Words.gf";
 		String nativeConcreteFile = dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf";
 		String foreignConcreteFile = dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf";
-		String fun = Character.toUpperCase(foreignWord.charAt(0)) + foreignWord.toLowerCase().substring(1);
 
 		//Remove from abstract
 		GfFileEditor editor = new GfFileEditor(abstractFile);
-		editor.delete(fun, "fun");
+		editor.delete(function, "fun");
 		editor.saveToFile();
 
 		//Remove from native concrete
 		editor = new GfFileEditor(nativeConcreteFile);
-		editor.delete(fun, "lin");
+		editor.delete(function, "lin");
 		editor.saveToFile();
 
 		//Remove from foreign concrete
 		editor = new GfFileEditor(foreignConcreteFile);
-		editor.delete(fun, "lin");
+		editor.delete(function, "lin");
 		editor.saveToFile();
 
 		//Compile
-		compilePGF(true, nativeConcreteFile, foreignConcreteFile);
+		compilePGF(true, new File(dir), nativeConcreteFile, foreignConcreteFile);
 	}
 
 	/**
@@ -158,21 +217,36 @@ public class GrammarManager {
      */
 	public List<Word> getAllWords(String category){
         List<String> functions = pgf.getFunctionsByCat(category);
-        return functions.stream().map(fun -> new Word(nativeConcr, foreignConcr, fun)).collect(Collectors.toList());
+        return functions.stream().map(fun -> new Word(nativeConcr, foreignConcr, fun, category)).collect(Collectors.toList());
 	}
 
 	/*public void tmp(){
-		Word word = new Word(nativeConcr, foreignConcr, "Go");
-        nativeConcr.tabularLinearize(word.getExpr()).forEach((key, value) -> {System.out.println(key + value);});
+		System.out.println(isValidFunction("hejhej"));
 	}*/
 
 	/*****Private methods******/
 
+    /**
+     * If s if not purley ascii, it is converted to a pseudo-random ascii string. o/w s is returned
+     * @param s
+     */
+    private String convertToASCII(String s){
+        if(!s.matches("\\A\\p{ASCII}*\\z")) {
+            char[] chars = s.toCharArray();
+            for (int i = 0; i < chars.length; i++)
+                chars[i] = (char) (((int) chars[i] % (65 - 90)) + 65);
+            return new String(chars);
+        }else
+            return s;
+    }
+
 	/**
-	 * Compiles .gf files to .pgf files
+	 * Compiles .gf files to .pgf files, then updates the pgf and Concr objects.
+     * @param compileLocally If false, compilation will be done using gf cloud
+     * @param compilePath Specifies where the finished pgf file should be put
 	 * @param files The files to compile
      */
-	private void compilePGF(boolean compileLocally, String... files) {
+	private void compilePGF(boolean compileLocally, File compilePath, String... files) {
         if (compileLocally){
             try {
                 String[] args = new String[files.length + 2];
@@ -182,7 +256,15 @@ public class GrammarManager {
                 Process builder = new ProcessBuilder(args).start();
                 printCompileLog(builder);
 
-                pgf = PGF.readPGF("Words.pgf");
+                //Move pgf file
+                File file = new File("Words.pgf");
+                if(file.exists() &&
+                        !file.renameTo(new File(compilePath.getAbsolutePath() + File.separator + "Words.pgf")))
+                    throw new IOException("Could not move file Word.pgf to " + compilePath.getAbsolutePath());
+
+
+                //Reinitialize variables
+                pgf = PGF.readPGF(compilePath.getAbsolutePath() + File.separator + "Words.pgf");
                 nativeConcr = pgf.getLanguages().get(Utils.codeToGF(nativeLangCode));
                 foreignConcr = pgf.getLanguages().get(Utils.codeToGF(foreignLangCode));
             } catch (IOException e) {
@@ -205,7 +287,7 @@ public class GrammarManager {
 	 * @throws IOException
      */
 	private void printCompileLog(Process pro) throws IOException{
-		BufferedReader reader =	new BufferedReader(new InputStreamReader(pro.getInputStream()));
+		BufferedReader reader =	new BufferedReader(new InputStreamReader(pro.getErrorStream()));
 		StringBuilder builder = new StringBuilder();
 		String line;
 		while ( (line = reader.readLine()) != null) {
@@ -213,5 +295,12 @@ public class GrammarManager {
 			builder.append(System.getProperty("line.separator"));
 		}
 		System.out.println(builder.toString());
+
+        reader =	new BufferedReader(new InputStreamReader(pro.getErrorStream()));
+        while ( (line = reader.readLine()) != null) {
+            builder.append(line);
+            builder.append(System.getProperty("line.separator"));
+        }
+        System.out.println(builder.toString());
 	}
 }

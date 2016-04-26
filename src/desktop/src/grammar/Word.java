@@ -11,32 +11,67 @@ public class Word {
 
     private Concr nativeConcr;
     private Concr foreignConcr;
-    private String fun;
+    private String function;
+    private String category;
 
-    public Word(Concr nativeConcr, Concr foreignConcr, String fun){
+    public Word(Concr nativeConcr, Concr foreignConcr, String function, String category){
         this.nativeConcr = nativeConcr;
         this.foreignConcr = foreignConcr;
-        this.fun = fun;
+        this.function = function;
+        this.category = category;
     }
 
-    public Word(PGF pgf, String nativeLang, String foreitnLang, String fun){
+    public Word(PGF pgf, String nativeLang, String foreitnLang, String function, String category){
         nativeConcr = pgf.getLanguages().get(Utils.codeToGF(nativeLang));
         foreignConcr = pgf.getLanguages().get(Utils.codeToGF(foreitnLang));
-        this.fun = fun;
+        this.function = function;
+        this.category = category;
     }
 
     /**
      * Returns the word in its default native form
      */
     public String getNative(){
-        return nativeConcr.linearize(new Expr(fun, new Expr[0]));
+        return nativeConcr.linearize(new Expr(function, new Expr[0]));
     }
 
     /**
      * Returns the word in its default foreign form
      */
     public String getForeign(){
-        return foreignConcr.linearize(new Expr(fun, new Expr[0]));
+        return foreignConcr.linearize(new Expr(function, new Expr[0]));
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getFunction(){
+        return function;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getCategory() {
+        return category;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getNativeLanguage(){
+        return Utils.gfToName(nativeConcr.getName());
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getForeignLanguage(){
+        return Utils.gfToName(foreignConcr.getName());
     }
 
     /**
@@ -46,6 +81,10 @@ public class Word {
         return getNative ? getNative() : getForeign();
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean hasInflections(){
         return getAllInflectionNames().size() > 1;
     }
@@ -54,7 +93,7 @@ public class Word {
      * Returns an array with the names of all inflection forms.
      */
     public List<String> getAllInflectionNames(){
-        return new ArrayList<>(foreignConcr.tabularLinearize(new Expr(fun, new Expr[0])).keySet());
+        return new ArrayList<>(foreignConcr.tabularLinearize(new Expr(function, new Expr[0])).keySet());
     }
 
     /**
@@ -70,7 +109,7 @@ public class Word {
      * @return The word in the foreign language
      */
     public String getForeignInflectionFormByName(String inflectionName){
-        return foreignConcr.tabularLinearize(new Expr(fun, new Expr[0])).get(inflectionName);
+        return foreignConcr.tabularLinearize(new Expr(function, new Expr[0])).get(inflectionName);
     }
 
     /**
@@ -79,7 +118,7 @@ public class Word {
     * @return The word in the native language
     */
     public String getNativeInflectionFormByName(String inflectionName){
-        return nativeConcr.tabularLinearize(new Expr(fun, new Expr[0])).get(inflectionName);
+        return nativeConcr.tabularLinearize(new Expr(function, new Expr[0])).get(inflectionName);
     }
 
     /**
@@ -119,7 +158,7 @@ public class Word {
     }
 
     public Expr getExpr(){
-        return new Expr(fun, new Expr[0]);
+        return new Expr(function, new Expr[0]);
     }
 
     @Override
@@ -128,7 +167,7 @@ public class Word {
             return true;
         if(obj instanceof Word){
             Word word = (Word)obj;
-             return this.fun.equals(word.fun);
+             return this.function.equals(word.function);
         }
         return false;
     }

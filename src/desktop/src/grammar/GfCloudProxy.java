@@ -10,7 +10,7 @@ import java.util.List;
 
 public class GfCloudProxy {
 
-    private static final String dir = "dir";
+    private static final String dir = "/tmp/gfse.3295756966818776490";
     private InputStream is;
 
     /**
@@ -142,7 +142,12 @@ public class GfCloudProxy {
         return response == 200;
     }
 
-
+    /**
+     *
+     * @param command
+     * @return
+     * @throws Exception
+     */
     private int sendGet(String command) throws Exception {
         URL url = new URL("http://cloud.grammaticalframework.org/" + command);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -152,6 +157,12 @@ public class GfCloudProxy {
         return con.getResponseCode();
     }
 
+    /**
+     *
+     * @param params
+     * @return
+     * @throws Exception
+     */
     private int sendPost(String params) throws Exception {
 
         URL url = new URL("http://cloud.grammaticalframework.org/");

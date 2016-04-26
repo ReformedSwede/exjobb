@@ -9,7 +9,19 @@ abstract Words = {
 		VerbCat ;
 
 	fun
-		Word, Light, Human, Son : NounCat;
-		Listen, See, Teach, Say : VerbCat;
-		Good, True, Strong, Big : AdjectiveCat;
+		Word : NounCat ;
+		Light : NounCat ;
+		Human: NounCat ;
+		Son : NounCat ;
+		Listen : VerbCat ;
+		See : VerbCat ;
+		Teach : VerbCat ;
+		Say : VerbCat ;
+		Good : AdjectiveCat ;
+		True : AdjectiveCat ;
+		Strong : AdjectiveCat ;
+		Big : AdjectiveCat ;
+		Bread : NounCat ;
+		UYJP : NounCat ;
+		NWUKT : VerbCat ;
 }
