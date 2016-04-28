@@ -3,6 +3,7 @@ package main;
 
 import grammar.GrammarManager;
 import grammar.Word;
+import org.grammaticalframework.pgf.Concr;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -139,5 +140,11 @@ public class Model {
     */
     public void removeWord(String cat, String fun){
         manager.removeWord(cat, fun);
+    }
+
+    /*******Extras********/
+
+    public String translate(String word, String cat, boolean fromForeign){
+        return manager.translate(word, cat, fromForeign);
     }
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <language lang="eng">
+        <category name="Noun" oper="mkN" minArgs="1"/>
+        <category name="Verb" oper="mkV" minArgs="1"/>
+        <category name="Adjective" oper="mkA" minArgs="1"/>
+    </language>
+    <language lang="swe">
+        <category name="Noun" oper="mkN" minArgs="1"/>
+        <category name="Verb" oper="mkV" minArgs="1"/>
+        <category name="Adjective" oper="mkA" minArgs="1"/>
+    </language>
+    <language lang="ger">
+        <category name="Noun" oper="mkN" minArgs="1"/>
+        <category name="Verb" oper="mkV" minArgs="1"/>
+        <category name="Adjective" oper="mkA" minArgs="1"/>
+    </language>
+    <cat name="Noun" cat="N" />
+    <cat name="Verb" cat="V" />
+    <cat name="Adjective" cat="A" />
+</resources>

@@ -4,6 +4,7 @@ import main.Utils;
 import org.grammaticalframework.pgf.Concr;
 import org.grammaticalframework.pgf.Expr;
 import org.grammaticalframework.pgf.PGF;
+import org.grammaticalframework.pgf.ParseError;
 
 import java.util.*;
 
@@ -44,6 +45,12 @@ public class Word {
 
     /**
      *
+
+    @Test
+    public void getAllInflectionNames(){
+        noun.getAllInflectionNames().forEach(System.out::println);
+        verb.getAllInflectionNames().forEach(System.out::println);
+    }
      * @return
      */
     public String getFunction(){
@@ -82,26 +89,61 @@ public class Word {
     }
 
     /**
-     *
-     * @return
+     * Returns an array with the names of all inflection forms.
      */
-    public boolean hasInflections(){
-        return getAllInflectionNames().size() > 1;
+    public List<String> getForeignInflectionNames(){
+        return new ArrayList<>(foreignConcr.tabularLinearize(new Expr(function, new Expr[0])).keySet());
     }
 
     /**
      * Returns an array with the names of all inflection forms.
      */
-    public List<String> getAllInflectionNames(){
-        return new ArrayList<>(foreignConcr.tabularLinearize(new Expr(function, new Expr[0])).keySet());
+    public List<String> getNativeInflectionNames(){
+        return new ArrayList<>(nativeConcr.tabularLinearize(new Expr(function, new Expr[0])).keySet());
+    }
+
+    /**
+     *
+     * @param foreign If true returns all foreign inflections. Else, returns all native inflections
+     * @return
+     */
+    public List<String> getInflectionNames(boolean foreign){
+        if(foreign)
+            return getForeignInflectionNames();
+        else
+            return getNativeInflectionNames();
     }
 
     /**
      * Returns a random inflection form name
      */
-    public String getRandomInflectionName(){
-        return getAllInflectionNames().get(new Random().nextInt(getAllInflectionNames().size()));
+    public String getRandomForeignInflectionName(){
+        List<String> inflections = getForeignInflectionNames();
+        return inflections.get(new Random().nextInt(inflections.size()));
     }
+
+    /**
+     * Returns a random inflection form name
+     */
+    public String getRandomNativeInflectionName(){
+        List<String> inflections = getNativeInflectionNames();
+        return inflections.get(new Random().nextInt(inflections.size()));
+    }
+
+    /**
+     * Returns a random inflection form name
+     * @param foreign If true returns a foreign inflection. Else, returns native inflection
+     */
+    public String getRandomInflectionName(boolean foreign){
+        if(foreign) {
+            List<String> inflections = getForeignInflectionNames();
+            return inflections.get(new Random().nextInt(inflections.size()));
+        }else {
+            List<String> inflections = getNativeInflectionNames();
+            return inflections.get(new Random().nextInt(inflections.size()));
+        }
+    }
+
 
     /**
      * Returns the word inflected in the specified form
@@ -138,11 +180,23 @@ public class Word {
      * @param inflectionName The form that the answer is supposed to be inflected in.
      * @return true if correct translation, false o/w
      */
-    public boolean checkInflectedAnswer(String answer, String inflectionName, boolean translateToNative){
-        if(translateToNative)
-            return answer.equals(getNativeInflectionFormByName(inflectionName));
-        else
-            return answer.equals(getForeignInflectionFormByName(inflectionName));
+    public boolean checkInflectedAnswer(String answer, String inflectionName, boolean translateToNative) {
+        Expr e = null;
+        if (translateToNative){
+            try {
+                e = foreignConcr.parse(category, getForeignInflectionFormByName(inflectionName)).iterator().next().getExpr();
+            } catch (ParseError parseError) {
+                parseError.printStackTrace();
+            }
+                return nativeConcr.linearize(e).equals(answer);
+        }else{
+            try {
+                e = nativeConcr.parse(category, getNativeInflectionFormByName(inflectionName)).iterator().next().getExpr();
+            } catch (ParseError parseError) {
+                parseError.printStackTrace();
+            }
+                return foreignConcr.linearize(e).equals(answer);
+        }
     }
 
     /**

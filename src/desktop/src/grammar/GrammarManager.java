@@ -7,7 +7,9 @@ import java.util.stream.Collectors;
 import javafx.util.Pair;
 import main.Utils;
 import org.grammaticalframework.pgf.Concr;
+import org.grammaticalframework.pgf.Expr;
 import org.grammaticalframework.pgf.PGF;
+import org.grammaticalframework.pgf.ParseError;
 
 public class GrammarManager {
 
@@ -32,15 +34,12 @@ public class GrammarManager {
 
         try {
             pgf = PGF.readPGF(dir + File.separator + "Words.pgf");
+            nativeConcr = pgf.getLanguages().get(Utils.codeToGF(nativeLang));
+            foreignConcr = pgf.getLanguages().get(Utils.codeToGF(foreignLang));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            compilePGF(true, new File(dir), dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf",
+                    dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf");
         }
-        nativeConcr = pgf.getLanguages().get(Utils.codeToGF(nativeLang));
-        foreignConcr = pgf.getLanguages().get(Utils.codeToGF(foreignLang));
-
-        //Create PGF file TODO: compile correct file in correct directory with correct funfilename
-		/*String file = dir + File.separator + Utils.codeToGF(foreignLang) + ".gf";
-		if(!new File(file).exists())*/
 
         compilePGF(true, new File(dir), dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf",
               dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf");
@@ -53,9 +52,30 @@ public class GrammarManager {
 	public static List<Pair<String, String>> getSessions(){
 		ArrayList<Pair<String, String>> sessions = new ArrayList<>();
 		String path = System.getProperty("user.home") + File.separator + "grammar";
-		for(String folder : new File(path).list())
-			sessions.add(new Pair<>(folder.substring(0, 3), folder.substring(3, 6)));
+		for(File folder : new File(path).listFiles())
+			if(folder.isDirectory())
+				sessions.add(new Pair<>(folder.getName().substring(0, 3), folder.getName().substring(3, 6)));
 		return sessions;
+	}
+
+	/**
+	 * Creates a new session by making a new directory and initialize files there
+	 * @param nativeLang The native language of the session
+	 * @param foreignLang The foreign language of the session
+     */
+	public static void createSession(String nativeLang, String foreignLang){
+		//Create directory
+		File folder = new File(System.getProperty("user.home") + File.separator + "grammar" + File.separator +
+				nativeLang.substring(0, 3).toLowerCase() + foreignLang.substring(0, 3).toLowerCase());
+		folder.mkdir();
+
+        String abstractFile = folder.getAbsolutePath() + File.separator + "Words.gf";
+        String nativeConcreteFile = folder.getAbsolutePath() + File.separator + Utils.nameToGf(nativeLang) + ".gf";
+        String foreignConcreteFile = folder.getAbsolutePath() + File.separator + Utils.nameToGf(foreignLang) + ".gf";
+
+        GfFileEditor.initAbstractFile(abstractFile);
+        GfFileEditor.initConcreteFile(nativeConcreteFile, nativeLang);
+        GfFileEditor.initConcreteFile(foreignConcreteFile, foreignLang);
 	}
 
 	/**
@@ -196,7 +216,7 @@ public class GrammarManager {
 	public List<String> getAllCategories(){
         List<String> cats;
         cats = pgf.getCategories().stream().filter((category) ->
-                !category.equals("Int")&&!category.equals("String")&&!category.equals("Float"))
+                !category.equals("Int") && !category.equals("String") && !category.equals("Float"))
                 .collect(Collectors.toList());
         return cats;
 	}
@@ -206,9 +226,7 @@ public class GrammarManager {
      */
     public List<Word> getAllWords(){
         List<Word> list = new ArrayList<>();
-        getAllCategories().forEach(cat -> {
-            list.addAll(getAllWords(cat));
-        });
+        getAllCategories().forEach(cat -> list.addAll(getAllWords(cat)));
         return list;
     }
 
@@ -220,9 +238,51 @@ public class GrammarManager {
         return functions.stream().map(fun -> new Word(nativeConcr, foreignConcr, fun, category)).collect(Collectors.toList());
 	}
 
-	/*public void tmp(){
-		System.out.println(isValidFunction("hejhej"));
-	}*/
+    public String translate(String word, String startcat, boolean fromForeign){
+        Expr e = null;
+        if(fromForeign){
+            try {
+                e = foreignConcr.parse(startcat, word).iterator().next().getExpr();
+            } catch (ParseError parseError) {
+                parseError.printStackTrace();
+            }
+            return nativeConcr.linearize(e);
+        }else{
+            try {
+                e = nativeConcr.parse(startcat, word).iterator().next().getExpr();
+            } catch (ParseError parseError) {
+                parseError.printStackTrace();
+            }
+            return foreignConcr.linearize(e);
+        }
+    }
+
+	public void tmp(){
+		/*List<Word> all = getAllWords("Noun");
+		Word w = getAllWords("Noun").get(new Random().nextInt(all.size()));
+		String form = w.getForeignInflectionFormByName(w.getRandomForeignInflectionName());
+
+
+		System.out.println(pgf.getStartCat() + form);
+
+		try {
+			Expr e = foreignConcr.parse(pgf.getStartCat(), form).iterator().next().getExpr();
+			System.out.println(nativeConcr.linearize(e));
+		} catch (ParseError parseError) {
+			parseError.printStackTrace();
+		}
+*/
+		List<String> l = pgf.getFunctionsByCat("Noun");
+		String word = l.get(new Random().nextInt(l.size()));
+		Concr eng = pgf.getLanguages().get("WordsEng");
+		eng.tabularLinearize(new Expr("Wine", new Expr[0])).forEach((s, s2) -> {
+			try {
+				eng.parse("Noun", s2);
+			} catch (ParseError parseError) {
+				parseError.printStackTrace();
+			}
+		});
+	}
 
 	/*****Private methods******/
 

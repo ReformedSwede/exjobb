@@ -50,7 +50,7 @@ public class PracticeController{
         sessionTitle.setText("Native language: " + Utils.codeToName(model.getNativeLangCode()) +
                 ", foreign language: " + Utils.codeToName(model.getForeignLangCode()));
 
-        model.getAllCategories().forEach(s -> {
+        Utils.getGfCats().forEach(s -> {
             RadioButton rb = new RadioButton(s);
             rb.setSelected(true);
             rb.setOnAction(event -> catRadioSelected(rb));
@@ -115,13 +115,8 @@ public class PracticeController{
         }while(currentWord.equals(prevWord));
         prevWord = currentWord;
 
-        if(currentWord.hasInflections()) {
-            inflectionForm = currentWord.getRandomInflectionName();
-            practiceWordLbl.setText(currentWord.getWordInflectionFormByName(inflectionForm, !translateToNative));
-        }else {
-            practiceWordLbl.setText(currentWord.getWord(!translateToNative));
-            inflectionForm = null;
-        }
+        inflectionForm = currentWord.getRandomInflectionName(translateToNative);
+        practiceWordLbl.setText(currentWord.getWordInflectionFormByName(inflectionForm, !translateToNative));
     }
 
 

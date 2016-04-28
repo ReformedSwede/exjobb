@@ -1,5 +1,7 @@
 package grammar;
 
+import main.Utils;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -75,6 +77,50 @@ class GfFileEditor {
                         break;
                 }
             }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    static void initAbstractFile(String path){
+        File file = new File(path);
+
+        try(BufferedWriter br = new BufferedWriter(new FileWriter(file))){
+            file.createNewFile();
+            br.write("abstract Words =  { ");
+            br.newLine();
+            br.write("cat ");
+            for(String cat : Utils.getGfCats()) {
+                br.write(cat + ";");
+                br.newLine();
+            }
+            br.write("fun }");
+            br.newLine();
+            br.flush();
+            br.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    static void initConcreteFile(String path, String language){
+        File file = new File(path);
+        String capitalizedLangCode = language.substring(0,1).toUpperCase() + language.substring(1, 3).toLowerCase();
+
+        try(BufferedWriter br = new BufferedWriter(new FileWriter(file))){
+            file.createNewFile();
+            br.write("concrete " + Utils.nameToGf(language) + " of Words = open Cat" + capitalizedLangCode +
+                    ", Paradigms" + capitalizedLangCode + " in { ");
+            br.newLine();
+            br.write("lincat ");
+            for(String cat : Utils.getGfCats()) {
+                br.write(cat + " = " + Utils.getGfCatByName(cat) + ";");
+                br.newLine();
+            }
+            br.write("lin }");
+            br.newLine();
+            br.flush();
+            br.close();
         }catch (IOException e){
             e.printStackTrace();
         }

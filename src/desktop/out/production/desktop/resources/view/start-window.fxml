@@ -5,10 +5,18 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.TilePane?>
 
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.HBox?>
 <StackPane fx:id="pContent" fx:controller="controllers.StartController"
            xmlns:fx="http://javafx.com/fxml">
     <VBox>
         <Label styleClass="title" text="Sessions"/>
         <TilePane fx:id="sessionsGrid" prefColumns="1"/>
+        <HBox>
+            <ComboBox fx:id="nativeBox" promptText="Choose native language"/>
+            <ComboBox fx:id="foreignBox" promptText="Choose foreign language"/>
+            <Button fx:id="addNew" text="Add" onAction="#addNewSession"/>
+        </HBox>
+
     </VBox>
 </StackPane>

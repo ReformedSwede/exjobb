@@ -30,7 +30,7 @@ public class DialogController {
     public Button editBtn;
 
     public void init(Word word, InflectionCallback callback, Stage thisStage){
-        this.word = word;
+       /* this.word = word;
         this.callback = callback;
         this.thisStage = thisStage;
 
@@ -51,26 +51,26 @@ public class DialogController {
             tf.setEditable(false);
             foreignFields.add(tf);
             foreignPanel.getChildren().add(tf);
-        }
+        }*/
     }
 
     public void ok(){
-        if(editing)
+        /*if(editing)
             callback.call(word.getCategory(), word.getFunction(),
                     nativeFields.stream().map((textField) ->
                             textField.getText().trim()).collect(Collectors.toList()),
                     foreignFields.stream().map((textField1) ->
                             textField1.getText().trim()).collect(Collectors.toList()));
-        thisStage.close();
+        */thisStage.close();
     }
 
     public void edit(){
-        for(TextField tf : nativeFields)
+        /*for(TextField tf : nativeFields)
             tf.setEditable(true);
         for(TextField tf : foreignFields)
             tf.setEditable(true);
         editing = true;
         editBtn.setDisable(true);
-        originalForeignWord = foreignFields.get(0).getText();
+        originalForeignWord = foreignFields.get(0).getText();*/
     }
 }

@@ -73,7 +73,7 @@ public class GrammarManagerTest {
 
     @org.junit.Test
     public void tmp() throws Exception{
-        //manager.tmp();
+        manager.tmp();
     }
 
 }
