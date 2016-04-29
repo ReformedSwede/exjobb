@@ -1,7 +1,7 @@
 abstract Words = {
 
 	flags
-		startcat = Phrase ;
+		startcat = NounCat ;
 
 	cat
 		NounCat ;

@@ -27,7 +27,7 @@
 -fx-font-size: 50pt;
 -fx-padding: 0 0 50 0
 }
-#sessionsGrid{
+#sessionList{
 -fx-background-color:#aaaaaa;
 -fx-padding: 30;
 -fx-background-radius: 20;
@@ -36,11 +36,17 @@
 -fx-background-color: #333333;
 -fx-font-size: 12pt;
 }
+#launchBtn{
+-fx-padding: 10px;
+}
 #removeBtn{
 -fx-background-color: #cc5555;
 -fx-padding: 10px;
 -fx-border-insets: 5px;
 -fx-background-insets: 5px;
+}
+#removeBtn:hover{
+-fx-background-color: radial-gradient(center 50% 50%, radius 50%, #ee7777, #cc5555);
 }
 #infoPanel{
 -fx-border-color: #55aa77;

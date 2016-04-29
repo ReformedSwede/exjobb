@@ -4,17 +4,13 @@ import grammar.GrammarManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
-import javafx.stage.Stage;
+import javafx.scene.layout.*;
 import main.Utils;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.TilePane;
 import javafx.util.Pair;
 import main.Model;
 
@@ -22,6 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class StartController implements Initializable {
@@ -30,25 +27,15 @@ public class StartController implements Initializable {
 
     //UI components
     public Pane pContent;
-    public TilePane sessionsGrid;
+    public GridPane sessionsList;
+    //public VBox buttonGrid;
     public ComboBox<String> nativeBox;
     public ComboBox<String> foreignBox;
     public Button addNew;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        sessionsGrid.getChildren().clear();
-        List<Pair<String, String>> sessions = GrammarManager.getSessions();
-
-        sessions.forEach(session -> {
-            HBox box = new HBox();
-            box.getChildren().add(new Label(Utils.codeToName(session.getKey())));
-            box.getChildren().add(new Label(Utils.codeToName(session.getValue())));
-            Button b = new Button("Launch session");
-            b.setOnAction(event -> startPractice(session.getKey(), session.getValue()));
-            box.getChildren().add(b);
-            sessionsGrid.getChildren().add(box);
-        });
+        refreshSessionsList();
 
         ObservableList<String> availableLanguages = FXCollections.observableArrayList();
         availableLanguages.addAll(Utils.getGfLanguages().stream().map(Utils::codeToName).collect(Collectors.toList()));
@@ -61,19 +48,40 @@ public class StartController implements Initializable {
         String sessionForeign = foreignBox.getSelectionModel().getSelectedItem();
         GrammarManager.createSession(sessionNative, sessionForeign);
 
-        //Refresh list
-        sessionsGrid.getChildren().clear();
-        List<Pair<String, String>> sessions = GrammarManager.getSessions();
+        refreshSessionsList();
+    }
 
-        sessions.forEach(session -> {
+    private void refreshSessionsList(){
+        //Clear previous content
+        sessionsList.getChildren().clear();
+
+        List<Pair<String, String>> sessions = GrammarManager.getSessions();
+        for(int row = 0; row < sessions.size(); row++){
+            //Add labels
             HBox box = new HBox();
-            box.getChildren().add(new Label(Utils.codeToName(session.getKey())));
-            box.getChildren().add(new Label(Utils.codeToName(session.getValue())));
+            GridPane.setConstraints(box, 0, row);
+            sessionsList.getChildren().add(box);
+            box.getChildren().add(new Label(Utils.codeToName(sessions.get(row).getKey())));
+            box.getChildren().add(new Label(Utils.codeToName(sessions.get(row).getValue())));
+
+            //Add buttons
+            box = new HBox();
+            GridPane.setConstraints(box, 1, row);
+            sessionsList.getChildren().add(box);
+            Pair<String, String> session = sessions.get(row);
+
+            //Launch button
             Button b = new Button("Launch session");
-            b.setOnAction(event -> startPractice(session.getKey(), session.getValue()));
+            b.setOnAction(event -> StartController.this.startPractice(session.getKey(), session.getValue()));
+            b.setId("launchBtn");
             box.getChildren().add(b);
-            sessionsGrid.getChildren().add(box);
-        });
+
+            //Delete button
+            b = new Button("Delete");
+            b.setOnAction(event -> StartController.this.deleteSession(session.getKey(), session.getValue()));
+            b.setId("removeBtn");
+            box.getChildren().add(b);
+        }
     }
 
     private void startPractice(String nativeLang, String foreignLang){
@@ -92,5 +100,10 @@ public class StartController implements Initializable {
 
         model.initialize(nativeLang, foreignLang);
         ((PracticeController)fxmlloader.getController()).init(model, pContent);
+    }
+
+    private void deleteSession(String nativeLangCode, String foreignLangCode){
+        GrammarManager.removeSession(nativeLangCode, foreignLangCode);
+        refreshSessionsList();
     }
 }

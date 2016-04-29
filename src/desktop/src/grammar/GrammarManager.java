@@ -60,8 +60,8 @@ public class GrammarManager {
 
 	/**
 	 * Creates a new session by making a new directory and initialize files there
-	 * @param nativeLang The native language of the session
-	 * @param foreignLang The foreign language of the session
+	 * @param nativeLang The name of the native language of the session
+	 * @param foreignLang The name of the foreign language of the session
      */
 	public static void createSession(String nativeLang, String foreignLang){
 		//Create directory
@@ -76,6 +76,20 @@ public class GrammarManager {
         GfFileEditor.initAbstractFile(abstractFile);
         GfFileEditor.initConcreteFile(nativeConcreteFile, nativeLang);
         GfFileEditor.initConcreteFile(foreignConcreteFile, foreignLang);
+	}
+
+	/**
+	 *
+	 * @param nativeLangCode
+	 * @param foreignLangCode
+     */
+	public static void removeSession(String nativeLangCode, String foreignLangCode){
+		File folder = new File(System.getProperty("user.home") + File.separator + "grammar" + File.separator +
+				nativeLangCode + foreignLangCode);
+		File[] files = folder.listFiles();
+		for(File f : files)
+			f.delete();
+		folder.delete();
 	}
 
 	/**
@@ -258,30 +272,12 @@ public class GrammarManager {
     }
 
 	public void tmp(){
-		/*List<Word> all = getAllWords("Noun");
-		Word w = getAllWords("Noun").get(new Random().nextInt(all.size()));
-		String form = w.getForeignInflectionFormByName(w.getRandomForeignInflectionName());
+		List<Word> all = getAllWords("Verb");
+		Word w = all.get(new Random().nextInt(all.size()));
+		w.getForeignInflectionNames().forEach(System.out::println);
+		System.out.println("****");
+		w.getNativeInflectionNames().forEach(System.out::println);
 
-
-		System.out.println(pgf.getStartCat() + form);
-
-		try {
-			Expr e = foreignConcr.parse(pgf.getStartCat(), form).iterator().next().getExpr();
-			System.out.println(nativeConcr.linearize(e));
-		} catch (ParseError parseError) {
-			parseError.printStackTrace();
-		}
-*/
-		List<String> l = pgf.getFunctionsByCat("Noun");
-		String word = l.get(new Random().nextInt(l.size()));
-		Concr eng = pgf.getLanguages().get("WordsEng");
-		eng.tabularLinearize(new Expr("Wine", new Expr[0])).forEach((s, s2) -> {
-			try {
-				eng.parse("Noun", s2);
-			} catch (ParseError parseError) {
-				parseError.printStackTrace();
-			}
-		});
 	}
 
 	/*****Private methods******/
