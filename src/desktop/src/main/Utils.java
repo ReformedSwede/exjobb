@@ -166,6 +166,11 @@ public class Utils {
         return "";
     }
 
+    /**
+     * Gives a list of all languages that are specified in the gf-resources xml resource file.
+     * These are the only languages that can be used
+     * @return All languages
+     */
     public static List<String> getGfLanguages(){
         List<String> list = new ArrayList<>();
         try {
@@ -191,8 +196,8 @@ public class Utils {
     }
 
     /**
-     * Returns all gf categories in the resource list
-     * @return
+     * Returns all gf categories that are specified in the gf-resources xml resource file.
+     * @return all gf cats
      */
     public static List<String> getGfCats(){
         List<String> list = new ArrayList<>();
@@ -219,10 +224,12 @@ public class Utils {
     }
 
     /**
-     * Returns the name of a GF category, given its abstract name. EX:
+     * Returns the name of a GF category (as it is used in grammars), given its real name. EX:
      * Verb -> N
      * Two-place verb -> V2
      * Noun Conjunction -> Conj
+     * @param catName The name of a category (e.g. "Verb" or "Kind" or "Phrase")
+     * @return The corresponding gf category (as it is used in grammars, e.g. 'V', 'V2')
      */
     public static String getGfCatByName(String catName){
         try {

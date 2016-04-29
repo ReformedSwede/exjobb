@@ -10,9 +10,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * This class is for manipulating GF-files.
- *
- * It can parse an .gf file and read its data, insert new data, or change existing data.
+ * This class is for manipulating GF-files. Can parse a .gf file and insert new data, or remove existing data.
+ * Also contains static methods for initializing abstract or concrete files.
+ * Use: Specify a file to edit in the constructor. Then call insert() or delete() as desired.
+ * After all changes have been made, call saveToFile()
  */
 class GfFileEditor {
 
@@ -22,7 +23,7 @@ class GfFileEditor {
     private static final String[] sections = {"open", "flags", "cat", "fun", "lincat", "lin", "params", "oper"};
 
     /**
-     * Creates a new instance of GfFileEditor.
+     * Creates a new instance of GfFileEditor. The specified file will be parsed for use.
      * @param path Path of the file to manipulate.
      */
     GfFileEditor(String path){
@@ -82,6 +83,16 @@ class GfFileEditor {
         }
     }
 
+    /**
+     * Initialized an abstract gf file. I.E. creates a new file and fills it with data.
+     * A freshly initialized file will have the following content:
+            abstract Words =  {
+            cat Noun;
+            Verb;
+            Adjective;
+            fun }
+     * @param path Path indicating where the file should be created, including filename.
+     */
     static void initAbstractFile(String path){
         File file = new File(path);
 
@@ -103,6 +114,17 @@ class GfFileEditor {
         }
     }
 
+    /**
+     * Initialized a concrete gf file. I.E. creates a new file and fills it with data.
+     * A freshly initialized file for the English language will have the following content:
+             concrete WordsEng of Words = open CatEng, ParadigmsEng in {
+             lincat Noun = N;
+             Verb = V;
+             Adjective = A;
+             lin }
+     * @param path Path indicating where the file should be created, including filename.
+     * @param language The language of the concrete gf file.
+     */
     static void initConcreteFile(String path, String language){
         File file = new File(path);
         String capitalizedLangCode = language.substring(0,1).toUpperCase() + language.substring(1, 3).toLowerCase();
@@ -124,23 +146,6 @@ class GfFileEditor {
         }catch (IOException e){
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Pretty prints a parsed file
-     */
-    void printFile(){
-        System.out.println("Printing " + file.getAbsolutePath());
-        for(Map.Entry<String, ArrayList<String>> element : fileContent.entrySet()){
-            if(element.getKey().equals("title")){
-                System.out.println(element.getValue().get(0) + " {");
-            }else{
-                System.out.println("\n\t" + element.getKey());
-                for(String row : element.getValue())
-                    System.out.println("\t\t" + row + " ;");
-            }
-        }
-        System.out.println("}\n");
     }
 
     /**
@@ -191,7 +196,7 @@ class GfFileEditor {
     }
 
     /**
-     * Saves the data to disk
+     * Saves the data to to file specified in the constructor.
      */
     void saveToFile(){
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(file))){
@@ -208,5 +213,22 @@ class GfFileEditor {
         }catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Pretty prints a parsed file
+     */
+    void printFile(){
+        System.out.println("Printing " + file.getAbsolutePath());
+        for(Map.Entry<String, ArrayList<String>> element : fileContent.entrySet()){
+            if(element.getKey().equals("title")){
+                System.out.println(element.getValue().get(0) + " {");
+            }else{
+                System.out.println("\n\t" + element.getKey());
+                for(String row : element.getValue())
+                    System.out.println("\t\t" + row + " ;");
+            }
+        }
+        System.out.println("}\n");
     }
 }

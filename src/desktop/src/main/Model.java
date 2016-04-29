@@ -19,9 +19,9 @@ public class Model {
     private GrammarManager manager;
 
     /**
-     *
-     * @param nativeLang
-     * @param foreignLang
+     * Starts a new session
+     * @param nativeLang The native language of the session
+     * @param foreignLang The foreign language of the session
      */
     public void initialize(String nativeLang, String foreignLang){
         this.nativeLangCode = nativeLang;
@@ -30,7 +30,7 @@ public class Model {
     }
 
     /**
-     *
+     * Ends the initialized session session. If no session was ever initialized, nothing interesting happens.
      */
     public void endSession(){
         nativeLangCode = foreignLangCode = null;
@@ -40,16 +40,16 @@ public class Model {
     /*****Getters*****/
 
     /**
-     *
-     * @return
+     * Gives the language code for the native language of the session (i.e. "eng" for English)
+     * @return the native language code
      */
     public String getNativeLangCode() {
         return nativeLangCode;
     }
 
     /**
-     *
-     * @return
+     * Gives the language code for the foreign language of the session (i.e. "eng" for English)
+     * @return the foreign language code
      */
     public String getForeignLangCode() {
         return foreignLangCode;
@@ -57,6 +57,8 @@ public class Model {
 
     /**
      * Returns a random word, but not from the specified categories
+     * @param doNotInclude A list of categories not to include
+     * @return a random Word
      */
     public Word getRandomWord(String... doNotInclude){
         List<String> catsToInclude = manager.getAllCategories();
@@ -71,35 +73,33 @@ public class Model {
     }
 
     /**
-     *
-     * @return
+     * Returns all categories
      */
     public List<String> getAllCategories(){
         return manager.getAllCategories();
     }
 
     /**
-     *
-     * @return
+     * Returns all words
      */
     public List<Word> getAllWords(){
         return manager.getAllWords();
     }
 
     /**
-     *
-     * @param partOfSpeech
-     * @return
+     * Gives all words in the specified category
+     * @param cat The category
+     * @return All words
      */
-    public List<Word> getAllWords(String partOfSpeech){
-        return manager.getAllWords(partOfSpeech);
+    public List<Word> getAllWords(String cat){
+        return manager.getAllWords(cat);
     }
 
     /**
-     *
-     * @param category
-     * @param foreignWord
-     * @return
+     * Returns a Word object from the specified category, corresponding to the specified foreign word
+     * @param category A category
+     * @param foreignWord A word in the foreign language
+     * @return A Word
      */
     public Word getWordByString(String category, String foreignWord){
         for (Word w : manager.getAllWords(category)){
@@ -144,6 +144,13 @@ public class Model {
 
     /*******Extras********/
 
+    /**
+     * Translates a word from one language in the session to the other
+     * @param word The word to translate
+     * @param cat It's category
+     * @param fromForeign If true, translation will happen into the native language. O/w into the foreign
+     * @return The translation
+     */
     public String translate(String word, String cat, boolean fromForeign){
         return manager.translate(word, cat, fromForeign);
     }

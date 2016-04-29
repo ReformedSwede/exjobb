@@ -11,6 +11,10 @@ import org.grammaticalframework.pgf.Expr;
 import org.grammaticalframework.pgf.PGF;
 import org.grammaticalframework.pgf.ParseError;
 
+/**
+ * File for manipulating grammar using gf files.
+ * Contains methods for reading, inserting and removing data from gf files.
+ */
 public class GrammarManager {
 
 	private String dir;
@@ -79,9 +83,9 @@ public class GrammarManager {
 	}
 
 	/**
-	 *
-	 * @param nativeLangCode
-	 * @param foreignLangCode
+	 * Removes a session folder and all its files.
+	 * @param nativeLangCode The native language of the session
+	 * @param foreignLangCode The foreign language of the session
      */
 	public static void removeSession(String nativeLangCode, String foreignLangCode){
 		File folder = new File(System.getProperty("user.home") + File.separator + "grammar" + File.separator +
@@ -135,7 +139,7 @@ public class GrammarManager {
 	}
 
 	/**
-	 * Inserts a new word into the file system.
+	 * Inserts a new word with several inflections into the file system.
 	 * @param category The type of the word, gf category (Keep first letter capitalized!)
 	 * @param nativeWords All inflection forms of the new word in the user's native language
 	 * @param foreignWords All inflection forms of the new word in the foreign language
@@ -225,7 +229,8 @@ public class GrammarManager {
 	}
 
 	/**
-	 * Return a list of all categories
+	 * Gives a list of all categories in the pgf file
+	 * @return A list of all categories
      */
 	public List<String> getAllCategories(){
         List<String> cats;
@@ -236,7 +241,8 @@ public class GrammarManager {
 	}
 
 	/**
-	 * Returns a list of all words in the file system
+	 * Gives a list of all word in the pgf file
+	 * @return All words
      */
     public List<Word> getAllWords(){
         List<Word> list = new ArrayList<>();
@@ -245,13 +251,21 @@ public class GrammarManager {
     }
 
 	/**
-	 * Returns a list of all words of the specified category
+	 * @return A list of all words of the specified category
      */
 	public List<Word> getAllWords(String category){
         List<String> functions = pgf.getFunctionsByCat(category);
         return functions.stream().map(fun -> new Word(nativeConcr, foreignConcr, fun, category)).collect(Collectors.toList());
 	}
 
+	/**
+	 * Translates a word into the other language. Specify what language with the fromForeign parameter
+	 * @param word The word to translate
+	 * @param startcat The startcat, necessary for parsing
+	 * @param fromForeign Set to true if the word is in the foreign language and should be translated into the native.
+	 *                    Set to false otherwise.
+     * @return
+     */
     public String translate(String word, String startcat, boolean fromForeign){
         Expr e = null;
         if(fromForeign){
@@ -283,8 +297,9 @@ public class GrammarManager {
 	/*****Private methods******/
 
     /**
-     * If s if not purley ascii, it is converted to a pseudo-random ascii string. o/w s is returned
-     * @param s
+	 * Check if a string is made up of only ASCII characters or not.
+     * If s if not purely ascii, it is converted to a pseudo-random ascii string. o/w the original string is returned.
+     * @param s The string to check
      */
     private String convertToASCII(String s){
         if(!s.matches("\\A\\p{ASCII}*\\z")) {

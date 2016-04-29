@@ -8,6 +8,10 @@ import org.grammaticalframework.pgf.ParseError;
 
 import java.util.*;
 
+/**
+ * Class containing information about a GF word, i.e. a GF function.
+ * Contains methods to get inflection forms of the word in either the native or foreign language.
+ */
 public class Word {
 
     private Concr nativeConcr;
@@ -15,6 +19,13 @@ public class Word {
     private String function;
     private String category;
 
+    /**
+     * Initializes a new word object
+     * @param nativeConcr The concrete syntax of the native language
+     * @param foreignConcr The concrete syntax of the foreign language
+     * @param function The gf function of the word
+     * @param category The gf cat of the word
+     */
     public Word(Concr nativeConcr, Concr foreignConcr, String function, String category){
         this.nativeConcr = nativeConcr;
         this.foreignConcr = foreignConcr;
@@ -22,60 +33,64 @@ public class Word {
         this.category = category;
     }
 
-    public Word(PGF pgf, String nativeLang, String foreitnLang, String function, String category){
-        nativeConcr = pgf.getLanguages().get(Utils.codeToGF(nativeLang));
-        foreignConcr = pgf.getLanguages().get(Utils.codeToGF(foreitnLang));
+    /**
+     * Initialized a new word object
+     * @param pgf The pgf file that the word comes from
+     * @param nativeLangCode The language code of the native language (e.g. "eng" for English)
+     * @param foreignLangCode The language code of the foreign language (e.g. "swe" for Swedish)
+     * @param function The gf function of the word
+     * @param category The gf cat of the word
+     */
+    public Word(PGF pgf, String nativeLangCode, String foreignLangCode, String function, String category){
+        nativeConcr = pgf.getLanguages().get(Utils.codeToGF(nativeLangCode));
+        foreignConcr = pgf.getLanguages().get(Utils.codeToGF(foreignLangCode));
         this.function = function;
         this.category = category;
     }
 
     /**
-     * Returns the word in its default native form
+     * Gives the word in its default native form
+     * @return the native word
      */
     public String getNative(){
         return nativeConcr.linearize(new Expr(function, new Expr[0]));
     }
 
     /**
-     * Returns the word in its default foreign form
+     * Gives the word in its default foreign form
+     * @return the foreign word
      */
     public String getForeign(){
         return foreignConcr.linearize(new Expr(function, new Expr[0]));
     }
 
     /**
-     *
-
-    @Test
-    public void getAllInflectionNames(){
-        noun.getAllInflectionNames().forEach(System.out::println);
-        verb.getAllInflectionNames().forEach(System.out::println);
-    }
-     * @return
+     * Gives the gf function of the word
+     * @return the function
      */
     public String getFunction(){
         return function;
     }
 
     /**
-     *
-     * @return
+     * Gives the gf cat of the word
+     * @return The category
      */
     public String getCategory() {
         return category;
     }
 
     /**
-     *
-     * @return
+     * Gives the name of the native language
+     * @return The native language
      */
     public String getNativeLanguage(){
         return Utils.gfToName(nativeConcr.getName());
     }
 
     /**
-     *
-     * @return
+     * Gives the name of the foreign language
+     * @return The foreign language
      */
     public String getForeignLanguage(){
         return Utils.gfToName(foreignConcr.getName());
@@ -83,29 +98,33 @@ public class Word {
 
     /**
      * Returns the word, either native or foreign, depending on parameter
+     * @param getNative If true, returns the native word, o/w the foreign
+     * @return The word, either native or foreign
      */
     public String getWord(boolean getNative){
         return getNative ? getNative() : getForeign();
     }
 
     /**
-     * Returns an array with the names of all inflection forms.
+     * Returns an array with the names of all foreign inflection forms.
+     * @return All foreign inflection names
      */
     public List<String> getForeignInflectionNames(){
         return new ArrayList<>(foreignConcr.tabularLinearize(new Expr(function, new Expr[0])).keySet());
     }
 
     /**
-     * Returns an array with the names of all inflection forms.
+     * Returns an array with the names of all native inflection forms.
+     * @return All native inflection names
      */
     public List<String> getNativeInflectionNames(){
         return new ArrayList<>(nativeConcr.tabularLinearize(new Expr(function, new Expr[0])).keySet());
     }
 
     /**
-     *
+     * Gives a list of all inflection names, either native or foreign, depending on parameter.
      * @param foreign If true returns all foreign inflections. Else, returns all native inflections
-     * @return
+     * @return all inflection names
      */
     public List<String> getInflectionNames(boolean foreign){
         if(foreign)
@@ -115,7 +134,7 @@ public class Word {
     }
 
     /**
-     * Returns a random inflection form name
+     * Returns a random foreign inflection form name
      */
     public String getRandomForeignInflectionName(){
         List<String> inflections = getForeignInflectionNames();
@@ -123,7 +142,7 @@ public class Word {
     }
 
     /**
-     * Returns a random inflection form name
+     * Returns a random native inflection form name
      */
     public String getRandomNativeInflectionName(){
         List<String> inflections = getNativeInflectionNames();
@@ -133,6 +152,7 @@ public class Word {
     /**
      * Returns a random inflection form name
      * @param foreign If true returns a foreign inflection. Else, returns native inflection
+     * @return a random inflection name
      */
     public String getRandomInflectionName(boolean foreign){
         if(foreign) {
@@ -211,6 +231,10 @@ public class Word {
             return answer.equals(getForeign());
     }
 
+    /**
+     * Returns a expression, i.e. abstract syntax tree, of this word
+     * @return
+     */
     public Expr getExpr(){
         return new Expr(function, new Expr[0]);
     }

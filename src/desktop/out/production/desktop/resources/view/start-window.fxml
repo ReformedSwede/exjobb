@@ -12,14 +12,6 @@
     <VBox>
         <Label styleClass="title" text="Sessions"/>
         <GridPane fx:id="sessionsList"/>
-        <!--<GridPane fx:id="sessionList">
-            <VBox fx:id="sessionsList"
-                    GridPane.rowIndex="0"
-                    GridPane.columnIndex="0"/>
-            <VBox fx:id="buttonGrid"
-                    GridPane.rowIndex="0"
-                    GridPane.columnIndex="1"/>
-        </GridPane>-->
         <HBox>
             <ComboBox fx:id="nativeBox" promptText="Choose native language"/>
             <ComboBox fx:id="foreignBox" promptText="Choose foreign language"/>
