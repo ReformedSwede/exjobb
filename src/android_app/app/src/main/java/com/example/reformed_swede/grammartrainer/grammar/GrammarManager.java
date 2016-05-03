@@ -1,11 +1,10 @@
-package grammar;
+package com.example.reformed_swede.grammartrainer.grammar;
+
+import android.util.Log;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import javafx.util.Pair;
-import main.Utils;
 import org.grammaticalframework.pgf.Concr;
 import org.grammaticalframework.pgf.Expr;
 import org.grammaticalframework.pgf.PGF;
@@ -16,6 +15,11 @@ import org.grammaticalframework.pgf.ParseError;
  * Contains methods for reading, inserting and removing data from gf files.
  */
 public class GrammarManager {
+
+	/*
+	TODO: 	All file handling in this class MUST be rewritten. Use Context.getExternalCacheDir()
+	TODO:	or similar. App WILL NOT run until this is done!
+	 */
 
 	private String dir;
     private PGF pgf;
@@ -42,31 +46,31 @@ public class GrammarManager {
 		this.nativeLangCode = nativeLang.substring(0, 3).toLowerCase();
 		this.foreignLangCode = foreignLang.substring(0, 3).toLowerCase();
 
-        try {
-            pgf = PGF.readPGF(dir + File.separator + "Words.pgf");
-            nativeConcr = pgf.getLanguages().get(Utils.codeToGF(nativeLang));
-            foreignConcr = pgf.getLanguages().get(Utils.codeToGF(foreignLang));
-        } catch (FileNotFoundException e) {
-            compilePGF(true, new File(dir), dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf",
-                    dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf");
-        }
+		try {
+			pgf = PGF.readPGF(dir + File.separator + "Words.pgf");
+			nativeConcr = pgf.getLanguages().get(Utils.codeToGF(nativeLang));
+			foreignConcr = pgf.getLanguages().get(Utils.codeToGF(foreignLang));
+		} catch (FileNotFoundException e) {
+			compilePGF(true, new File(dir), dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf",
+					dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf");
+		}
 
-        compilePGF(true, new File(dir), dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf",
-              dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf");
+		compilePGF(true, new File(dir), dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf",
+				dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf");
 	}
 
 	/**
 	 * Lists all sessions.
 	 * @return A list of all sessions. Each element is a pair on the form (nativeLangCode, foreignLangCode)
-     */
-	public static List<Pair<String, String>> getSessions(){
-		ArrayList<Pair<String, String>> sessions = new ArrayList<>();
+	 */
+	public static LinkedHashMap<String, String> getSessions(){
+		LinkedHashMap<String, String> sessions = new LinkedHashMap<>();
 		String path = "grammar";
-		new File(path).mkdir();
+		Log.i("get sessions", "" + new File(path).mkdir());
 
 		for(File folder : new File(path).listFiles())
 			if(folder.isDirectory())
-				sessions.add(new Pair<>(folder.getName().substring(0, 3), folder.getName().substring(3, 6)));
+				sessions.put(folder.getName().substring(0, 3), folder.getName().substring(3, 6));
 		return sessions;
 	}
 
@@ -74,27 +78,27 @@ public class GrammarManager {
 	 * Creates a new session by making a new directory and initialize files there
 	 * @param nativeLang The name of the native language of the session
 	 * @param foreignLang The name of the foreign language of the session
-     */
+	 */
 	public static void createSession(String nativeLang, String foreignLang){
 		//Create directory
 		File folder = new File("grammar" + File.separator +
 				nativeLang.substring(0, 3).toLowerCase() + foreignLang.substring(0, 3).toLowerCase());
 		folder.mkdir();
 
-        String abstractFile = folder.getAbsolutePath() + File.separator + "Words.gf";
-        String nativeConcreteFile = folder.getAbsolutePath() + File.separator + Utils.nameToGf(nativeLang) + ".gf";
-        String foreignConcreteFile = folder.getAbsolutePath() + File.separator + Utils.nameToGf(foreignLang) + ".gf";
+		String abstractFile = folder.getAbsolutePath() + File.separator + "Words.gf";
+		String nativeConcreteFile = folder.getAbsolutePath() + File.separator + Utils.nameToGf(nativeLang) + ".gf";
+		String foreignConcreteFile = folder.getAbsolutePath() + File.separator + Utils.nameToGf(foreignLang) + ".gf";
 
-        GfFileEditor.initAbstractFile(abstractFile);
-        GfFileEditor.initConcreteFile(nativeConcreteFile, nativeLang);
-        GfFileEditor.initConcreteFile(foreignConcreteFile, foreignLang);
+		GfFileEditor.initAbstractFile(abstractFile);
+		GfFileEditor.initConcreteFile(nativeConcreteFile, nativeLang);
+		GfFileEditor.initConcreteFile(foreignConcreteFile, foreignLang);
 	}
 
 	/**
 	 * Removes a session folder and all its files.
 	 * @param nativeLangCode The native language of the session
 	 * @param foreignLangCode The foreign language of the session
-     */
+	 */
 	public static void removeSession(String nativeLangCode, String foreignLangCode){
 		File folder = new File("grammar" + File.separator +
 				nativeLangCode + foreignLangCode);
@@ -231,10 +235,9 @@ public class GrammarManager {
 	 * @return List of all languages
      */
 	public Collection<String> getAllLanguages(){
-        Collection<String> langs = pgf.getLanguages().keySet();
-        langs.forEach((s -> {
-            s = Utils.gfToName(s);
-        }));
+        Collection<String> langs = new ArrayList<>();
+		for (String s : pgf.getLanguages().keySet() )
+			langs.add(Utils.gfToName(s));
         return langs;
 	}
 
@@ -243,10 +246,13 @@ public class GrammarManager {
 	 * @return A list of all categories
      */
 	public List<String> getAllCategories(){
-        List<String> cats;
-        cats = pgf.getCategories().stream().filter((category) ->
-                !category.equals("Int") && !category.equals("String") && !category.equals("Float"))
-                .collect(Collectors.toList());
+        List<String> cats = pgf.getCategories();
+		Iterator<String> caterator = cats.iterator();
+		while(caterator.hasNext()) {
+			String next = caterator.next();
+			if(next.equals("Int") || next.equals("String") || next.equals("Float"))
+				caterator.remove();
+		}
         return cats;
 	}
 
@@ -256,7 +262,8 @@ public class GrammarManager {
      */
     public List<Word> getAllWords(){
         List<Word> list = new ArrayList<>();
-        getAllCategories().forEach(cat -> list.addAll(getAllWords(cat)));
+		for(String cat : getAllCategories())
+			list.addAll(getAllWords(cat));
         return list;
     }
 
@@ -264,8 +271,11 @@ public class GrammarManager {
 	 * @return A list of all words of the specified category
      */
 	public List<Word> getAllWords(String category){
-        List<String> functions = pgf.getFunctionsByCat(category);
-        return functions.stream().map(fun -> new Word(nativeConcr, foreignConcr, fun, category)).collect(Collectors.toList());
+        List<Word> words = new ArrayList<>();
+		List<String> functions = pgf.getFunctionsByCat(category);
+		for(String fun : functions)
+			words.add(new Word(nativeConcr, foreignConcr, fun, category));
+		return words;
 	}
 
 	/**
@@ -298,9 +308,11 @@ public class GrammarManager {
 	public void tmp(){
 		List<Word> all = getAllWords("Verb");
 		Word w = all.get(new Random().nextInt(all.size()));
-		w.getForeignInflectionNames().forEach(System.out::println);
+		for(String s : w.getForeignInflectionNames())
+			System.out.println(s);
 		System.out.println("****");
-		w.getNativeInflectionNames().forEach(System.out::println);
+		for(String s : w.getNativeInflectionNames())
+			System.out.println(s);
 
 	}
 

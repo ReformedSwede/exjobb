@@ -1,21 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <language lang="eng">
-        <category name="Noun" oper="mkN" minArgs="1"/>
-        <category name="Verb" oper="mkV" minArgs="1"/>
-        <category name="Adjective" oper="mkA" minArgs="1"/>
+        <category name="Noun" oper="mkN" minArgs="1">
+            <inflection-form name="singular nominative" form="Sg Nom"/>
+            <inflection-form name="singular nominative" form="Sg Gen"/>
+            <inflection-form name="singular nominative" form="Pl Nom"/>
+            <inflection-form name="singular nominative" form="Pl Gen"/>
+        </category>
+        <category name="Verb" oper="mkV" minArgs="1">
+            <inflection-form name="infinitive" form="VInf"/>
+            <inflection-form name="present" form="VPres"/>
+            <inflection-form name="past" form="VPast"/>
+            <inflection-form name="past part" form="VPPart"/>
+        </category>
+        <category name="Adjective" oper="mkA" minArgs="1">
+            <inflection-form name="singular nominative" form="Sg"/>
+            <inflection-form name="singular nominative" form="Pl"/>
+        </category>
     </language>
     <language lang="swe">
-        <category name="Noun" oper="mkN" minArgs="1"/>
-        <category name="Verb" oper="mkV" minArgs="1"/>
-        <category name="Adjective" oper="mkA" minArgs="1"/>
+        <category name="Noun" oper="mkN" minArgs="1">
+            <inflection-form name="singular nominative" form="Sg Indef Nom"/>
+            <inflection-form name="singular nominative" form="Sg Indef Gen"/>
+            <inflection-form name="singular nominative" form="Pl Indef Nom"/>
+            <inflection-form name="singular nominative" form="Pl Indef Gen"/>
+        </category>
+        <category name="Verb" oper="mkV" minArgs="1">
+            <inflection-form name="infinitive" form="(VI (VInfin Act))"/>
+            <inflection-form name="present" form="(VF (VPres Act))"/>
+            <inflection-form name="past" form="(VF (VImper Act))"/>
+            <inflection-form name="past part" form="(VI (VSupin Arc))"/>
+        </category>
+        <category name="Adjective" oper="mkA" minArgs="1">
+            <inflection-form name="singular nominative" form="Sg"/>
+            <inflection-form name="singular nominative" form="Pl"/>
+        </category>
     </language>
     <language lang="ger">
         <category name="Noun" oper="mkN" minArgs="1"/>
         <category name="Verb" oper="mkV" minArgs="1"/>
         <category name="Adjective" oper="mkA" minArgs="1"/>
     </language>
-    <cat name="Noun" cat="N" />
-    <cat name="Verb" cat="V" />
-    <cat name="Adjective" cat="A" />
+
+    <cat name="Noun" cat="N">
+        <inflection name="singular nominative"/>
+        <inflection name="singular genitive"/>
+        <inflection name="plural nominative"/>
+        <inflection name="plural genitive"/>
+    </cat>
+    <cat name="Verb" cat="V">
+        <inflection name="infinitive"/>
+        <inflection name="present"/>
+        <inflection name="past"/>
+        <inflection name="past part"/>
+    </cat>
+    <cat name="Adjective" cat="A">
+        <inflection name="singular"/>
+        <inflection name="plural"/>
+    </cat>
+
 </resources>
