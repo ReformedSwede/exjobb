@@ -296,12 +296,21 @@ public class GrammarManager {
     }
 
 	public void tmp(){
-		List<Word> all = getAllWords("Verb");
-		Word w = all.get(new Random().nextInt(all.size()));
-		w.getForeignInflectionNames().forEach(System.out::println);
-		System.out.println("****");
-		w.getNativeInflectionNames().forEach(System.out::println);
+		//select random part of speech
+		//select random word in ^
+		//select random form of ^
 
+
+
+		Expr verb = new Expr("Eat", new Expr[0]);
+		Expr form = new Expr("Past", new Expr[0]);
+		Expr expr = new Expr("VF", verb, form);
+		System.out.println(nativeConcr.linearize(expr));
+
+		/*for(String s : pgf.getFunctions())
+			System.out.println(s);
+		for(String s : pgf.getCategories())
+			System.out.println(s);*/
 	}
 
 	/*****Private methods******/

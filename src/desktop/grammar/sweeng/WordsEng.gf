@@ -1,15 +1,23 @@
-concrete WordsEng of Words =  open CatEng, ParadigmsEng in {
+concrete WordsEng of Words = open ResEng, CatEng, ParadigmsEng in {
+  lincat
+    Word = Str;
+    Noun = N;
+    Verb = V;
 
-	lincat
-		Noun = N ;
-		Adjective = A ;
-		Verb = V ;
+    VerbForm = {vf:VForm;s:Str};
+    NounForm = {nf:Number;s:Str};
 
-	lin
-		Cheese = mkN "cheese" ;
-		Run = mkV "run" "ran" "run" ;
-		Water = mkN "water" ;
-		Milk = mkN "milk" ;
-		See = mkV "see" ;
-		Big = mkA "big" ;
+  lin
+    Infinitive = {vf=VInf;s=""};
+    Past = {vf=VPast;s=""};
+    PPart = {vf=VPPart;s=""};
+
+    Sing = {nf=Sg;s=""};
+    Plur = {nf=Pl;s=""};
+    
+    VF v f = f.s++v.s ! f.vf;
+    NF n f = f.s++n.s ! f.nf ! Nom;
+
+    Fish = mkN "fish" ;
+    Eat = mkV "eat" "ate" "eaten";
 }

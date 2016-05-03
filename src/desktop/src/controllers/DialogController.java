@@ -8,6 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.InflectionCallback;
+import main.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class DialogController {
         this.thisStage = thisStage;
 
         catLbl.setText("Category: " + word.getCategory());
-        List<String> inflections = word.getNativeInflectionNames();
+        List<String> inflections = Utils.getInflectionCatByName(word.getCategory());
         nativePanel.getChildren().add(new Label(word.getNativeLanguage()));
         foreignPanel.getChildren().add(new Label(word.getForeignLanguage()));
         inflectionPanel.getChildren().add(new Label());

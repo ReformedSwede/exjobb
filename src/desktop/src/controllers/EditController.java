@@ -49,7 +49,7 @@ public class EditController implements InflectionCallback {
 
         //Init both comboboxes with all parts of speech
         ObservableList<String> posList = FXCollections.observableArrayList();
-        posList.addAll(Utils.getGfCats());
+        posList.addAll(Utils.getPartOfSpeechCats());
         catField.setItems(posList);
         catBox.setItems(posList);
         catBox.setOnAction(event -> {
@@ -77,9 +77,9 @@ public class EditController implements InflectionCallback {
                     catBox.getValue(),
                     wordList.getSelectionModel().getSelectedItem());
 
-            List<String> info = selectedWord.getForeignInflectionNames().stream()
+            List<String> info = Utils.getInflectionCatByName(selectedWord.getCategory()).stream()
                     .map(infl -> selectedWord.getForeignInflectionFormByName(infl) + " = " +
-                            model.translate(selectedWord.getForeignInflectionFormByName(infl), selectedWord.getCategory(), true))
+                            selectedWord.getNativeInflectionFormByName(infl))
                     .collect(Collectors.toList());
             infoPanel.getChildren().addAll(info.stream().map(Label::new).collect(Collectors.toList()));
         }

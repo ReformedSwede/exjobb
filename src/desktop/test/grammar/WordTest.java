@@ -34,20 +34,4 @@ public class WordTest {
             e.printStackTrace();
         }
     }
-
-    @Test
-    public void checkAnswer() throws Exception {
-        assertTrue(noun.checkAnswer("bil", true));
-    }
-
-    @Test
-    public void checkInflectedAnswer(){
-        assertTrue(verb.checkInflectedAnswer("åt", "s VPast", true));
-    }
-
-    @Test
-    public void compareInflections(){
-        verb.getForeignInflectionNames().forEach(System.out::println);
-        verb.getNativeInflectionNames().forEach(System.out::println);
-    }
 }

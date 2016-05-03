@@ -196,10 +196,11 @@ public class Utils {
     }
 
     /**
-     * Returns all gf categories that are specified in the gf-resources xml resource file.
-     * @return all gf cats
+     * Returns the names of the categories specified in the xml resource that are parts of speech.
+     * E.G. Noun, Verb, but not VerbForm, Word, Float
+     * @return all part of speech names
      */
-    public static List<String> getGfCats(){
+    public static List<String> getPartOfSpeechCats(){
         List<String> list = new ArrayList<>();
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -224,14 +225,13 @@ public class Utils {
     }
 
     /**
-     * Returns the name of a GF category (as it is used in grammars), given its real name. EX:
-     * Verb -> N
-     * Two-place verb -> V2
-     * Noun Conjunction -> Conj
-     * @param catName The name of a category (e.g. "Verb" or "Kind" or "Phrase")
-     * @return The corresponding gf category (as it is used in grammars, e.g. 'V', 'V2')
+     * Returns the category, given its name. EX:
+     * Verb -> VF
+     * Noun -> NF
+     * @param catName The real name of a category
+     * @return The corresponding gf category name
      */
-    public static String getGfCatByName(String catName){
+    public static String getPartOfSpeechLinCatByName(String catName){
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -253,5 +253,37 @@ public class Utils {
             e.printStackTrace();
         }
         return "";
+    }
+
+    /**
+     * Returns a list containing the names of the GF categories that represents inflection forms.
+     * @param catName The name of the part of speech (e.g. Noun or Verb)
+     * @return A list of all inflection form names
+     */
+    public static List<String> getInflectionCatByName(String catName){
+        List<String> list = new ArrayList<>();
+        try{
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(gfXML);
+            doc.getDocumentElement().normalize();
+
+            NodeList nList = doc.getElementsByTagName("cat");
+
+            for (int i = 0; i < nList.getLength(); i++) {
+                Node nNode = nList.item(i);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+                    if(eElement.getAttribute("name").equals(catName)) {
+                        NodeList inflList = ((Element) nNode).getElementsByTagName("inflection");
+                        for (int j = 0; j < inflList.getLength(); j++)
+                            list.add(((Element) inflList.item(j)).getAttribute("name"));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

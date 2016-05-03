@@ -50,7 +50,7 @@ public class PracticeController{
         sessionTitle.setText("Native language: " + Utils.codeToName(model.getNativeLangCode()) +
                 ", foreign language: " + Utils.codeToName(model.getForeignLangCode()));
 
-        Utils.getGfCats().forEach(s -> {
+        Utils.getPartOfSpeechCats().forEach(s -> {
             RadioButton rb = new RadioButton(s);
             rb.setSelected(true);
             rb.setOnAction(event -> catRadioSelected(rb));
@@ -67,10 +67,7 @@ public class PracticeController{
         if (e.getCode().equals(KeyCode.ENTER)){
             //grade answer
             boolean correct;
-            if(inflectionForm == null)
-                correct = currentWord.checkAnswer(inputFld.getText().trim(), translateToNative);
-            else
-                correct = currentWord.checkInflectedAnswer(inputFld.getText().trim(), inflectionForm, translateToNative);
+            correct = currentWord.checkAnswer(inputFld.getText().trim(), inflectionForm, translateToNative);
 
             if(correct){
                 imageView.setImage(new Image("/resources/images/checkmark.png"));
@@ -80,10 +77,7 @@ public class PracticeController{
                 imageView.setImage(new Image("/resources/images/x.png"));
                 infoLbl.setText("Incorrect! \"" + practiceWordLbl.getText() +
                     "\" does not translate to  \"" + inputFld.getText() + "\".\n" + "The correct answer was \"" +
-                    (inflectionForm == null ?
-                            currentWord.getWord(translateToNative) :
-                            currentWord.getWordInflectionFormByName(inflectionForm, translateToNative)) +
-                        "\".");
+                         currentWord.getWordInflectionFormByName(inflectionForm, translateToNative) + "\".");
             }
             setNextWord();
         }
@@ -115,7 +109,7 @@ public class PracticeController{
         }while(currentWord.equals(prevWord));
         prevWord = currentWord;
 
-        inflectionForm = currentWord.getRandomInflectionName(translateToNative);
+        inflectionForm = currentWord.getRandomInflectionName();
         practiceWordLbl.setText(currentWord.getWordInflectionFormByName(inflectionForm, !translateToNative));
     }
 

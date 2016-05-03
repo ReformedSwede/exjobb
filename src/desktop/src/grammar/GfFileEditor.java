@@ -101,7 +101,7 @@ class GfFileEditor {
             br.write("abstract Words =  { ");
             br.newLine();
             br.write("cat ");
-            for(String cat : Utils.getGfCats()) {
+            for(String cat : Utils.getPartOfSpeechCats()) {
                 br.write(cat + ";");
                 br.newLine();
             }
@@ -135,8 +135,8 @@ class GfFileEditor {
                     ", Paradigms" + capitalizedLangCode + " in { ");
             br.newLine();
             br.write("lincat ");
-            for(String cat : Utils.getGfCats()) {
-                br.write(cat + " = " + Utils.getGfCatByName(cat) + ";");
+            for(String cat : Utils.getPartOfSpeechCats()) {
+                br.write(cat + " = " + Utils.getPartOfSpeechLinCatByName(cat) + ";");
                 br.newLine();
             }
             br.write("lin }");

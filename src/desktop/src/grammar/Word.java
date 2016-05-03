@@ -97,73 +97,13 @@ public class Word {
     }
 
     /**
-     * Returns the word, either native or foreign, depending on parameter
-     * @param getNative If true, returns the native word, o/w the foreign
-     * @return The word, either native or foreign
-     */
-    public String getWord(boolean getNative){
-        return getNative ? getNative() : getForeign();
-    }
-
-    /**
-     * Returns an array with the names of all foreign inflection forms.
-     * @return All foreign inflection names
-     */
-    public List<String> getForeignInflectionNames(){
-        return new ArrayList<>(foreignConcr.tabularLinearize(new Expr(function, new Expr[0])).keySet());
-    }
-
-    /**
-     * Returns an array with the names of all native inflection forms.
-     * @return All native inflection names
-     */
-    public List<String> getNativeInflectionNames(){
-        return new ArrayList<>(nativeConcr.tabularLinearize(new Expr(function, new Expr[0])).keySet());
-    }
-
-    /**
-     * Gives a list of all inflection names, either native or foreign, depending on parameter.
-     * @param foreign If true returns all foreign inflections. Else, returns all native inflections
-     * @return all inflection names
-     */
-    public List<String> getInflectionNames(boolean foreign){
-        if(foreign)
-            return getForeignInflectionNames();
-        else
-            return getNativeInflectionNames();
-    }
-
-    /**
-     * Returns a random foreign inflection form name
-     */
-    public String getRandomForeignInflectionName(){
-        List<String> inflections = getForeignInflectionNames();
-        return inflections.get(new Random().nextInt(inflections.size()));
-    }
-
-    /**
-     * Returns a random native inflection form name
-     */
-    public String getRandomNativeInflectionName(){
-        List<String> inflections = getNativeInflectionNames();
-        return inflections.get(new Random().nextInt(inflections.size()));
-    }
-
-    /**
      * Returns a random inflection form name
-     * @param foreign If true returns a foreign inflection. Else, returns native inflection
      * @return a random inflection name
      */
-    public String getRandomInflectionName(boolean foreign){
-        if(foreign) {
-            List<String> inflections = getForeignInflectionNames();
-            return inflections.get(new Random().nextInt(inflections.size()));
-        }else {
-            List<String> inflections = getNativeInflectionNames();
-            return inflections.get(new Random().nextInt(inflections.size()));
-        }
+    public String getRandomInflectionName(){
+        List<String> inflections = Utils.getInflectionCatByName(category);
+        return inflections.get(new Random().nextInt(inflections.size()));
     }
-
 
     /**
      * Returns the word inflected in the specified form
@@ -171,7 +111,9 @@ public class Word {
      * @return The word in the foreign language
      */
     public String getForeignInflectionFormByName(String inflectionName){
-        return foreignConcr.tabularLinearize(new Expr(function, new Expr[0])).get(inflectionName);
+        Expr word = new Expr(function, new Expr[0]);
+        Expr form = new Expr(inflectionName, new Expr[0]);
+        return foreignConcr.linearize(new Expr(Utils.getPartOfSpeechLinCatByName(category), word, form));
     }
 
     /**
@@ -180,7 +122,9 @@ public class Word {
     * @return The word in the native language
     */
     public String getNativeInflectionFormByName(String inflectionName){
-        return nativeConcr.tabularLinearize(new Expr(function, new Expr[0])).get(inflectionName);
+        Expr word = new Expr(function, new Expr[0]);
+        Expr form = new Expr(inflectionName, new Expr[0]);
+        return nativeConcr.linearize(new Expr(Utils.getPartOfSpeechLinCatByName(category), word, form));
     }
 
     /**
@@ -200,43 +144,9 @@ public class Word {
      * @param inflectionName The form that the answer is supposed to be inflected in.
      * @return true if correct translation, false o/w
      */
-    public boolean checkInflectedAnswer(String answer, String inflectionName, boolean translateToNative) {
-        Expr e = null;
-        if (translateToNative){
-            try {
-                e = foreignConcr.parse(category, getForeignInflectionFormByName(inflectionName)).iterator().next().getExpr();
-            } catch (ParseError parseError) {
-                parseError.printStackTrace();
-            }
-                return nativeConcr.linearize(e).equals(answer);
-        }else{
-            try {
-                e = nativeConcr.parse(category, getNativeInflectionFormByName(inflectionName)).iterator().next().getExpr();
-            } catch (ParseError parseError) {
-                parseError.printStackTrace();
-            }
-                return foreignConcr.linearize(e).equals(answer);
-        }
-    }
-
-    /**
-     * Checks if the answer is a correct translation of the word.
-     * @param answer A word in the foreign language
-     * @return true if correct translation, false o/w
-     */
-    public boolean checkAnswer(String answer, boolean translateToNative){
-        if(translateToNative)
-            return answer.equals(getNative());
-        else
-            return answer.equals(getForeign());
-    }
-
-    /**
-     * Returns a expression, i.e. abstract syntax tree, of this word
-     * @return
-     */
-    public Expr getExpr(){
-        return new Expr(function, new Expr[0]);
+    public boolean checkAnswer(String answer, String inflectionName, boolean translateToNative) {
+        return (translateToNative ? getNativeInflectionFormByName(inflectionName)
+                : getForeignInflectionFormByName(inflectionName)).equals(answer);
     }
 
     @Override

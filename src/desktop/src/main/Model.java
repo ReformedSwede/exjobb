@@ -61,14 +61,14 @@ public class Model {
      * @return a random Word
      */
     public Word getRandomWord(String... doNotInclude){
-        List<String> catsToInclude = manager.getAllCategories();
+        List<String> catsToInclude = Utils.getPartOfSpeechCats();
         if(doNotInclude.length != 0) {
             final List<String> list = Arrays.asList(doNotInclude);
             catsToInclude = catsToInclude.stream().filter((o) -> !list.contains(o)).collect(Collectors.toList());
         }
 
         List<Word> words = new ArrayList<>();
-        catsToInclude.forEach(s -> words.addAll(manager.getAllWords(s)));
+        catsToInclude.forEach(s -> words.addAll(getAllWords(s)));
         return words.get(new Random().nextInt(words.size()));
     }
 
@@ -76,14 +76,7 @@ public class Model {
      * Returns all categories
      */
     public List<String> getAllCategories(){
-        return manager.getAllCategories();
-    }
-
-    /**
-     * Returns all words
-     */
-    public List<Word> getAllWords(){
-        return manager.getAllWords();
+        return Utils.getPartOfSpeechCats();
     }
 
     /**
@@ -140,18 +133,5 @@ public class Model {
     */
     public void removeWord(String cat, String fun){
         manager.removeWord(cat, fun);
-    }
-
-    /*******Extras********/
-
-    /**
-     * Translates a word from one language in the session to the other
-     * @param word The word to translate
-     * @param cat It's category
-     * @param fromForeign If true, translation will happen into the native language. O/w into the foreign
-     * @return The translation
-     */
-    public String translate(String word, String cat, boolean fromForeign){
-        return manager.translate(word, cat, fromForeign);
     }
 }
