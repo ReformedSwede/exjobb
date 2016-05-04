@@ -109,9 +109,9 @@ public class GrammarManager {
 	 * @param category The type of the word, gf category (Keep first letter capitalized!)
 	 * @param nativeWord The new word in the user's native language
 	 * @param foreignWord The new word in the foreign language
-     * @return True if an insertion was made, false o/w
+     * @return The just inserted word, as a Word object, or null if it already exists.
 	 */
-	public boolean addWord(String category, String nativeWord, String foreignWord){
+	public Word addWord(String category, String nativeWord, String foreignWord){
 		//Define file paths and names
 		String abstractFile = dir + File.separator + "Words.gf";
 		String nativeConcreteFile = dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf";
@@ -125,7 +125,7 @@ public class GrammarManager {
         String duplicate;
         if((duplicate = editor.isDuplicateInsertion(fun, "fun")) != null){
             if(duplicate.endsWith(category))
-                return false;
+                return null;
             fun = fun + category.substring(0, 1).toUpperCase();
         }
 		//Insert into abstract
@@ -144,7 +144,7 @@ public class GrammarManager {
 
 		//Compile
 		compilePGF(true, new File(dir), nativeConcreteFile, foreignConcreteFile);
-        return true;
+        return new Word(nativeConcr, foreignConcr, fun, category);
 	}
 
 	/**
@@ -152,9 +152,9 @@ public class GrammarManager {
 	 * @param category The type of the word, gf category (Keep first letter capitalized!)
 	 * @param nativeWords All inflection forms of the new word in the user's native language
 	 * @param foreignWords All inflection forms of the new word in the foreign language
-     * @return True if an insertion was made, false o/w
+     * @return The just inserted word, as a Word object, or null if it already exists.
 	 */
-	public boolean addWordWithInflections(String category, List<String> nativeWords, List<String> foreignWords){
+	public Word addWordWithInflections(String category, List<String> nativeWords, List<String> foreignWords){
 		//Define file paths and names
 		String abstractFile = dir + File.separator + "Words.gf";
 		String nativeConcreteFile = dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf";
@@ -168,7 +168,7 @@ public class GrammarManager {
         String duplicate;
         if((duplicate = editor.isDuplicateInsertion(fun, "fun")) != null){
             if(duplicate.endsWith(category))
-                return false;
+                return null;
             fun = fun + category.substring(0, 1).toUpperCase();
         }
         //Insert into abstract
@@ -193,7 +193,7 @@ public class GrammarManager {
 
 		//Compile
 		compilePGF(true, new File(dir), nativeConcreteFile, foreignConcreteFile);
-        return true;
+		return new Word(nativeConcr, foreignConcr, fun, category);
 	}
 
 	/**
@@ -296,21 +296,7 @@ public class GrammarManager {
     }
 
 	public void tmp(){
-		//select random part of speech
-		//select random word in ^
-		//select random form of ^
-
-
-
-		Expr verb = new Expr("Eat", new Expr[0]);
-		Expr form = new Expr("Past", new Expr[0]);
-		Expr expr = new Expr("VF", verb, form);
-		System.out.println(nativeConcr.linearize(expr));
-
-		/*for(String s : pgf.getFunctions())
-			System.out.println(s);
-		for(String s : pgf.getCategories())
-			System.out.println(s);*/
+		System.out.println(Utils.getInflectionGfNamesByCat("swe", "Verb", "Past"));
 	}
 
 	/*****Private methods******/

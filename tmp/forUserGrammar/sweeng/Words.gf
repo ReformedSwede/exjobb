@@ -1,20 +1,29 @@
 abstract Words = {
 
-	flags startcat = Noun ;
+	flags
+		startcat=Word ;
+
 	cat
+		Word ;
 		Noun ;
-		Adjective ;
 		Verb ;
+		VerbForm ;
+		NounForm ;
 
 	fun
-		Wine : Noun ;
-		Cheese : Noun ;
+		VFormFun : Verb -> VerbForm -> Word ;
+		NFormFun : Noun -> NounForm -> Word ;
 		Fish : Noun ;
-		Fresh : Adjective ;
-		Warm : Adjective ;
-		Expensive : Adjective ;
-		Delicious : Adjective ;
-		Play : Verb;
-		See : Verb;
-		Run : Verb;
+		Eat : Verb ;
+		Infinitive : VerbForm ;
+		Past : VerbForm ;
+		PPart: VerbForm ;
+		Sing : NounForm ;
+		Plur : NounForm ;
+		Water : Noun ;
+		Computer : Noun ;
+		See : Verb ;
+		Play : Verb ;
+		Cube : Noun ;
+		Run : Verb ;
 }

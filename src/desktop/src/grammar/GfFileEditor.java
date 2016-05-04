@@ -74,23 +74,20 @@ class GfFileEditor {
                     if (matcher.find()) {
                         fileContent.get(sections[i]).add(content.substring(0, matcher.start()).trim());
                         content = content.substring(matcher.end(), content.length());
-                    }else
+                    } else
                         break;
                 }
             }
         }catch (IOException e){
             e.printStackTrace();
+        }catch (Exception e){
+            System.out.println(file.getName());
+            throw e;
         }
     }
 
     /**
      * Initialized an abstract gf file. I.E. creates a new file and fills it with data.
-     * A freshly initialized file will have the following content:
-            abstract Words =  {
-            cat Noun;
-            Verb;
-            Adjective;
-            fun }
      * @param path Path indicating where the file should be created, including filename.
      */
     static void initAbstractFile(String path){
@@ -100,12 +97,28 @@ class GfFileEditor {
             file.createNewFile();
             br.write("abstract Words =  { ");
             br.newLine();
+            br.write("flags startcat = Word ;");
+            br.newLine();
             br.write("cat ");
+            br.write("Word ;");
+            br.newLine();
             for(String cat : Utils.getPartOfSpeechCats()) {
-                br.write(cat + ";");
+                br.write(cat + " ;" + cat + "Form ;");
                 br.newLine();
             }
-            br.write("fun }");
+            br.newLine();
+            br.write("fun");
+            br.newLine();
+            for(String cat : Utils.getPartOfSpeechCats()){
+                br.write(cat.substring(0, 1) + "FormFun :" + cat + " -> " + cat + "Form -> Word ;");
+                br.newLine();
+                for(String inflection : Utils.getInflectionRealNamesByCat(cat)) {
+                    br.write(inflection + " : " + cat + "Form ;");
+                    br.newLine();
+                }
+                br.newLine();
+            }
+            br.write("}");
             br.newLine();
             br.flush();
             br.close();
@@ -116,30 +129,41 @@ class GfFileEditor {
 
     /**
      * Initialized a concrete gf file. I.E. creates a new file and fills it with data.
-     * A freshly initialized file for the English language will have the following content:
-             concrete WordsEng of Words = open CatEng, ParadigmsEng in {
-             lincat Noun = N;
-             Verb = V;
-             Adjective = A;
-             lin }
      * @param path Path indicating where the file should be created, including filename.
-     * @param language The language of the concrete gf file.
+     * @param language The name of the language to init.
      */
     static void initConcreteFile(String path, String language){
         File file = new File(path);
-        String capitalizedLangCode = language.substring(0,1).toUpperCase() + language.substring(1, 3).toLowerCase();
+        String lowercaseLangCode = language.substring(0,3).toLowerCase();
 
         try(BufferedWriter br = new BufferedWriter(new FileWriter(file))){
             file.createNewFile();
-            br.write("concrete " + Utils.nameToGf(language) + " of Words = open Cat" + capitalizedLangCode +
-                    ", Paradigms" + capitalizedLangCode + " in { ");
+            br.write("concrete " + Utils.nameToGf(language) + " of Words = open " +
+                    Utils.getLangFilesByLang(language) + " in { ");
             br.newLine();
             br.write("lincat ");
+            br.write("Word = Str ;");
             for(String cat : Utils.getPartOfSpeechCats()) {
-                br.write(cat + " = " + Utils.getPartOfSpeechLinCatByName(cat) + ";");
+                br.write(cat + " = " + Utils.getParadigmCatByName(cat) + " ;");
+                br.newLine();
+                br.write(cat + "Form = {" + cat.substring(0, 1).toLowerCase() + "f:" +
+                        Utils.getLincatRecord(lowercaseLangCode, cat) + ";s:Str};");
                 br.newLine();
             }
-            br.write("lin }");
+            br.write("lin");
+            br.newLine();
+            for(String cat : Utils.getPartOfSpeechCats()) {
+                String catFirstLetter = cat.substring(0, 1).toLowerCase();
+                br.write(cat.substring(0, 1) + "FormFun " + catFirstLetter + " f = f.s++" +
+                    catFirstLetter + ".s ! f." + catFirstLetter + "f " + Utils.getLinSelect(lowercaseLangCode, cat) + " ;");
+                br.newLine();
+                for(String inflection : Utils.getInflectionRealNamesByCat(cat)){
+                    br.write(inflection + " = {" + catFirstLetter + "f=" +
+                            Utils.getInflectionGfNamesByCat(lowercaseLangCode, cat, inflection) + " ; s=\"\"} ;");
+                    br.newLine();
+                }
+            }
+            br.write("}");
             br.newLine();
             br.flush();
             br.close();

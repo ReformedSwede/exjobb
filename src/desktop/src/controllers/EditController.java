@@ -52,19 +52,11 @@ public class EditController implements InflectionCallback {
         posList.addAll(Utils.getPartOfSpeechCats());
         catField.setItems(posList);
         catBox.setItems(posList);
-        catBox.setOnAction(event -> {
-            ObservableList<String> list = FXCollections.observableArrayList();
-            list.addAll(model.getAllWords(catBox.getValue()).stream()
-                    .map(Word::getForeign).collect(Collectors.toList()));
-            wordList.setItems(list);
-        });
+        catBox.setOnAction(event -> refreshWordList());
         catBox.setValue(catBox.getItems().get(0));
 
         //Init list of words
-        ObservableList<String> list = FXCollections.observableArrayList();
-        list.addAll(model.getAllWords(catBox.getValue()).stream()
-                .map(Word::getForeign).collect(Collectors.toList()));
-        wordList.setItems(list);
+        refreshWordList();
     }
 
     public void wordInListSelected(){
@@ -77,7 +69,7 @@ public class EditController implements InflectionCallback {
                     catBox.getValue(),
                     wordList.getSelectionModel().getSelectedItem());
 
-            List<String> info = Utils.getInflectionCatByName(selectedWord.getCategory()).stream()
+            List<String> info = Utils.getInflectionRealNamesByCat(selectedWord.getCategory()).stream()
                     .map(infl -> selectedWord.getForeignInflectionFormByName(infl) + " = " +
                             selectedWord.getNativeInflectionFormByName(infl))
                     .collect(Collectors.toList());
@@ -89,11 +81,11 @@ public class EditController implements InflectionCallback {
         if(catField.getValue() == null) return;
 
         //Add to model
-        boolean addSuccess =
+        Word addedWord =
                 model.addNewWord(catField.getValue(), nativeField.getText().trim(), foreignField.getText().trim());
-        if(!addSuccess)
+        if(addedWord == null)
             return;        //TODO Notify user that insertion failed!
-        openConfirmDialog(model.getWordByString(catField.getValue(), foreignField.getText().trim()));
+        openConfirmDialog(addedWord);
 
         //Refresh view
         if(catBox.getValue().equals(catField.getValue()))
@@ -139,6 +131,13 @@ public class EditController implements InflectionCallback {
         ((DialogController)fxmlLoader.getController()).init(word, this, dialog);
     }
 
+    private void refreshWordList(){
+        ObservableList<String> list = FXCollections.observableArrayList();
+        list.addAll(model.getAllWords(catBox.getValue()).stream()
+                .map(Word::getForeign).collect(Collectors.toList()));
+        wordList.setItems(list);
+    }
+
     /**
      * This is a callback method for the confirm dialog. If the user edits the words in the confirm dialog,
      * This method is called.
@@ -152,13 +151,6 @@ public class EditController implements InflectionCallback {
 
         //Refresh view
         refreshWordList();
-    }
-
-    private void refreshWordList(){
-        ObservableList<String> list = FXCollections.observableArrayList();
-        list.addAll(model.getAllWords(catBox.getValue()).stream()
-                .map(Word::getForeign).collect(Collectors.toList()));
-        wordList.setItems(list);
     }
 
     /****Navigation Methods****/

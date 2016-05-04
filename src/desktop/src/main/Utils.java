@@ -13,6 +13,8 @@ import java.util.List;
 
 public class Utils {
 
+    //TODO: Refactor for better efficiency. Maybe singleton with pre-parsed xml document objects?
+
     private static final File langXML = new File(System.getProperty("user.dir") + "/src/resources/xml/language.xml");
     private static final File gfXML = new File(System.getProperty("user.dir") + "/src/resources/xml/gf-resources.xml");
 
@@ -256,11 +258,11 @@ public class Utils {
     }
 
     /**
-     * Returns a list containing the names of the GF categories that represents inflection forms.
+     * Returns a list containing the real names of the inflection forms.
      * @param catName The name of the part of speech (e.g. Noun or Verb)
      * @return A list of all inflection form names
      */
-    public static List<String> getInflectionCatByName(String catName){
+    public static List<String> getInflectionRealNamesByCat(String catName){
         List<String> list = new ArrayList<>();
         try{
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -285,5 +287,175 @@ public class Utils {
             e.printStackTrace();
         }
         return list;
+    }
+
+    /**
+     * Returns a list containing the categories from the GF library that correspond to the inflection forms.
+     * @param catName The name of the part of speech (e.g. Noun or Verb)
+     * @param inflName inflection name
+     * @param lang language code
+     * @return A list of all inflection gf names
+     */
+    public static String getInflectionGfNamesByCat(String lang, String catName, String inflName){
+        try{
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(gfXML);
+            doc.getDocumentElement().normalize();
+
+            NodeList langList = doc.getElementsByTagName("language");
+
+            for (int i = 0; i < langList.getLength(); i++) {
+                Element langElem = (Element) langList.item(i);
+                if(langElem.getAttribute("lang").equals(lang)) {
+                    NodeList catList = langElem.getElementsByTagName("category");
+                    for (int j = 0; j < catList.getLength(); j++){
+
+                        Element catElem = ((Element)catList.item(j));
+                        if(catElem.getAttribute("name").equals(catName)) {
+                            NodeList inflList = catElem.getElementsByTagName("inflection-form");
+                            for (int k = 0; k < inflList.getLength(); k++) {
+
+                                Element inflElem = (Element) inflList.item(k);
+                                if (inflElem.getAttribute("name").equals(inflName))
+                                    return inflElem.getAttribute("form");
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     * Returns the category of the paradigm
+     * @param catName The name of a category
+     * @return The corresponding gf paradigm category
+     */
+    public static String getParadigmCatByName(String catName){
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(gfXML);
+            doc.getDocumentElement().normalize();
+
+            NodeList nList = doc.getElementsByTagName("cat");
+
+            for (int i = 0; i < nList.getLength(); i++) {
+                Node nNode = nList.item(i);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+                    if(eElement.getAttribute("name").equals(catName))
+                        return eElement.getAttribute("paradigm-cat");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     * Returns a comma separated list of all necessary files
+     * @param lang code of the language
+     * @return a string with files listed
+     */
+    public static String getLangFilesByLang(String lang){
+        String langcode = lang.substring(0, 3).toLowerCase();
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(gfXML);
+            doc.getDocumentElement().normalize();
+
+            NodeList nList = doc.getElementsByTagName("language");
+
+            for (int i = 0; i < nList.getLength(); i++) {
+                Node nNode = nList.item(i);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+
+                    Element eElement = (Element) nNode;
+                    if(eElement.getAttribute("lang").equals(langcode))
+                        return eElement.getAttribute("files");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     * Returns the name of the form record
+     * @param lang code of the language
+     * @param partOfSpeech part of speech
+     * @return the form record name
+     */
+    public static String getLincatRecord(String lang, String partOfSpeech){
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(gfXML);
+            doc.getDocumentElement().normalize();
+
+            NodeList nList = doc.getElementsByTagName("language");
+
+            for (int i = 0; i < nList.getLength(); i++) {
+                Node nNode = nList.item(i);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+                    if(eElement.getAttribute("lang").equals(lang)) {
+                        NodeList catlist = eElement.getElementsByTagName("category");
+                        for(int j = 0; j < catlist.getLength(); j++) {
+                            Element catElem = (Element) catlist.item(j);
+                            if (catElem.getAttribute("name").equals(partOfSpeech))
+                                return catElem.getAttribute("lincat-record");
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     * Returns the lin cat form fun select clause
+     * @param lang code of the language
+     * @param partOfSpeech part of speech
+     * @return the lin cat form fun select clause
+     */
+    public static String getLinSelect(String lang, String partOfSpeech){
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(gfXML);
+            doc.getDocumentElement().normalize();
+
+            NodeList nList = doc.getElementsByTagName("language");
+
+            for (int i = 0; i < nList.getLength(); i++) {
+                Node nNode = nList.item(i);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eElement = (Element) nNode;
+                    if(eElement.getAttribute("lang").equals(lang)) {
+                        NodeList catlist = eElement.getElementsByTagName("category");
+                        for(int j = 0; j < catlist.getLength(); j++) {
+                            Element catElem = (Element) catlist.item(j);
+                            if (catElem.getAttribute("name").equals(partOfSpeech))
+                                return catElem.getAttribute("lin-select");
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

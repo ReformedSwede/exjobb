@@ -4,7 +4,6 @@ import grammar.Word;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.InflectionCallback;
@@ -36,7 +35,7 @@ public class DialogController {
         this.thisStage = thisStage;
 
         catLbl.setText("Category: " + word.getCategory());
-        List<String> inflections = Utils.getInflectionCatByName(word.getCategory());
+        List<String> inflections = Utils.getInflectionRealNamesByCat(word.getCategory());
         nativePanel.getChildren().add(new Label(word.getNativeLanguage()));
         foreignPanel.getChildren().add(new Label(word.getForeignLanguage()));
         inflectionPanel.getChildren().add(new Label());

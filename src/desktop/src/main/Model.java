@@ -91,7 +91,7 @@ public class Model {
     /**
      * Returns a Word object from the specified category, corresponding to the specified foreign word
      * @param category A category
-     * @param foreignWord A word in the foreign language
+     * @param foreignWord A word in the foreign language, inflected in the first listen form
      * @return A Word
      */
     public Word getWordByString(String category, String foreignWord){
@@ -109,9 +109,9 @@ public class Model {
      * @param cat The type of the word, gf category (Keep first letter capitalized!)
      * @param nativeWord The new word in the user's native language
      * @param foreignWord The new word in the foreign language
-     * @return True, if the insertion succeeded
+     * @return The just inserted word, as a Word object, or null if it already exists.
      */
-    public boolean addNewWord(String cat, String nativeWord, String foreignWord){
+    public Word addNewWord(String cat, String nativeWord, String foreignWord){
         return manager.addWord(cat, nativeWord, foreignWord);
     }
 
@@ -120,9 +120,9 @@ public class Model {
      * @param category The type of the word, gf category (Keep first letter capitalized!)
      * @param nativeWords All inflection forms of the new word in the user's native language
      * @param foreignWords All inflection forms of the new word in the foreign language
-     * @return True, if the insertion succeeded
+     * @return The just inserted word, as a Word object, or null if it already exists.
      */
-    public boolean addWordWithInflections(String category, List<String> nativeWords, List<String> foreignWords){
+    public Word addWordWithInflections(String category, List<String> nativeWords, List<String> foreignWords){
         return manager.addWordWithInflections(category, nativeWords, foreignWords);
     }
 

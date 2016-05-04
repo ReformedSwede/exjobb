@@ -39,7 +39,6 @@ public class GrammarManagerTest {
             }
         }
         assertTrue(removed);
-
     }
 
     @org.junit.Test

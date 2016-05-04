@@ -50,10 +50,16 @@
 
             <VBox fx:id="catRadioList"
                   GridPane.columnIndex="3"
-                    GridPane.rowIndex="0"
-                    GridPane.rowSpan="2">
+                    GridPane.rowIndex="0">
                 <Label text="Categories to practice"/>
             </VBox>
+
+            <VBox fx:id="inflectionRadioList"
+                  GridPane.columnIndex="3"
+                  GridPane.rowIndex="1">
+                <Label text="Inflection forms to practice"/>
+            </VBox>
+
             <ToggleButton fx:id="langToggle" text="Translate to native"
                 GridPane.columnIndex="3"
                 GridPane.rowIndex="3"

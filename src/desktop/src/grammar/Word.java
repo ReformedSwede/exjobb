@@ -4,7 +4,6 @@ import main.Utils;
 import org.grammaticalframework.pgf.Concr;
 import org.grammaticalframework.pgf.Expr;
 import org.grammaticalframework.pgf.PGF;
-import org.grammaticalframework.pgf.ParseError;
 
 import java.util.*;
 
@@ -49,19 +48,19 @@ public class Word {
     }
 
     /**
-     * Gives the word in its default native form
+     * Gives the word in the native language, inflected in the first listed form
      * @return the native word
      */
     public String getNative(){
-        return nativeConcr.linearize(new Expr(function, new Expr[0]));
+        return getNativeInflectionFormByName(Utils.getInflectionRealNamesByCat(category).get(0));
     }
 
     /**
-     * Gives the word in its default foreign form
+     * Gives the word in the foreign language, inflected in the first listed form
      * @return the foreign word
      */
     public String getForeign(){
-        return foreignConcr.linearize(new Expr(function, new Expr[0]));
+        return getForeignInflectionFormByName(Utils.getInflectionRealNamesByCat(category).get(0));
     }
 
     /**
@@ -97,11 +96,16 @@ public class Word {
     }
 
     /**
-     * Returns a random inflection form name
+     * Returns a random inflection form name, but not from among the specified inflections
+     * @param doNotIncllude Set of inflection forms that must not be returned
      * @return a random inflection name
      */
-    public String getRandomInflectionName(){
-        List<String> inflections = Utils.getInflectionCatByName(category);
+    public String getRandomInflectionName(Set<String> doNotIncllude){
+        List<String> inflections = Utils.getInflectionRealNamesByCat(category);
+        if(doNotIncllude != null)
+            for (Iterator<String> iterator = inflections.iterator(); iterator.hasNext(); )
+                if(doNotIncllude.contains(iterator.next()))
+                    iterator.remove();
         return inflections.get(new Random().nextInt(inflections.size()));
     }
 
@@ -140,11 +144,23 @@ public class Word {
 
     /**
      * Checks if the answer is a correct translation of the word and in the correct inflection form.
+     * Also returns true if there is another inflection form, that would have the same form. E.g:
+     * fish (sing) and fish (plur) will both be acceptable answers to fish.
      * @param answer A word in the foreign language
      * @param inflectionName The form that the answer is supposed to be inflected in.
      * @return true if correct translation, false o/w
      */
     public boolean checkAnswer(String answer, String inflectionName, boolean translateToNative) {
+        //Check for correct translation among other inflections
+        List<String> otherInflections = Utils.getInflectionRealNamesByCat(category);
+        otherInflections.remove(inflectionName);
+        for(String inflection : otherInflections)
+            if(getWordInflectionFormByName(inflection, !translateToNative)
+                    .equals(getWordInflectionFormByName(inflectionName, !translateToNative)) &&
+                getWordInflectionFormByName(inflection, translateToNative).equals(answer))
+                    return true;
+
+        //Check correct answer in specified inflection
         return (translateToNative ? getNativeInflectionFormByName(inflectionName)
                 : getForeignInflectionFormByName(inflectionName)).equals(answer);
     }

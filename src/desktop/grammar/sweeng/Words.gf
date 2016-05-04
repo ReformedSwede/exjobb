@@ -1,19 +1,26 @@
 abstract Words = {
-  flags startcat=Word;
-  cat
-    Word; Noun; Verb;
-    VerbForm; NounForm;
-  fun
-    VF : Verb -> VerbForm -> Word;
-    NF : Noun -> NounForm -> Word;
-      
-    Fish : Noun ;
-    Eat : Verb ;
 
-    Infinitive : VerbForm;
-    Past : VerbForm;
-    PPart: VerbForm;
+	flags
+		startcat=Word ;
 
-    Sing : NounForm;
-    Plur : NounForm;    
+	cat
+		Word ;
+		Noun ;
+		Verb ;
+		VerbForm ;
+		NounForm ;
+
+	fun
+		VFormFun : Verb -> VerbForm -> Word ;
+		NFormFun : Noun -> NounForm -> Word ;
+		Infinitive : VerbForm ;
+		Past : VerbForm ;
+		PPart: VerbForm ;
+		Sing : NounForm ;
+		Plur : NounForm ;
+		Water : Noun ;
+		Play : Verb ;
+		Run : Verb ;
+		Fish : Noun ;
+		Lake : Noun ;
 }

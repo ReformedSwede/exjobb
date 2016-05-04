@@ -1,19 +1,33 @@
-concrete WordsEng of Words =  open CatEng, ParadigmsEng in {
-	flags startcat = Noun ;
+concrete WordsEng of Words = open ResEng, CatEng, ParadigmsEng in {
+
 	lincat
+		Word = Str ;
 		Noun = N ;
-		Adjective = A ;
 		Verb = V ;
+		VerbForm = {vf:VForm ;
+		s:Str} ;
+		NounForm = {nf:Number ;
+		s:Str} ;
 
 	lin
-		Wine = mkN "wine" ;
-		Cheese = mkN "cheese" ;
+		Infinitive = {vf=VInf ;
+		s=""} ;
+		Past = {vf=VPast ;
+		s=""} ;
+		PPart = {vf=VPPart ;
+		s=""} ;
+		Sing = {nf=Sg ;
+		s=""} ;
+		Plur = {nf=Pl ;
+		s=""} ;
+		VFormFun v f = f.s++v.s ! f.vf ;
+		NFormFun n f = f.s++n.s ! f.nf ! Nom ;
 		Fish = mkN "fish" ;
-		Fresh = mkA "fresh" ;
-		Warm = mkA "warm" ;
-		Expensive = mkA "expensive" ;
-		Delicious = mkA "delicious" ;
-		Play = mkV "play";
-		See = mkV "see" "saw" "seen";
-		Run = mkV "run" "ran" "run";
+		Eat = mkV "eat" "ate" "eaten" ;
+		Water = mkN "water" "waters" ;
+		Computer = mkN "computer" "computers" ;
+		See = mkV "see" "saw" "seen" ;
+		Play = mkV "play" ;
+		Cube = mkN "cube" "cubes" ;
+		Run = mkV "run" "ran" "run" ;
 }

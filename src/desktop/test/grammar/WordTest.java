@@ -21,7 +21,7 @@ public class WordTest {
     @Before
     public void setUp(){
         try {
-            PGF pgf = PGF.readPGF(System.getProperty("user.home") + "/grammar/sweeng/Words.pgf");
+            PGF pgf = PGF.readPGF("grammar/sweeng/Words.pgf");
             noun = new Word(
                     pgf.getLanguages().get(Utils.codeToGF("swe")),
                     pgf.getLanguages().get(Utils.codeToGF("eng")),

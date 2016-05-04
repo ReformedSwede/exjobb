@@ -15,15 +15,14 @@ import main.Model;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class PracticeController{
 
     private Model model;
     private Word currentWord, prevWord = null;
     private String inflectionForm;
-    private Set<String> unusedCategories = new HashSet<>();
+    private HashMap<String, Set<String>> unusedCategoriesAndInflections = new HashMap<>();
     private boolean translateToNative = true;
 
     //UI components
@@ -33,8 +32,8 @@ public class PracticeController{
     public TextField inputFld;
     public Label infoLbl;
     public ImageView imageView;
-    public Button exit;
     public VBox catRadioList;
+    public VBox inflectionRadioList;
     public ToggleButton langToggle;
 
 
@@ -50,11 +49,18 @@ public class PracticeController{
         sessionTitle.setText("Native language: " + Utils.codeToName(model.getNativeLangCode()) +
                 ", foreign language: " + Utils.codeToName(model.getForeignLangCode()));
 
-        Utils.getPartOfSpeechCats().forEach(s -> {
-            RadioButton rb = new RadioButton(s);
+        Utils.getPartOfSpeechCats().forEach(pos -> {
+            RadioButton rb = new RadioButton(pos);
             rb.setSelected(true);
             rb.setOnAction(event -> catRadioSelected(rb));
             catRadioList.getChildren().add(rb);
+
+            Utils.getInflectionRealNamesByCat(pos).forEach(inflection -> {
+                RadioButton rbtn = new RadioButton(inflection);
+                rbtn.setSelected(true);
+                rbtn.setOnAction(event -> inflectionRadioSelected(rbtn));
+                inflectionRadioList.getChildren().add(rbtn);
+            });
         });
 
         langToggle.setSelected(translateToNative = true);
@@ -84,14 +90,39 @@ public class PracticeController{
     }
 
     private void catRadioSelected(RadioButton rb){
-        if(rb.isSelected()){
-            unusedCategories.remove(rb.getText());
-        }else{
-            if(unusedCategories.size() + 1 == model.getAllCategories().size()) {
+        if(rb.isSelected()){ //A button was selected and thus, a category was added
+            unusedCategoriesAndInflections.remove(rb.getText());
+        }else{ //A button was deselected and thus, a category was removed
+            if(unusedCategoriesAndInflections.size() + 1 == model.getAllCategories().size()) {
                 rb.setSelected(true);
                 return;
             }
-            unusedCategories.add(rb.getText());
+            List<String> inflections = Utils.getInflectionRealNamesByCat(rb.getText());
+            unusedCategoriesAndInflections.put(rb.getText(), new HashSet<>(inflections));
+
+            setNextWord();
+        }
+    }
+
+    private void inflectionRadioSelected(RadioButton rb){
+        //Find out which part of speech this radiobutton belongs to
+        String pos = "";
+        for(String s : Utils.getPartOfSpeechCats())
+            for(String i : Utils.getInflectionRealNamesByCat(s))
+                if(rb.getText().equals(i))
+                    pos = s;
+
+        if(rb.isSelected()){ //A button was selected and thus, a inflection form was added
+            unusedCategoriesAndInflections.get(pos).remove(rb.getText());
+        }else{ //A button was deselected and thus, a inflection form was removed
+            if(unusedCategoriesAndInflections.get(pos) != null &&
+                unusedCategoriesAndInflections.get(pos).size() + 1 == Utils.getInflectionRealNamesByCat(pos).size()) {
+                rb.setSelected(true);
+                return;
+            }
+            unusedCategoriesAndInflections.putIfAbsent(pos, new HashSet<>());
+            unusedCategoriesAndInflections.get(pos).add(rb.getText());
+
             setNextWord();
         }
     }
@@ -105,11 +136,12 @@ public class PracticeController{
     private void setNextWord(){
         inputFld.clear();
         do{
-            currentWord = model.getRandomWord(unusedCategories.toArray(new String[0]));
+            currentWord = model.getRandomWord(unusedCategoriesAndInflections.keySet().toArray(new String[0]));
         }while(currentWord.equals(prevWord));
         prevWord = currentWord;
 
-        inflectionForm = currentWord.getRandomInflectionName();
+        inflectionForm = currentWord.getRandomInflectionName(
+                unusedCategoriesAndInflections.get(currentWord.getCategory()));
         practiceWordLbl.setText(currentWord.getWordInflectionFormByName(inflectionForm, !translateToNative));
     }
 
