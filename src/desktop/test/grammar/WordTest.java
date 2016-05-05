@@ -1,17 +1,10 @@
 package grammar;
 
-import main.Utils;
-import org.grammaticalframework.pgf.Concr;
+import main.ResourceManager;
 import org.grammaticalframework.pgf.PGF;
 import org.junit.Before;
-import org.junit.Test;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Collection;
-
-import static org.junit.Assert.*;
 
 public class WordTest {
 
@@ -23,12 +16,12 @@ public class WordTest {
         try {
             PGF pgf = PGF.readPGF("grammar/sweeng/Words.pgf");
             noun = new Word(
-                    pgf.getLanguages().get(Utils.codeToGF("swe")),
-                    pgf.getLanguages().get(Utils.codeToGF("eng")),
+                    pgf.getLanguages().get(ResourceManager.codeToGF("swe")),
+                    pgf.getLanguages().get(ResourceManager.codeToGF("eng")),
                     "Car", "Noun");
             verb = new Word(
-                    pgf.getLanguages().get(Utils.codeToGF("swe")),
-                    pgf.getLanguages().get(Utils.codeToGF("eng")),
+                    pgf.getLanguages().get(ResourceManager.codeToGF("swe")),
+                    pgf.getLanguages().get(ResourceManager.codeToGF("eng")),
                     "Eat","Verb");
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -27,4 +27,8 @@ concrete WordsSwe of Words = open CommonScand, CatSwe, ParadigmsSwe in {
 		Run = mkV "springa" "sprang" "sprungit" ;
 		Fish = mkN "fisk" "fiskar" ;
 		Lake = mkN "sjö" ;
+		Read = mkV "läsa" "läste" "läst" ;
+		Say = mkV "säga" "sade" "sagt" ;
+		Computer = mkN "dator" "datorer" ;
+		Cello = mkN "cello" "celli" ;
 }

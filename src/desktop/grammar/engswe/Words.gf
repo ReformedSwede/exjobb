@@ -18,7 +18,8 @@ abstract Words = {
 		Infinitive : VerbForm ;
 		Past : VerbForm ;
 		PPart : VerbForm ;
-		LDOIA : Noun ;
-		Luft : Noun ;
-		Se : Verb ;
+		Dator : Noun ;
+		Mus : Noun ;
+		BDPW : Verb ;
+		Spela : Verb ;
 }

@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import main.InflectionCallback;
 import main.Model;
-import main.Utils;
+import main.ResourceManager;
 
 import java.io.IOException;
 import java.net.URL;
@@ -40,16 +40,16 @@ public class EditController implements InflectionCallback {
         pContent = content;
 
         //Set windows size
-        pContent.getScene().getWindow().setHeight(700);
+        pContent.getScene().getWindow().setHeight(900);
         pContent.getScene().getWindow().setWidth(1200);
 
         //Init components
-        sessionTitle.setText("Native language: " + Utils.codeToName(model.getNativeLangCode()) +
-                ", foreign language: " + Utils.codeToName(model.getForeignLangCode()));
+        sessionTitle.setText("Native language: " + ResourceManager.codeToName(model.getNativeLangCode()) +
+                ", foreign language: " + ResourceManager.codeToName(model.getForeignLangCode()));
 
         //Init both comboboxes with all parts of speech
         ObservableList<String> posList = FXCollections.observableArrayList();
-        posList.addAll(Utils.getPartOfSpeechCats());
+        posList.addAll(ResourceManager.getPartOfSpeechCats());
         catField.setItems(posList);
         catBox.setItems(posList);
         catBox.setOnAction(event -> refreshWordList());
@@ -69,7 +69,7 @@ public class EditController implements InflectionCallback {
                     catBox.getValue(),
                     wordList.getSelectionModel().getSelectedItem());
 
-            List<String> info = Utils.getInflectionRealNamesByCat(selectedWord.getCategory()).stream()
+            List<String> info = ResourceManager.getInflectionRealNamesByCat(selectedWord.getCategory()).stream()
                     .map(infl -> selectedWord.getForeignInflectionFormByName(infl) + " = " +
                             selectedWord.getNativeInflectionFormByName(infl))
                     .collect(Collectors.toList());

@@ -3,7 +3,6 @@ package main;
 
 import grammar.GrammarManager;
 import grammar.Word;
-import org.grammaticalframework.pgf.Concr;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -61,10 +60,10 @@ public class Model {
      * @return a random Word
      */
     public Word getRandomWord(String... doNotInclude){
-        List<String> catsToInclude = Utils.getPartOfSpeechCats();
+        List<String> catsToInclude = ResourceManager.getPartOfSpeechCats();
         if(doNotInclude.length != 0) {
             final List<String> list = Arrays.asList(doNotInclude);
-            catsToInclude = catsToInclude.stream().filter((o) -> !list.contains(o)).collect(Collectors.toList());
+            catsToInclude = catsToInclude.stream().filter(cat -> !list.contains(cat)).collect(Collectors.toList());
         }
 
         List<Word> words = new ArrayList<>();
@@ -76,7 +75,7 @@ public class Model {
      * Returns all categories
      */
     public List<String> getAllCategories(){
-        return Utils.getPartOfSpeechCats();
+        return ResourceManager.getPartOfSpeechCats();
     }
 
     /**
@@ -86,6 +85,17 @@ public class Model {
      */
     public List<Word> getAllWords(String cat){
         return manager.getAllWords(cat);
+    }
+
+    /**
+     * Returns the total number of words in the database
+     * @return # of words
+     */
+    public int getNrOfWords(){
+        int nr = 0;
+        for(String partOspeech : ResourceManager.getPartOfSpeechCats())
+            nr += manager.getAllWords(partOspeech).size();
+        return nr;
     }
 
     /**

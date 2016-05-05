@@ -1,6 +1,6 @@
 package grammar;
 
-import main.Utils;
+import main.ResourceManager;
 import org.grammaticalframework.pgf.Concr;
 import org.grammaticalframework.pgf.Expr;
 import org.grammaticalframework.pgf.PGF;
@@ -41,8 +41,8 @@ public class Word {
      * @param category The gf cat of the word
      */
     public Word(PGF pgf, String nativeLangCode, String foreignLangCode, String function, String category){
-        nativeConcr = pgf.getLanguages().get(Utils.codeToGF(nativeLangCode));
-        foreignConcr = pgf.getLanguages().get(Utils.codeToGF(foreignLangCode));
+        nativeConcr = pgf.getLanguages().get(ResourceManager.codeToGF(nativeLangCode));
+        foreignConcr = pgf.getLanguages().get(ResourceManager.codeToGF(foreignLangCode));
         this.function = function;
         this.category = category;
     }
@@ -52,7 +52,7 @@ public class Word {
      * @return the native word
      */
     public String getNative(){
-        return getNativeInflectionFormByName(Utils.getInflectionRealNamesByCat(category).get(0));
+        return getNativeInflectionFormByName(ResourceManager.getInflectionRealNamesByCat(category).get(0));
     }
 
     /**
@@ -60,7 +60,7 @@ public class Word {
      * @return the foreign word
      */
     public String getForeign(){
-        return getForeignInflectionFormByName(Utils.getInflectionRealNamesByCat(category).get(0));
+        return getForeignInflectionFormByName(ResourceManager.getInflectionRealNamesByCat(category).get(0));
     }
 
     /**
@@ -84,7 +84,7 @@ public class Word {
      * @return The native language
      */
     public String getNativeLanguage(){
-        return Utils.gfToName(nativeConcr.getName());
+        return ResourceManager.gfToName(nativeConcr.getName());
     }
 
     /**
@@ -92,7 +92,7 @@ public class Word {
      * @return The foreign language
      */
     public String getForeignLanguage(){
-        return Utils.gfToName(foreignConcr.getName());
+        return ResourceManager.gfToName(foreignConcr.getName());
     }
 
     /**
@@ -101,7 +101,7 @@ public class Word {
      * @return a random inflection name
      */
     public String getRandomInflectionName(Set<String> doNotIncllude){
-        List<String> inflections = Utils.getInflectionRealNamesByCat(category);
+        List<String> inflections = ResourceManager.getInflectionRealNamesByCat(category);
         if(doNotIncllude != null)
             for (Iterator<String> iterator = inflections.iterator(); iterator.hasNext(); )
                 if(doNotIncllude.contains(iterator.next()))
@@ -117,7 +117,7 @@ public class Word {
     public String getForeignInflectionFormByName(String inflectionName){
         Expr word = new Expr(function, new Expr[0]);
         Expr form = new Expr(inflectionName, new Expr[0]);
-        return foreignConcr.linearize(new Expr(Utils.getPartOfSpeechLinCatByName(category), word, form));
+        return foreignConcr.linearize(new Expr(ResourceManager.getPartOfSpeechLinCatByName(category), word, form));
     }
 
     /**
@@ -128,7 +128,7 @@ public class Word {
     public String getNativeInflectionFormByName(String inflectionName){
         Expr word = new Expr(function, new Expr[0]);
         Expr form = new Expr(inflectionName, new Expr[0]);
-        return nativeConcr.linearize(new Expr(Utils.getPartOfSpeechLinCatByName(category), word, form));
+        return nativeConcr.linearize(new Expr(ResourceManager.getPartOfSpeechLinCatByName(category), word, form));
     }
 
     /**
@@ -152,7 +152,7 @@ public class Word {
      */
     public boolean checkAnswer(String answer, String inflectionName, boolean translateToNative) {
         //Check for correct translation among other inflections
-        List<String> otherInflections = Utils.getInflectionRealNamesByCat(category);
+        List<String> otherInflections = ResourceManager.getInflectionRealNamesByCat(category);
         otherInflections.remove(inflectionName);
         for(String inflection : otherInflections)
             if(getWordInflectionFormByName(inflection, !translateToNative)

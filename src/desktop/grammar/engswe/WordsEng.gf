@@ -22,7 +22,8 @@ concrete WordsEng of Words = open ResEng, CatEng, ParadigmsEng in {
 		s=""} ;
 		PPart = {vf=VPPart ;
 		s=""} ;
-		LDOIA = mkN "world" ;
-		Luft = mkN "air" ;
-		Se = mkV "see" "saw" "seen" ;
+		Dator = mkN "computer" "computers" ;
+		Mus = mkN "mouse" "mice" ;
+		BDPW = mkV "read" "read" "read" ;
+		Spela = mkV "play" ;
 }

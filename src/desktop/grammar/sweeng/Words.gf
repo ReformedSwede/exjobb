@@ -23,4 +23,8 @@ abstract Words = {
 		Run : Verb ;
 		Fish : Noun ;
 		Lake : Noun ;
+		Read : Verb ;
+		Say : Verb ;
+		Computer : Noun ;
+		Cello : Noun ;
 }

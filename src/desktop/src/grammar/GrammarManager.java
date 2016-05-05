@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import javafx.util.Pair;
-import main.Utils;
+import main.ResourceManager;
 import org.grammaticalframework.pgf.Concr;
 import org.grammaticalframework.pgf.Expr;
 import org.grammaticalframework.pgf.PGF;
@@ -44,15 +44,15 @@ public class GrammarManager {
 
         try {
             pgf = PGF.readPGF(dir + File.separator + "Words.pgf");
-            nativeConcr = pgf.getLanguages().get(Utils.codeToGF(nativeLang));
-            foreignConcr = pgf.getLanguages().get(Utils.codeToGF(foreignLang));
+            nativeConcr = pgf.getLanguages().get(ResourceManager.codeToGF(nativeLang));
+            foreignConcr = pgf.getLanguages().get(ResourceManager.codeToGF(foreignLang));
         } catch (FileNotFoundException e) {
-            compilePGF(true, new File(dir), dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf",
-                    dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf");
+            compilePGF(true, new File(dir), dir + File.separator + ResourceManager.codeToGF(nativeLangCode) + ".gf",
+                    dir + File.separator + ResourceManager.codeToGF(foreignLangCode) + ".gf");
         }
 
-        compilePGF(true, new File(dir), dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf",
-              dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf");
+        compilePGF(true, new File(dir), dir + File.separator + ResourceManager.codeToGF(nativeLangCode) + ".gf",
+              dir + File.separator + ResourceManager.codeToGF(foreignLangCode) + ".gf");
 	}
 
 	/**
@@ -82,8 +82,10 @@ public class GrammarManager {
 		folder.mkdir();
 
         String abstractFile = folder.getAbsolutePath() + File.separator + "Words.gf";
-        String nativeConcreteFile = folder.getAbsolutePath() + File.separator + Utils.nameToGf(nativeLang) + ".gf";
-        String foreignConcreteFile = folder.getAbsolutePath() + File.separator + Utils.nameToGf(foreignLang) + ".gf";
+        String nativeConcreteFile = folder.getAbsolutePath() + File.separator
+				+ ResourceManager.nameToGf(nativeLang) + ".gf";
+        String foreignConcreteFile = folder.getAbsolutePath() + File.separator
+				+ ResourceManager.nameToGf(foreignLang) + ".gf";
 
         GfFileEditor.initAbstractFile(abstractFile);
         GfFileEditor.initConcreteFile(nativeConcreteFile, nativeLang);
@@ -114,8 +116,8 @@ public class GrammarManager {
 	public Word addWord(String category, String nativeWord, String foreignWord){
 		//Define file paths and names
 		String abstractFile = dir + File.separator + "Words.gf";
-		String nativeConcreteFile = dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf";
-		String foreignConcreteFile = dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf";
+		String nativeConcreteFile = dir + File.separator + ResourceManager.codeToGF(nativeLangCode) + ".gf";
+		String foreignConcreteFile = dir + File.separator + ResourceManager.codeToGF(foreignLangCode) + ".gf";
 		String fun = Character.toUpperCase(foreignWord.charAt(0)) + foreignWord.toLowerCase().substring(1);
         fun = convertToASCII(fun);
 
@@ -157,9 +159,10 @@ public class GrammarManager {
 	public Word addWordWithInflections(String category, List<String> nativeWords, List<String> foreignWords){
 		//Define file paths and names
 		String abstractFile = dir + File.separator + "Words.gf";
-		String nativeConcreteFile = dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf";
-		String foreignConcreteFile = dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf";
-		String fun = Character.toUpperCase(foreignWords.get(0).charAt(0)) + foreignWords.get(0).toLowerCase().substring(1);
+		String nativeConcreteFile = dir + File.separator + ResourceManager.codeToGF(nativeLangCode) + ".gf";
+		String foreignConcreteFile = dir + File.separator + ResourceManager.codeToGF(foreignLangCode) + ".gf";
+		String fun = Character.toUpperCase(foreignWords.get(0).charAt(0))
+				+ foreignWords.get(0).toLowerCase().substring(1);
         fun = convertToASCII(fun);
 
 		GfFileEditor editor = new GfFileEditor(abstractFile);
@@ -204,8 +207,8 @@ public class GrammarManager {
 	public void removeWord(String category, String function){
 		//Define file paths and names
 		String abstractFile = dir + File.separator + "Words.gf";
-		String nativeConcreteFile = dir + File.separator + Utils.codeToGF(nativeLangCode) + ".gf";
-		String foreignConcreteFile = dir + File.separator + Utils.codeToGF(foreignLangCode) + ".gf";
+		String nativeConcreteFile = dir + File.separator + ResourceManager.codeToGF(nativeLangCode) + ".gf";
+		String foreignConcreteFile = dir + File.separator + ResourceManager.codeToGF(foreignLangCode) + ".gf";
 
 		//Remove from abstract
 		GfFileEditor editor = new GfFileEditor(abstractFile);
@@ -233,7 +236,7 @@ public class GrammarManager {
 	public Collection<String> getAllLanguages(){
         Collection<String> langs = pgf.getLanguages().keySet();
         langs.forEach((s -> {
-            s = Utils.gfToName(s);
+            s = ResourceManager.gfToName(s);
         }));
         return langs;
 	}
@@ -265,7 +268,9 @@ public class GrammarManager {
      */
 	public List<Word> getAllWords(String category){
         List<String> functions = pgf.getFunctionsByCat(category);
-        return functions.stream().map(fun -> new Word(nativeConcr, foreignConcr, fun, category)).collect(Collectors.toList());
+        return functions.stream()
+				.map(fun -> new Word(nativeConcr, foreignConcr, fun, category))
+				.collect(Collectors.toList());
 	}
 
 	/**
@@ -296,7 +301,7 @@ public class GrammarManager {
     }
 
 	public void tmp(){
-		System.out.println(Utils.getInflectionGfNamesByCat("swe", "Verb", "Past"));
+		System.out.println(ResourceManager.getLangFilesByLang("swe"));
 	}
 
 	/*****Private methods******/
@@ -341,8 +346,8 @@ public class GrammarManager {
 
                 //Reinitialize variables
                 pgf = PGF.readPGF(compilePath.getAbsolutePath() + File.separator + "Words.pgf");
-                nativeConcr = pgf.getLanguages().get(Utils.codeToGF(nativeLangCode));
-                foreignConcr = pgf.getLanguages().get(Utils.codeToGF(foreignLangCode));
+                nativeConcr = pgf.getLanguages().get(ResourceManager.codeToGF(nativeLangCode));
+                foreignConcr = pgf.getLanguages().get(ResourceManager.codeToGF(foreignLangCode));
             } catch (IOException e) {
                 e.printStackTrace();
             }

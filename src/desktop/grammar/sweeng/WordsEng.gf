@@ -27,4 +27,8 @@ concrete WordsEng of Words = open ResEng, CatEng, ParadigmsEng in {
 		Run = mkV "run" "ran" "run" ;
 		Fish = mkN "fish" "fish" ;
 		Lake = mkN "lake" ;
+		Read = mkV "read" "read" "read" ;
+		Say = mkV "say" "said" "said" ;
+		Computer = mkN "computer" "computers" ;
+		Cello = mkN "cello" "cellos" ;
 }

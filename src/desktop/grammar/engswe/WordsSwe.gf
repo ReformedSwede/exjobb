@@ -18,11 +18,12 @@ concrete WordsSwe of Words = open CommonScand, CatSwe, ParadigmsSwe in {
 		VFormFun v f = f.s++v.s ! f.vf ;
 		Infinitive = {vf=(VI (VInfin Act)) ;
 		s=""} ;
-		Past = {vf=(VF (VImper Act)) ;
+		Past = {vf=(VF (VPret Act)) ;
 		s=""} ;
 		PPart = {vf=(VI (VSupin Act)) ;
 		s=""} ;
-		LDOIA = mkN "värld" ;
-		Luft = mkN "luft" ;
-		Se = mkV "se" "såg" "sett" ;
+		Dator = mkN "dator" "datorer" ;
+		Mus = mkN "mus" "möss" ;
+		BDPW = mkV "läsa" "läste" "läst" ;
+		Spela = mkV "spela" ;
 }

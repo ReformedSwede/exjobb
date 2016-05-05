@@ -5,7 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.*;
-import main.Utils;
+import main.ResourceManager;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class StartController implements Initializable {
@@ -38,7 +37,7 @@ public class StartController implements Initializable {
         refreshSessionsList();
 
         ObservableList<String> availableLanguages = FXCollections.observableArrayList();
-        availableLanguages.addAll(Utils.getGfLanguages().stream().map(Utils::codeToName).collect(Collectors.toList()));
+        availableLanguages.addAll(ResourceManager.getGfLanguages().stream().map(ResourceManager::codeToName).collect(Collectors.toList()));
         nativeBox.setItems(availableLanguages);
         foreignBox.setItems(availableLanguages);
     }
@@ -61,8 +60,8 @@ public class StartController implements Initializable {
             HBox box = new HBox();
             GridPane.setConstraints(box, 0, row);
             sessionsList.getChildren().add(box);
-            box.getChildren().add(new Label(Utils.codeToName(sessions.get(row).getKey())));
-            box.getChildren().add(new Label(Utils.codeToName(sessions.get(row).getValue())));
+            box.getChildren().add(new Label(ResourceManager.codeToName(sessions.get(row).getKey())));
+            box.getChildren().add(new Label(ResourceManager.codeToName(sessions.get(row).getValue())));
 
             //Add buttons
             box = new HBox();

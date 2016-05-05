@@ -19,7 +19,7 @@
         </category>
         <category name="Verb" oper="mkV" minArgs="1" lincat-record="VForm" lin-select="">
             <inflection-form real-name="Infinitive" gf-name="(VI (VInfin Act))"/>
-            <inflection-form real-name="Past" gf-name="(VF (VImper Act))"/>
+            <inflection-form real-name="Past" gf-name="(VF (VPret Act))"/>
             <inflection-form real-name="PPart" gf-name="(VI (VSupin Act))"/>
         </category>
     </language>

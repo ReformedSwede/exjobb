@@ -1,6 +1,6 @@
 package grammar;
 
-import main.Utils;
+import main.ResourceManager;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -102,17 +102,17 @@ class GfFileEditor {
             br.write("cat ");
             br.write("Word ;");
             br.newLine();
-            for(String cat : Utils.getPartOfSpeechCats()) {
+            for(String cat : ResourceManager.getPartOfSpeechCats()) {
                 br.write(cat + " ;" + cat + "Form ;");
                 br.newLine();
             }
             br.newLine();
             br.write("fun");
             br.newLine();
-            for(String cat : Utils.getPartOfSpeechCats()){
+            for(String cat : ResourceManager.getPartOfSpeechCats()){
                 br.write(cat.substring(0, 1) + "FormFun :" + cat + " -> " + cat + "Form -> Word ;");
                 br.newLine();
-                for(String inflection : Utils.getInflectionRealNamesByCat(cat)) {
+                for(String inflection : ResourceManager.getInflectionRealNamesByCat(cat)) {
                     br.write(inflection + " : " + cat + "Form ;");
                     br.newLine();
                 }
@@ -138,28 +138,30 @@ class GfFileEditor {
 
         try(BufferedWriter br = new BufferedWriter(new FileWriter(file))){
             file.createNewFile();
-            br.write("concrete " + Utils.nameToGf(language) + " of Words = open " +
-                    Utils.getLangFilesByLang(language) + " in { ");
+            br.write("concrete " + ResourceManager.nameToGf(language) + " of Words = open " +
+                    ResourceManager.getLangFilesByLang(lowercaseLangCode) + " in { ");
             br.newLine();
             br.write("lincat ");
             br.write("Word = Str ;");
-            for(String cat : Utils.getPartOfSpeechCats()) {
-                br.write(cat + " = " + Utils.getParadigmCatByName(cat) + " ;");
+            for(String cat : ResourceManager.getPartOfSpeechCats()) {
+                br.write(cat + " = " + ResourceManager.getParadigmCatByName(cat) + " ;");
                 br.newLine();
                 br.write(cat + "Form = {" + cat.substring(0, 1).toLowerCase() + "f:" +
-                        Utils.getLincatRecord(lowercaseLangCode, cat) + ";s:Str};");
+                        ResourceManager.getLincatRecord(lowercaseLangCode, cat) + ";s:Str};");
                 br.newLine();
             }
             br.write("lin");
             br.newLine();
-            for(String cat : Utils.getPartOfSpeechCats()) {
+            for(String cat : ResourceManager.getPartOfSpeechCats()) {
                 String catFirstLetter = cat.substring(0, 1).toLowerCase();
                 br.write(cat.substring(0, 1) + "FormFun " + catFirstLetter + " f = f.s++" +
-                    catFirstLetter + ".s ! f." + catFirstLetter + "f " + Utils.getLinSelect(lowercaseLangCode, cat) + " ;");
+                    catFirstLetter + ".s ! f." + catFirstLetter + "f " +
+                        ResourceManager.getLinSelect(lowercaseLangCode, cat) + " ;");
                 br.newLine();
-                for(String inflection : Utils.getInflectionRealNamesByCat(cat)){
+                for(String inflection : ResourceManager.getInflectionRealNamesByCat(cat)){
                     br.write(inflection + " = {" + catFirstLetter + "f=" +
-                            Utils.getInflectionGfNamesByCat(lowercaseLangCode, cat, inflection) + " ; s=\"\"} ;");
+                            ResourceManager.getInflectionGfNamesByCat(lowercaseLangCode, cat, inflection)
+                            + " ; s=\"\"} ;");
                     br.newLine();
                 }
             }
