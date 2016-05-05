@@ -154,7 +154,7 @@ class GfFileEditor {
             br.newLine();
             for(String cat : ResourceManager.getPartOfSpeechCats()) {
                 String catFirstLetter = cat.substring(0, 1).toLowerCase();
-                br.write(cat.substring(0, 1) + "FormFun " + catFirstLetter + " f = f.s++" +
+                br.write(ResourceManager.getPartOfSpeechLinCatByName(cat) + " " + catFirstLetter + " f = f.s++" +
                     catFirstLetter + ".s ! f." + catFirstLetter + "f " +
                         ResourceManager.getLinSelect(lowercaseLangCode, cat) + " ;");
                 br.newLine();

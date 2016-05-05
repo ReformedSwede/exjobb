@@ -16,7 +16,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/resources/view/start-window.fxml"));
         primaryStage.setTitle("Grammar");
 
-        Scene scene = new Scene(root, 700, 400);
+        Scene scene = new Scene(root, 800, 500);
         scene.getStylesheets().add("/resources/css/style.css");
 
         primaryStage.setScene(scene);

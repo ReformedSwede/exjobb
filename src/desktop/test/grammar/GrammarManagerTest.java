@@ -1,5 +1,7 @@
 package grammar;
 
+import main.Session;
+
 import static org.junit.Assert.*;
 
 public class GrammarManagerTest {
@@ -8,7 +10,7 @@ public class GrammarManagerTest {
 
     @org.junit.Before
     public void setUp() throws Exception {
-        manager = new GrammarManager("swe", "eng");
+        manager = new GrammarManager(new Session("swe", "eng", "main"));
     }
 
     @org.junit.Test

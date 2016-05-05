@@ -13,26 +13,23 @@ import java.util.stream.Collectors;
  */
 public class Model {
 
-    private String nativeLangCode;
-    private String foreignLangCode;
+    private Session session;
     private GrammarManager manager;
 
     /**
      * Starts a new session
-     * @param nativeLang The native language of the session
-     * @param foreignLang The foreign language of the session
+     * @param session the session
      */
-    public void initialize(String nativeLang, String foreignLang){
-        this.nativeLangCode = nativeLang;
-        this.foreignLangCode = foreignLang;
-        manager = new GrammarManager(nativeLang, foreignLang);
+    public void initialize(Session session){
+        this.session = session;
+        manager = new GrammarManager(session);
     }
 
     /**
      * Ends the initialized session session. If no session was ever initialized, nothing interesting happens.
      */
     public void endSession(){
-        nativeLangCode = foreignLangCode = null;
+        session = null;
         manager = null;
     }
 
@@ -43,7 +40,7 @@ public class Model {
      * @return the native language code
      */
     public String getNativeLangCode() {
-        return nativeLangCode;
+        return session.getNativeCode();
     }
 
     /**
@@ -51,7 +48,7 @@ public class Model {
      * @return the foreign language code
      */
     public String getForeignLangCode() {
-        return foreignLangCode;
+        return session.getForeignCode();
     }
 
     /**

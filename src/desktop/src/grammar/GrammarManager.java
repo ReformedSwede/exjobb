@@ -4,8 +4,8 @@ import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import javafx.util.Pair;
 import main.ResourceManager;
+import main.Session;
 import org.grammaticalframework.pgf.Concr;
 import org.grammaticalframework.pgf.Expr;
 import org.grammaticalframework.pgf.PGF;
@@ -26,26 +26,24 @@ public class GrammarManager {
 
 	/**
 	 * Initializes the grammar manager for this session. Finds the session's folder and compiles necessary files.
-	 * @param nativeLang The language native to the user. Preferably a three letter abbreviation.
-	 * @param foreignLang The language foreign to the user. Preferably a three letter abbreviation.
+	 * @param session A session object containing names of languages and title
      */
-	public GrammarManager(String nativeLang, String foreignLang){
+	public GrammarManager(Session session){
+		nativeLangCode = session.getNativeCode();
+		foreignLangCode = session.getForeignCode();
+
 		//Create grammar dir if non-existent
 		new File("grammar" + File.separator).mkdir();
 
 		//Check if session directory exists. If not, create
-		dir = "grammar" + File.separator +
-				nativeLang.substring(0, 3).toLowerCase() + foreignLang.substring(0, 3).toLowerCase();
+		dir = "grammar" + File.separator + session.getTitle() + "_" + nativeLangCode + foreignLangCode;
 		if(!new File(dir).exists())
-			createSession(nativeLang, foreignLang);
-
-		this.nativeLangCode = nativeLang.substring(0, 3).toLowerCase();
-		this.foreignLangCode = foreignLang.substring(0, 3).toLowerCase();
+			createSession(session.getTitle(), nativeLangCode, foreignLangCode);
 
         try {
             pgf = PGF.readPGF(dir + File.separator + "Words.pgf");
-            nativeConcr = pgf.getLanguages().get(ResourceManager.codeToGF(nativeLang));
-            foreignConcr = pgf.getLanguages().get(ResourceManager.codeToGF(foreignLang));
+            nativeConcr = pgf.getLanguages().get(ResourceManager.codeToGF(nativeLangCode));
+            foreignConcr = pgf.getLanguages().get(ResourceManager.codeToGF(foreignLangCode));
         } catch (FileNotFoundException e) {
             compilePGF(true, new File(dir), dir + File.separator + ResourceManager.codeToGF(nativeLangCode) + ".gf",
                     dir + File.separator + ResourceManager.codeToGF(foreignLangCode) + ".gf");
@@ -59,14 +57,16 @@ public class GrammarManager {
 	 * Lists all sessions.
 	 * @return A list of all sessions. Each element is a pair on the form (nativeLangCode, foreignLangCode)
      */
-	public static List<Pair<String, String>> getSessions(){
-		ArrayList<Pair<String, String>> sessions = new ArrayList<>();
+	public static List<Session> getSessions(){
+		List<Session> sessions = new ArrayList<>();
 		String path = "grammar";
 		new File(path).mkdir();
 
 		for(File folder : new File(path).listFiles())
-			if(folder.isDirectory())
-				sessions.add(new Pair<>(folder.getName().substring(0, 3), folder.getName().substring(3, 6)));
+			if(folder.isDirectory()) {
+				String[] folderName = folder.getName().split("_");
+				sessions.add(new Session(folderName[1].substring(0, 3), folderName[1].substring(3, 6),folderName[0]));
+			}
 		return sessions;
 	}
 
@@ -75,9 +75,14 @@ public class GrammarManager {
 	 * @param nativeLang The name of the native language of the session
 	 * @param foreignLang The name of the foreign language of the session
      */
-	public static void createSession(String nativeLang, String foreignLang){
+	public static void createSession(String name, String nativeLang, String foreignLang){
+		//Check if name already exists
+		for(File folder : new File("grammar").listFiles())
+			if(folder.isDirectory() && folder.getName().startsWith(name))
+				return;
+
 		//Create directory
-		File folder = new File("grammar" + File.separator +
+		File folder = new File("grammar" + File.separator + name + "_" +
 				nativeLang.substring(0, 3).toLowerCase() + foreignLang.substring(0, 3).toLowerCase());
 		folder.mkdir();
 
@@ -94,16 +99,20 @@ public class GrammarManager {
 
 	/**
 	 * Removes a session folder and all its files.
-	 * @param nativeLangCode The native language of the session
-	 * @param foreignLangCode The foreign language of the session
+	 * @param sessionName The title of the session
      */
-	public static void removeSession(String nativeLangCode, String foreignLangCode){
-		File folder = new File("grammar" + File.separator +
-				nativeLangCode + foreignLangCode);
-		File[] files = folder.listFiles();
+	public static void removeSession(String sessionName){
+		File sessionFolder = null;
+		for(File folder : new File("grammar").listFiles())
+			if(folder.isDirectory() && folder.getName().startsWith(sessionName)) {
+				sessionFolder = folder;
+				break;
+			}
+
+		File[] files = sessionFolder.listFiles();
 		for(File f : files)
 			f.delete();
-		folder.delete();
+		sessionFolder.delete();
 	}
 
 	/**
@@ -272,33 +281,6 @@ public class GrammarManager {
 				.map(fun -> new Word(nativeConcr, foreignConcr, fun, category))
 				.collect(Collectors.toList());
 	}
-
-	/**
-	 * Translates a word into the other language. Specify what language with the fromForeign parameter
-	 * @param word The word to translate
-	 * @param startcat The startcat, necessary for parsing
-	 * @param fromForeign Set to true if the word is in the foreign language and should be translated into the native.
-	 *                    Set to false otherwise.
-     * @return
-     */
-    public String translate(String word, String startcat, boolean fromForeign){
-        Expr e = null;
-        if(fromForeign){
-            try {
-                e = foreignConcr.parse(startcat, word).iterator().next().getExpr();
-            } catch (ParseError parseError) {
-                parseError.printStackTrace();
-            }
-            return nativeConcr.linearize(e);
-        }else{
-            try {
-                e = nativeConcr.parse(startcat, word).iterator().next().getExpr();
-            } catch (ParseError parseError) {
-                parseError.printStackTrace();
-            }
-            return foreignConcr.linearize(e);
-        }
-    }
 
 	public void tmp(){
 		System.out.println(ResourceManager.getLangFilesByLang("swe"));

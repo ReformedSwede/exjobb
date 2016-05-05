@@ -172,7 +172,6 @@ public class ResourceManager {
      * @param expression The expression to evaluate
      * @param constant The type to return
      * @return An object that encapsulated the result from the evaluation
-     * @throws XPathExpressionException
      */
     private static Object createXPath(InputSource xmlFile, String expression, QName constant){
         try {

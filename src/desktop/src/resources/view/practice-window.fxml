@@ -28,43 +28,39 @@
         <GridPane styleClass="center" hgap="200">
             <Label fx:id="practiceWordLbl" text="No data"
                    GridPane.columnIndex="0"
-                   GridPane.rowIndex="0"
-                   GridPane.columnSpan="3"/>
+                   GridPane.rowIndex="0"/>
 
             <TextField fx:id="inputFld"
                        promptText="Write something..."
                        onKeyPressed="#submit"
                    GridPane.columnIndex="0"
-                   GridPane.rowIndex="1"
-                   GridPane.columnSpan="3"/>
+                   GridPane.rowIndex="1"/>
 
             <Label fx:id="infoLbl"
                    GridPane.columnIndex="0"
-                   GridPane.rowIndex="2"
-                   GridPane.columnSpan="3"/>
+                   GridPane.rowIndex="2"/>
 
             <ImageView fx:id="imageView"
                GridPane.columnIndex="0"
-               GridPane.rowIndex="3"
-               GridPane.columnSpan="3"/>
+               GridPane.rowIndex="3"/>
+
+            <ToggleButton fx:id="langToggle" text="Translate to native"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="0"
+                          onAction="#toggleLanguage"/>
 
             <VBox fx:id="catRadioList"
-                  GridPane.columnIndex="3"
-                    GridPane.rowIndex="0">
+                    GridPane.columnIndex="1"
+                    GridPane.rowIndex="1"
+                    GridPane.rowSpan="2">
                 <Label text="Categories to practice"/>
             </VBox>
 
-            <VBox  GridPane.columnIndex="3"
-                   GridPane.rowIndex="1">
+            <VBox  GridPane.columnIndex="1"
+                   GridPane.rowIndex="3">
                 <Label text="Inflection forms to practice"/>
                 <VBox fx:id="inflectionRadioList"/>
             </VBox>
-
-
-            <ToggleButton fx:id="langToggle" text="Translate to native"
-                GridPane.columnIndex="3"
-                GridPane.rowIndex="3"
-                onAction="#toggleLanguage"/>
         </GridPane>
     </center>
 </BorderPane>

@@ -40,7 +40,7 @@ public class EditController implements InflectionCallback {
         pContent = content;
 
         //Set windows size
-        pContent.getScene().getWindow().setHeight(900);
+        pContent.getScene().getWindow().setHeight(700);
         pContent.getScene().getWindow().setWidth(1200);
 
         //Init components

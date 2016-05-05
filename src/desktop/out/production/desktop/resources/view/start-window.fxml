@@ -7,14 +7,16 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.TextField?>
 <StackPane fx:id="pContent" fx:controller="controllers.StartController"
            xmlns:fx="http://javafx.com/fxml">
     <VBox>
         <Label styleClass="title" text="Sessions"/>
         <GridPane fx:id="sessionsList"/>
         <HBox>
-            <ComboBox fx:id="nativeBox" promptText="Choose native language"/>
-            <ComboBox fx:id="foreignBox" promptText="Choose foreign language"/>
+            <TextField fx:id="titleField" promptText="Enter title"/>
+            <ComboBox fx:id="nativeBox" promptText="Choose native"/>
+            <ComboBox fx:id="foreignBox" promptText="Choose foreign"/>
             <Button fx:id="addNew" text="Add" onAction="#addNewSession"/>
         </HBox>
     </VBox>

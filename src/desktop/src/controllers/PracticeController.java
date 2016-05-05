@@ -44,7 +44,7 @@ public class PracticeController{
         this.pContent = content;
 
         //Init window
-        pContent.getScene().getWindow().setHeight(900);
+        pContent.getScene().getWindow().setHeight(700);
         pContent.getScene().getWindow().setWidth(1200);
 
         //Init components

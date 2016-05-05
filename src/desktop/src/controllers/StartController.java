@@ -4,6 +4,7 @@ import grammar.GrammarManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import main.ResourceManager;
 import javafx.fxml.FXMLLoader;
@@ -11,8 +12,8 @@ import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.util.Pair;
 import main.Model;
+import main.Session;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,6 +31,7 @@ public class StartController implements Initializable {
     //public VBox buttonGrid;
     public ComboBox<String> nativeBox;
     public ComboBox<String> foreignBox;
+    public TextField titleField;
     public Button addNew;
 
     @Override
@@ -45,7 +47,7 @@ public class StartController implements Initializable {
     public void addNewSession(){
         String sessionNative = nativeBox.getSelectionModel().getSelectedItem();
         String sessionForeign = foreignBox.getSelectionModel().getSelectedItem();
-        GrammarManager.createSession(sessionNative, sessionForeign);
+        GrammarManager.createSession(titleField.getText(), sessionNative, sessionForeign);
 
         refreshSessionsList();
     }
@@ -54,36 +56,40 @@ public class StartController implements Initializable {
         //Clear previous content
         sessionsList.getChildren().clear();
 
-        List<Pair<String, String>> sessions = GrammarManager.getSessions();
-        for(int row = 0; row < sessions.size(); row++){
+        List<Session> sessions = GrammarManager.getSessions();
+        for(int item = 0, row = 0; item < sessions.size(); item++, row++){
+            Session session = sessions.get(item);
+
             //Add labels
             HBox box = new HBox();
-            GridPane.setConstraints(box, 0, row);
+            GridPane.setConstraints(box, 0, row++);
             sessionsList.getChildren().add(box);
-            box.getChildren().add(new Label(ResourceManager.codeToName(sessions.get(row).getKey())));
-            box.getChildren().add(new Label(ResourceManager.codeToName(sessions.get(row).getValue())));
+            Label title = new Label(" - " + session.getTitle() + " - ");
+            title.setId("sessionTitleLbl");
+            box.getChildren().add(title);
+            box.getChildren().add(new Label("Native: " + ResourceManager.codeToName(session.getNativeCode())));
+            box.getChildren().add(new Label("& Foreign: " + ResourceManager.codeToName(session.getForeignCode())));
 
             //Add buttons
             box = new HBox();
-            GridPane.setConstraints(box, 1, row);
+            GridPane.setConstraints(box, 0, row);
             sessionsList.getChildren().add(box);
-            Pair<String, String> session = sessions.get(row);
 
             //Launch button
             Button b = new Button("Launch session");
-            b.setOnAction(event -> StartController.this.startPractice(session.getKey(), session.getValue()));
+            b.setOnAction(event -> StartController.this.startPractice(session));
             b.setId("launchBtn");
             box.getChildren().add(b);
 
             //Delete button
             b = new Button("Delete");
-            b.setOnAction(event -> StartController.this.deleteSession(session.getKey(), session.getValue()));
+            b.setOnAction(event -> StartController.this.deleteSession(session.getTitle()));
             b.setId("removeBtn");
             box.getChildren().add(b);
         }
     }
 
-    private void startPractice(String nativeLang, String foreignLang){
+    private void startPractice(Session session){
         URL url = getClass().getResource("/resources/view/practice-window.fxml");
 
         FXMLLoader fxmlloader = new FXMLLoader();
@@ -97,12 +103,12 @@ public class StartController implements Initializable {
             e.printStackTrace();
         }
 
-        model.initialize(nativeLang, foreignLang);
+        model.initialize(session);
         ((PracticeController)fxmlloader.getController()).init(model, pContent);
     }
 
-    private void deleteSession(String nativeLangCode, String foreignLangCode){
-        GrammarManager.removeSession(nativeLangCode, foreignLangCode);
+    private void deleteSession(String sessionTitle){
+        GrammarManager.removeSession(sessionTitle);
         refreshSessionsList();
     }
 }
