@@ -31,4 +31,5 @@ concrete WordsEng of Words = open ResEng, CatEng, ParadigmsEng in {
 		Say = mkV "say" "said" "said" ;
 		Computer = mkN "computer" "computers" ;
 		Cello = mkN "cello" "cellos" ;
+		Mouse = mkN "mouse" "mice" ;
 }

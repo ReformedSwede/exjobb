@@ -1,13 +1,10 @@
 package main;
 
-import controllers.StartController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.File;
 
 public class Main extends Application {
 
@@ -17,7 +14,7 @@ public class Main extends Application {
         primaryStage.setTitle("Grammar");
 
         Scene scene = new Scene(root, 800, 500);
-        scene.getStylesheets().add("/resources/css/style.css");
+        scene.getStylesheets().add("/resources/css/window-style.css");
 
         primaryStage.setScene(scene);
         primaryStage.show();

@@ -31,4 +31,5 @@ concrete WordsSwe of Words = open CommonScand, CatSwe, ParadigmsSwe in {
 		Say = mkV "säga" "sade" "sagt" ;
 		Computer = mkN "dator" "datorer" ;
 		Cello = mkN "cello" "celli" ;
+		Mouse = mkN "mus" "möss" ;
 }

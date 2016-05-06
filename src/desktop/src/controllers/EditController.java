@@ -121,7 +121,8 @@ public class EditController implements InflectionCallback {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Scene scene = new Scene(fxmlLoader.getRoot(), 400, 200);
+        Scene scene = new Scene(fxmlLoader.getRoot(), 800, 400);
+        scene.getStylesheets().add("/resources/css/dialog-style.css");
 
         Stage dialog = new Stage();
         dialog.setTitle("Does this look alright?");

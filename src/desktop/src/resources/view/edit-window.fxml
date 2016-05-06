@@ -33,7 +33,11 @@
                 <Button fx:id="removeBtn" text="Delete"
                         onAction="#removeWord" visible="false"/>
             </VBox>
-            <VBox fx:id="infoPanel"/>
+            <VBox>
+                <Label text="Information"
+                        styleClass="title"/>
+                <VBox fx:id="infoPanel"/>
+            </VBox>
             <GridPane vgap="4">
                 <Label styleClass="title" text="Add new word"
                        GridPane.columnIndex="0"

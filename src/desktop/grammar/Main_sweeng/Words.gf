@@ -27,4 +27,5 @@ abstract Words = {
 		Say : Verb ;
 		Computer : Noun ;
 		Cello : Noun ;
+		Mouse : Noun ;
 }
