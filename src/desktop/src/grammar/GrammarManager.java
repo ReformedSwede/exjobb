@@ -7,12 +7,10 @@ import java.util.stream.Collectors;
 import main.ResourceManager;
 import main.Session;
 import org.grammaticalframework.pgf.Concr;
-import org.grammaticalframework.pgf.Expr;
 import org.grammaticalframework.pgf.PGF;
-import org.grammaticalframework.pgf.ParseError;
 
 /**
- * File for manipulating grammar using gf files.
+ * Class used for manipulating grammar using gf files.
  * Contains methods for reading, inserting and removing data from gf files.
  */
 public class GrammarManager {
@@ -40,6 +38,7 @@ public class GrammarManager {
 		if(!new File(dir).exists())
 			createSession(session.getTitle(), nativeLangCode, foreignLangCode);
 
+		//Try to read PGF. If it's not found, compile a new one
         try {
             pgf = PGF.readPGF(dir + File.separator + "Words.pgf");
             nativeConcr = pgf.getLanguages().get(ResourceManager.codeToGF(nativeLangCode));
@@ -49,6 +48,7 @@ public class GrammarManager {
                     dir + File.separator + ResourceManager.codeToGF(foreignLangCode) + ".gf");
         }
 
+		//Compile new pgf to make sure we are using fresh objects (I guess this line could be removed)
         compilePGF(true, new File(dir), dir + File.separator + ResourceManager.codeToGF(nativeLangCode) + ".gf",
               dir + File.separator + ResourceManager.codeToGF(foreignLangCode) + ".gf");
 	}
@@ -86,12 +86,14 @@ public class GrammarManager {
 				nativeLang.substring(0, 3).toLowerCase() + foreignLang.substring(0, 3).toLowerCase());
 		folder.mkdir();
 
+		//Create file paths
         String abstractFile = folder.getAbsolutePath() + File.separator + "Words.gf";
         String nativeConcreteFile = folder.getAbsolutePath() + File.separator
 				+ ResourceManager.nameToGf(nativeLang) + ".gf";
         String foreignConcreteFile = folder.getAbsolutePath() + File.separator
 				+ ResourceManager.nameToGf(foreignLang) + ".gf";
 
+		//Fill files which content
         GfFileEditor.initAbstractFile(abstractFile);
         GfFileEditor.initConcreteFile(nativeConcreteFile, nativeLang);
         GfFileEditor.initConcreteFile(foreignConcreteFile, foreignLang);
@@ -103,15 +105,20 @@ public class GrammarManager {
      */
 	public static void removeSession(String sessionName){
 		File sessionFolder = null;
+
+		//Find the folder that contains the title in the name
 		for(File folder : new File("grammar").listFiles())
 			if(folder.isDirectory() && folder.getName().startsWith(sessionName)) {
 				sessionFolder = folder;
 				break;
 			}
 
+		//Remove all files in folder
 		File[] files = sessionFolder.listFiles();
 		for(File f : files)
 			f.delete();
+
+		//Remove the folder itself
 		sessionFolder.delete();
 	}
 
@@ -210,10 +217,9 @@ public class GrammarManager {
 
 	/**
 	 * Removes a word from the file system.
-	 * @param category The type of the word (Keep first letter capitalized!)
 	 * @param function The word in the foreign language
 	 */
-	public void removeWord(String category, String function){
+	public void removeWord(String function){
 		//Define file paths and names
 		String abstractFile = dir + File.separator + "Words.gf";
 		String nativeConcreteFile = dir + File.separator + ResourceManager.codeToGF(nativeLangCode) + ".gf";
@@ -239,38 +245,16 @@ public class GrammarManager {
 	}
 
 	/**
-	 * Returns a list of all languages in the pgf file
-	 * @return List of all languages
-     */
-	public Collection<String> getAllLanguages(){
-        Collection<String> langs = pgf.getLanguages().keySet();
-        langs.forEach((s -> {
-            s = ResourceManager.gfToName(s);
-        }));
-        return langs;
-	}
-
-	/**
 	 * Gives a list of all categories in the pgf file
 	 * @return A list of all categories
      */
-	public List<String> getAllCategories(){
+	 List<String> getAllCategories(){
         List<String> cats;
         cats = pgf.getCategories().stream().filter((category) ->
                 !category.equals("Int") && !category.equals("String") && !category.equals("Float"))
                 .collect(Collectors.toList());
         return cats;
 	}
-
-	/**
-	 * Gives a list of all word in the pgf file
-	 * @return All words
-     */
-    public List<Word> getAllWords(){
-        List<Word> list = new ArrayList<>();
-        getAllCategories().forEach(cat -> list.addAll(getAllWords(cat)));
-        return list;
-    }
 
 	/**
 	 * @return A list of all words of the specified category
@@ -282,7 +266,7 @@ public class GrammarManager {
 				.collect(Collectors.toList());
 	}
 
-	public void tmp(){
+	void tmp(){
 		System.out.println(ResourceManager.getLangFilesByLang("swe"));
 	}
 

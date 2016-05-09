@@ -203,8 +203,9 @@ public class EditController implements InflectionCallback {
      */
     public void exit(){
         model.endSession();
-        URL url = getClass().getResource("/resources/view/start-window.fxml");
 
+        //Load FXML
+        URL url = getClass().getResource("/resources/view/start-window.fxml");
         FXMLLoader fxmlloader = new FXMLLoader();
         fxmlloader.setLocation(url);
         fxmlloader.setBuilderFactory(new JavaFXBuilderFactory());
@@ -222,8 +223,8 @@ public class EditController implements InflectionCallback {
      * Move t the practice frame
      */
     public void practice(){
+        //Load FXMl
         URL url = getClass().getResource("/resources/view/practice-window.fxml");
-
         FXMLLoader fxmlloader = new FXMLLoader();
         fxmlloader.setLocation(url);
         fxmlloader.setBuilderFactory(new JavaFXBuilderFactory());

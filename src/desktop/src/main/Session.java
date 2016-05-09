@@ -1,5 +1,8 @@
 package main;
 
+/**
+ * Represents a session for practising foreign words
+ */
 public class Session {
     private String nativeCode;
     private String foreignCode;
@@ -20,7 +23,6 @@ public class Session {
     public String getNativeCode() {
         return nativeCode;
     }
-
     public String getForeignCode() {
         return foreignCode;
     }

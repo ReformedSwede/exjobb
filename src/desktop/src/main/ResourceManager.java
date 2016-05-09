@@ -12,6 +12,9 @@ import javax.xml.xpath.XPathFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class for querying XML resource files.
+ */
 public class ResourceManager {
     private static final InputSource langXML =
             new InputSource(System.getProperty("user.dir") + "/src/resources/xml/language.xml");

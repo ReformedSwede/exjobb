@@ -11,16 +11,16 @@ import java.util.regex.Pattern;
 
 /**
  * This class is for manipulating GF-files. Can parse a .gf file and insert new data, or remove existing data.
- * Also contains static methods for initializing abstract or concrete files.
- * Use: Specify a file to edit in the constructor. Then call insert() or delete() as desired.
+ * Also contains static methods for initializing abstract or concrete .gf files.
+ * How to use: Specify a file to edit in the constructor. Then call insert() or delete() as desired.
  * After all changes have been made, call saveToFile()
  */
 class GfFileEditor {
-
-    private File file;
-    private LinkedHashMap<String, ArrayList<String>> fileContent;
-
+    //Static list of Gf keywords. Used when parsing .gf files
     private static final String[] sections = {"open", "flags", "cat", "fun", "lincat", "lin", "params", "oper"};
+
+    private File file; //The file to edit
+    private LinkedHashMap<String, ArrayList<String>> fileContent; //The parsed contents of the file
 
     /**
      * Creates a new instance of GfFileEditor. The specified file will be parsed for use.
@@ -31,7 +31,7 @@ class GfFileEditor {
 
         try(BufferedReader br = new BufferedReader(
                 new InputStreamReader(new FileInputStream(file), "UTF8"))){
-            //Read file and store in String
+            //Read file and store contents in String
             char[] buff = new char[(int)file.length()];
             br.read(buff);
             String content = new String(buff);
@@ -44,7 +44,7 @@ class GfFileEditor {
             fileContent.get("title").add(content.substring(0, matcher.start()).trim());
             content = content.substring(matcher.start()+1, content.length());
 
-            //Put each section into map
+            //Put each remaining section into map
             for(int i = 0; i < sections.length; i++) {
                 //Check if section exists
                 matcher = matchRegex("\\s+" + sections[i] + "\\s", content);
@@ -87,7 +87,7 @@ class GfFileEditor {
     }
 
     /**
-     * Initialized an abstract gf file. I.E. creates a new file and fills it with data.
+     * Initializes an abstract gf file. I.E. creates a new file and fills it with data.
      * @param path Path indicating where the file should be created, including filename.
      */
     static void initAbstractFile(String path){
@@ -95,6 +95,8 @@ class GfFileEditor {
 
         try(BufferedWriter br = new BufferedWriter(new FileWriter(file))){
             file.createNewFile();
+
+            //Start filling file with contents
             br.write("abstract Words =  { ");
             br.newLine();
             br.write("flags startcat = Word ;");
@@ -128,7 +130,7 @@ class GfFileEditor {
     }
 
     /**
-     * Initialized a concrete gf file. I.E. creates a new file and fills it with data.
+     * Initializes a concrete gf file. I.E. creates a new file and fills it with data.
      * @param path Path indicating where the file should be created, including filename.
      * @param language The name of the language to init.
      */
@@ -138,6 +140,8 @@ class GfFileEditor {
 
         try(BufferedWriter br = new BufferedWriter(new FileWriter(file))){
             file.createNewFile();
+
+            //Start filling file with content
             br.write("concrete " + ResourceManager.nameToGf(language) + " of Words = open " +
                     ResourceManager.getLangFilesByLang(lowercaseLangCode) + " in { ");
             br.newLine();
@@ -222,7 +226,7 @@ class GfFileEditor {
     }
 
     /**
-     * Saves the data to to file specified in the constructor.
+     * Saves the parsed (and edited) contents of the map into a real file, formatted as a .gf file should be.
      */
     void saveToFile(){
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(file))){
@@ -239,22 +243,5 @@ class GfFileEditor {
         }catch(IOException e){
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Pretty prints a parsed file
-     */
-    void printFile(){
-        System.out.println("Printing " + file.getAbsolutePath());
-        for(Map.Entry<String, ArrayList<String>> element : fileContent.entrySet()){
-            if(element.getKey().equals("title")){
-                System.out.println(element.getValue().get(0) + " {");
-            }else{
-                System.out.println("\n\t" + element.getKey());
-                for(String row : element.getValue())
-                    System.out.println("\t\t" + row + " ;");
-            }
-        }
-        System.out.println("}\n");
     }
 }
