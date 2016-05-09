@@ -32,4 +32,9 @@ concrete WordsSwe of Words = open CommonScand, CatSwe, ParadigmsSwe in {
 		Computer = mkN "dator" "datorer" ;
 		Cello = mkN "cello" "celli" ;
 		Mouse = mkN "mus" "möss" ;
+		Eat = mkV "äta" "åt" "ätit" ;
+		Brush = mkV "borsta" ;
+		Car = mkN "bil" ;
+		Man = mkN "man" "män" ;
+		Write = mkV "skriva" "skrev" "skrivit" ;
 }

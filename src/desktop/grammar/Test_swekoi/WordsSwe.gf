@@ -1,25 +1,32 @@
-concrete WordsSwe of Words = open MorphoSwe in {
+concrete WordsSwe of Words = open CommonScand, CatSwe, ParadigmsSwe in {
 
 	lincat
+		Word = Str ;
 		Noun = N ;
-		Adjective = A ;
 		Verb = V ;
+		VerbForm = {vf : VForm ;
+		s : Str} ;
+		NounForm = {nf : Number ;
+		s : Str} ;
 
 	lin
-		Word = mkN "ord" ;
+		Infinitive = {vf=VI (VInfin Act) ;
+		s=""} ;
+		Past = {vf=VF (VPret Act) ;
+		s=""} ;
+		PPart = {vf=VI (VSupin Act) ;
+		s=""} ;
+		Sing = {nf=Sg ;
+		s=""} ;
+		Plur = {nf=Pl ;
+		s=""} ;
+		VFormFun v f = f.s++v.s ! f.vf ;
+		NFormFun n f = f.s++n.s ! f.nf ! Indef ! Nom ;
 		Light = mkN "ljus" "ljus" ;
 		Human = mkN "människa" ;
-		Son = mkN "son" ;
-		Listen = mkV "lyssna" ;
-		See = mkV "ser" "såg" ;
-		Teach = mkV "undervisa" ;
-		Say = mkV "säger" "sade" ;
-		Good = mkA "god" ;
-		True = mkA "sann" ;
-		Strong = mkA "stark" ;
-		Big = mkA "stor" ;
-		Bread = mkN "bröd" ;
-		UYJP = mkN "Guds" "Gud" ;
-		NWUKT = mkV "älskar" "älskade" ;
-		PLUQB = mkN "skrift" ;
+		NWUKT = mkV "älska" ;
+		IDJM = mkN "son" "söner" ;
+		XJWJM = mkN "ord" "ord" ;
+		DDNOYPT = mkV "tro" "trodde" "trott" ;
+		OUFFT = mkV "kasta" "kastade" "kastat" ;
 }

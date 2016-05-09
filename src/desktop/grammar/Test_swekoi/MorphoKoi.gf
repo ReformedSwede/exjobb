@@ -1,64 +1,45 @@
-resource MorphoKoi = open Prelude in{
+resource MorphoKoi = open Prelude, Predef in{
 	flags coding=utf8;
 	param
-		VForm = VPres | VImp;
-		NForm = NNom | NGen;
-		AForm = ASg | APl;
+		VForm = DictForm | VPast | VPart;
+		NForm = Pl | Sg;
 	oper
 		V : Type = {s : VForm => Str};
 		N : Type = {s : NForm => Str};
-		A : Type = {s : AForm => Str};
 
-	mkNoun : (_,_ : Str) -> N = \logos,logou -> {
+	mkNoun : (_,_ : Str) -> N = \logos,logoi -> {
 		s = table {
-			NNom => logos;
-			NGen => logou
+			Sg => logos;
+			Pl => logoi
 		}
 	};
 
 	regNoun : Str -> N = \logos ->
 		let log = init logos 
 		in
-		mkNoun logos (log + "ου");
+		mkNoun logos (log + "οι");
 
 	oper mkN = overload {
 		mkN : (logos : Str) -> N = regNoun ;
-		mkN : (logos,logou : Str) -> N = mkNoun 
+		mkN : (logos,logoi : Str) -> N = mkNoun 
 	};
 
 
-	mkAdjective : (_,_ : Str) -> A = \megas,megaloi -> {
+	mkVerb : (_,_,_ : Str) -> V = \pisteuo,episteusa,pepisteuka -> {
 		s = table {
-			ASg => megas;
-			APl => megaloi
-		}
-	};
-
-	regAdjective : Str -> A = \megas ->
-		let mega = init megas 
-		in
-		mkAdjective megas (mega + "λοι");
-
-	oper mkA = overload {
-		mkA : (megas : Str) -> A = regAdjective ;
-		mkA : (megas,megaloi : Str) -> A = mkAdjective 
-	};
-
-
-	mkVerb : (_,_ : Str) -> V = \lego,elegon -> {
-		s = table {
-			VPres => lego ;
-			VImp => elegon 
+			DictForm => pisteuo;
+			VPast => episteusa;
+			VPart => pepisteuka
 		}
 	} ;
 
-	regVerb : Str -> V = \lego ->
-		let leg = init lego 
+	regVerb : Str -> V = \pisteuo ->
+		let pisteu = init pisteuo 
 		in
-		mkVerb lego ("ε" + leg + "ον");
+		mkVerb pisteuo ("ε" + pisteu + "σα") (take 1 pisteu + "ε" + pisteu + "κα");
 
 	oper mkV = overload {
-		mkV : (lego : Str) -> V = regVerb ;
-		mkV : (lego,elegon : Str) -> V = mkVerb 
+		mkV : (pisteuo : Str) -> V = regVerb ;
+		mkV : (pisteuo,episteusa,pepisteuka : Str) -> V = mkVerb 
 	};
 }

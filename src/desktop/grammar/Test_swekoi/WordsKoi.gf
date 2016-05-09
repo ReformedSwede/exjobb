@@ -4,25 +4,32 @@ concrete WordsKoi of Words = open MorphoKoi in {
 		coding=utf8 ;
 
 	lincat
+		Word = Str ;
 		Noun = N ;
-		Adjective = A ;
 		Verb = V ;
+		VerbForm = {vf: VForm ;
+		s : Str} ;
+		NounForm = {nf : NForm ;
+		s : Str} ;
 
 	lin
-		Word = mkN "λογος" "λογου" ;
-		Light = mkN "φως" "φωτος" ;
-		Human = mkN "ανθροπως" "ανθροπου" ;
-		Son = mkN "υιος" "υιου" ;
-		Listen = mkV "ακουω" ;
-		See = mkV "βλεπω" ;
-		Teach = mkV "διδασκαλω" ;
-		Say = mkV "λεγω" ;
-		Good = mkA "αγαθος" "αγαθοι" ;
-		True = mkA "αλεθινος" "αλεθινοι" ;
-		Strong = mkA "ισχυρος" "ισχυροι" ;
-		Big = mkA "μεγας" "μεγαλοι" ;
-		Bread = mkN "αρτος" ;
-		UYJP = mkN "Θεου" "Θεος" ;
-		NWUKT = mkV "αγαπω" "ηγαπον" ;
-		PLUQB = mkN "γραφη" ;
+		Infinitive = {vf= DictForm ;
+		s=""} ;
+		Past = {vf= VPast ;
+		s=""} ;
+		PPart = {vf= VPart ;
+		s=""} ;
+		Sing = {nf= Sg ;
+		s=""} ;
+		Plur = {nf= Pl ;
+		s=""} ;
+		VFormFun v f = f.s++v.s ! f.vf ;
+		NFormFun n f = f.s++n.s ! f.nf ;
+		Light = mkN "φως" "φωτα" ;
+		Human = mkN "ανθροπως" "ανθροποι" ;
+		NWUKT = mkV "αγαπω" "ηγαπησα" "ηγαπηκα" ;
+		IDJM = mkN "υιος" "υιοι" ;
+		XJWJM = mkN "λογος" "λογοι" ;
+		DDNOYPT = mkV "πιστευω" "επιστευσα" "πεπιστευκα" ;
+		OUFFT = mkV "βαλλω" "εβαλα" "βέβληκα" ;
 }

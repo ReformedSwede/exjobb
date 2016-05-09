@@ -1,44 +1,65 @@
 resource MorphoSwe = open Prelude in{
 	param
-		VForm = VInf | VPres | VPast | VPastPart | VPresPart ;
+		VForm = VPres | VImp;
+		NForm = NNom | NGen;
+		AForm = ASg | APl;
+	oper
+		V : Type = {s : VForm => Str};
+		N : Type = {s : NForm => Str};
+		A : Type = {s : AForm => Str};
 
-	oper 
-		Verb : Type = {s : VForm => Str} ;
-		Adjective : Type = {s : Str};
-		Noun : Type = {s : Str};
 
-	mkN : Str -> Noun = \ord -> {
-		s = ord;
-	};
 
-	mkA : Str -> Adjective = \stor -> {
-		s = stor;
-	};
 
-	mkVerb : (_,_,_,_,_ : Str) -> Verb = \gå,går,gick,gått,gående -> {
+	mkNoun : (_,_ : Str) -> N = \bil,bils -> {
 		s = table {
-			VInf => gå ;
-			VPres => går ;
-			VPast => gick ;
-			VPastPart => gått ;
-			VPresPart => gående
+			NNom => bil;
+			NGen => bils
+		}
+	};
+
+	regNoun : Str -> N = \bil ->
+		mkNoun bil (bil + "s");
+
+	smartNoun : Str -> N = \n -> case n of {
+		_ + "s" => s_regNoun n ;
+		_ => regNoun n
+	} ;
+
+	s_regNoun : Str -> N = \ljus ->
+		mkNoun ljus ljus;
+
+	mkN = overload {
+		mkN : (bil : Str) -> N = smartNoun ;
+		mkN : (ljus,ljus : Str) -> N = mkNoun;
+
+
+		} ;
+
+	mkA : (_ : Str) -> A = \stor -> {
+		s = table {
+			ASg => stor;
+			APl => stor + "a"
+		}
+	};
+
+
+
+
+	mkVerb : (_,_ : Str) -> V = \går,gick -> {
+		s = table {
+			VPres => går;
+			VImp => gick
 		}
 	} ;
 
-	regVerb : Str -> Verb = \leva ->
-		let lev = init leva 
+	regVerb : Str -> V = \öppna ->
+		let öppn = init öppna 
 		in
-		mkVerb leva (lev + "ar") (lev + "de") (lev + "t") (leva + "nde");
-
-	irregVerb : (_,_,_ : Str) -> Verb = \sjunga,sjöng,sjungit ->
-		let v = regVerb sjunga
-		in
-		mkVerb sjunga (v.s ! VPres) sjöng sjungit (v.s ! VPresPart) ;
+		mkVerb (öppn + "ar") (öppn + "ade");
 
 	oper mkV = overload {
-		mkV : (bygga : Str) -> Verb = regVerb ;
-		mkV : (sjunga,sjöng,sjungit : Str) -> Verb = irregVerb ;
-		mkV : (gå,går,gick,gått,gående : Str) -> Verb = mkVerb ;
+		mkV : (leta : Str) -> V = regVerb ;
+		mkV : (går,gick : Str) -> V = mkVerb ;
 	};
 }
-

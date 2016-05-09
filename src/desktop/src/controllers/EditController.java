@@ -3,6 +3,7 @@ package controllers;
 import grammar.Word;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Scene;
@@ -19,22 +20,38 @@ import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for the Edit frame. Contains methods for handling displaying of words and addition of new words.
+ */
 public class EditController implements InflectionCallback {
 
     private Model model;
 
     //UI components
-    public Pane pContent;
-    public Label sessionTitle;
-    public ComboBox<String> catBox;
-    public ListView<String> wordList;
-    public ComboBox<String> catField;
-    public TextField nativeField;
-    public TextField foreignField;
-    public Button removeBtn;
-    public VBox infoPanel;
+    private Pane pContent;
+    @FXML
+    Label sessionTitle;
+    @FXML
+    ComboBox<String> catBox;
+    @FXML
+    ListView<String> wordList;
+    @FXML
+    ComboBox<String> catField;
+    @FXML
+    TextField nativeField;
+    @FXML
+    TextField foreignField;
+    @FXML
+    Button removeBtn;
+    @FXML
+    VBox infoPanel;
 
-    public void init(Model model, Pane content){
+    /**
+     * Initalized the view.
+     * @param model The model (M in MVC)
+     * @param content The JavaFX pane containing the view.
+     */
+    void init(Model model, Pane content){
         //Set important vars
         this.model = model;
         pContent = content;
@@ -59,16 +76,19 @@ public class EditController implements InflectionCallback {
         refreshWordList();
     }
 
+    /**
+     * Is run whenever the user selects a word in the list.
+     * Displays information about the selected item.
+     */
     public void wordInListSelected(){
         if(wordList.getSelectionModel().getSelectedItem() != null) {
             removeBtn.setVisible(true);
-
-            //Display info panel
             infoPanel.getChildren().clear();
+
+            //Fill info panel with content
             Word selectedWord = model.getWordByString(
                     catBox.getValue(),
                     wordList.getSelectionModel().getSelectedItem());
-
             List<String> info = ResourceManager.getInflectionRealNamesByCat(selectedWord.getCategory()).stream()
                     .map(infl -> selectedWord.getForeignInflectionFormByName(infl) + " = " +
                             selectedWord.getNativeInflectionFormByName(infl))
@@ -77,14 +97,22 @@ public class EditController implements InflectionCallback {
         }
     }
 
+    /**
+     * Is run whenever the user clicks the ADD button in order to add a new word to the database.
+     */
     public void addNewWord(){
         if(catField.getValue() == null) return;
 
         //Add to model
         Word addedWord =
                 model.addNewWord(catField.getValue(), nativeField.getText().trim(), foreignField.getText().trim());
-        if(addedWord == null)
-            return;        //TODO Notify user that insertion failed!
+        if(addedWord == null) {
+            infoPanel.getChildren().add(new Label("Failed to add " + nativeField.getText()));
+            foreignField.clear();
+            nativeField.clear();
+            removeBtn.setVisible(false);
+            return;
+        }
         openConfirmDialog(addedWord);
 
         //Refresh view
@@ -99,6 +127,9 @@ public class EditController implements InflectionCallback {
         removeBtn.setVisible(false);
     }
 
+    /**
+     * Is run whenever the user clicks the REMOVE button to remove a word form the database
+     */
     public void removeWord(){
         //Remove from file
         model.removeWord(catBox.getValue(),
@@ -110,8 +141,12 @@ public class EditController implements InflectionCallback {
         removeBtn.setVisible(false);
     }
 
-
+    /**
+     * Is run whenever a new word has been inserted into the database
+     * @param word The inserted word
+     */
     private void openConfirmDialog(Word word) {
+        //Load FXML file containing the view
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("/resources/view/confirm-dialog.fxml"));
         fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
@@ -121,6 +156,7 @@ public class EditController implements InflectionCallback {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        //init scene and stage
         Scene scene = new Scene(fxmlLoader.getRoot(), 800, 400);
         scene.getStylesheets().add("/resources/css/dialog-style.css");
 
@@ -129,9 +165,13 @@ public class EditController implements InflectionCallback {
         dialog.setScene(scene);
         dialog.show();
 
+        //Init controller
         ((DialogController)fxmlLoader.getController()).init(word, this, dialog);
     }
 
+    /**
+     * Refreshed the contents of the list of words.
+     */
     private void refreshWordList(){
         ObservableList<String> list = FXCollections.observableArrayList();
         list.addAll(model.getAllWords(catBox.getValue()).stream()
@@ -141,9 +181,11 @@ public class EditController implements InflectionCallback {
 
     /**
      * This is a callback method for the confirm dialog. If the user edits the words in the confirm dialog,
-     * This method is called.
-     * @param foreignInflections
-     * @param nativeInflections
+     * then clicks OK, this method is called.
+     * @param category The category of the inserted word
+     * @param function The function of the inserted word
+     * @param foreignInflections A list of native inflection forms
+     * @param nativeInflections A list of foreign inflection forms
      */
     @Override
     public void call(String category, String function, List<String> nativeInflections, List<String> foreignInflections) {
@@ -176,6 +218,9 @@ public class EditController implements InflectionCallback {
         ((StartController)fxmlloader.getController()).initialize(null, null);
     }
 
+    /**
+     * Move t the practice frame
+     */
     public void practice(){
         URL url = getClass().getResource("/resources/view/practice-window.fxml");
 

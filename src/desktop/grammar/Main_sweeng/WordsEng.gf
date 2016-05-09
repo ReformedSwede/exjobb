@@ -32,4 +32,9 @@ concrete WordsEng of Words = open ResEng, CatEng, ParadigmsEng in {
 		Computer = mkN "computer" "computers" ;
 		Cello = mkN "cello" "cellos" ;
 		Mouse = mkN "mouse" "mice" ;
+		Eat = mkV "eat" "ate" "eaten" ;
+		Brush = mkV "brush" ;
+		Car = mkN "car" ;
+		Man = mkN "man" "men" ;
+		Write = mkV "write" "wrote" "written" ;
 }

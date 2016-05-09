@@ -28,4 +28,9 @@ abstract Words = {
 		Computer : Noun ;
 		Cello : Noun ;
 		Mouse : Noun ;
+		Eat : Verb ;
+		Brush : Verb ;
+		Car : Noun ;
+		Man : Noun ;
+		Write : Verb ;
 }

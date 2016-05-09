@@ -1,28 +1,28 @@
 abstract Words = {
 
 	flags
-		startcat = Noun ;
+		startcat = Word ;
 
 	cat
+		Word ;
 		Noun ;
-		Adjective ;
 		Verb ;
+		NounForm ;
+		VerbForm ;
 
 	fun
-		Word : Noun ;
+		NFormFun : Noun -> NounForm -> Word ;
+		VFormFun : Verb -> VerbForm -> Word ;
+		Infinitive : VerbForm ;
+		Past : VerbForm ;
+		PPart : VerbForm ;
+		Sing : NounForm ;
+		Plur : NounForm ;
 		Light : Noun ;
 		Human: Noun ;
-		Son : Noun ;
-		Listen : Verb ;
-		See : Verb ;
-		Teach : Verb ;
-		Say : Verb ;
-		Good : Adjective ;
-		True : Adjective ;
-		Strong : Adjective ;
-		Big : Adjective ;
-		Bread : Noun ;
-		UYJP : Noun ;
 		NWUKT : Verb ;
-		PLUQB : Noun ;
+		IDJM : Noun ;
+		XJWJM : Noun ;
+		DDNOYPT : Verb ;
+		OUFFT : Verb ;
 }
