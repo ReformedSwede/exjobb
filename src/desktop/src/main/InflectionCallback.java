@@ -14,4 +14,6 @@ public interface InflectionCallback {
      * @param foreignList The updated list of all foreign inflections
      */
     void call(String category, String originalWord, List<String> nativeList, List<String> foreignList);
+
+    //TODO Check if 'originalWord' above should be function? What if the original word differs from the fun name???
 }

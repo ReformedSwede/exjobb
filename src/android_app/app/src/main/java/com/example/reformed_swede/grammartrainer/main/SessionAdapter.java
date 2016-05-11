@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.reformed_swede.grammartrainer.R;
+import com.example.reformed_swede.grammartrainer.grammar.Session;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -24,11 +25,11 @@ class SessionAdapter extends BaseAdapter {
 
     private static LayoutInflater inflater=null;
 
-    public SessionAdapter(StartActivity startActivity, LinkedHashMap<String, String> sessions) {
+    public SessionAdapter(StartActivity startActivity, List<Session> sessions) {
         context = startActivity;
-        for(Map.Entry<String, String> e : sessions.entrySet()){
-            natives.add(e.getKey());
-            foreigns.add(e.getValue());
+        for(Session sess : sessions){
+            natives.add(sess.getNativeCode());
+            foreigns.add(sess.getForeignCode());
         }
         inflater = ( LayoutInflater )context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);

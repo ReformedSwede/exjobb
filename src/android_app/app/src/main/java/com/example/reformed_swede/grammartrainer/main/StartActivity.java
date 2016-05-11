@@ -2,12 +2,9 @@ package com.example.reformed_swede.grammartrainer.main;
 
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.pm.PackageInstaller;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -15,15 +12,14 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.reformed_swede.grammartrainer.R;
 import com.example.reformed_swede.grammartrainer.grammar.GrammarManager;
+import com.example.reformed_swede.grammartrainer.grammar.Session;
+
+import java.util.List;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -36,12 +32,13 @@ public class StartActivity extends AppCompatActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
-        fab.setOnClickListener(new View.OnClickListener() {
+        /*fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Create dialog
                 LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
                 View layout = inflater.inflate(R.layout.create_session_dialog, (ViewGroup) findViewById(R.id.layout_root));
+                final EditText nameField = (EditText) layout.findViewById(R.id.name_field);
                 final EditText nativeField = (EditText) layout.findViewById(R.id.native_field);
                 final EditText foreignField = (EditText) layout.findViewById(R.id.foreign_field);
 
@@ -50,9 +47,12 @@ public class StartActivity extends AppCompatActivity {
                 builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //GrammarManager.createSession(
-                        //        nativeField.getText().toString(), foreignField.getText().toString());
+                        GrammarManager.createSession(nameField.getText().toString(),
+                                                    nativeField.getText().toString(),
+                                                    foreignField.getText().toString(),
+                                                    getApplicationContext());
                         dialog.dismiss();
+                        refreshSessionList();
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -63,11 +63,31 @@ public class StartActivity extends AppCompatActivity {
                 });
                 builder.create().show();
             }
-        });
+        });*/
 
+        refreshSessionList();
+    }
+
+    private void refreshSessionList(){
         ListView sessionList = (ListView)findViewById(R.id.session_list);
-        //SessionAdapter adapter = new SessionAdapter(this, GrammarManager.getSessions());
-        //sessionList.setAdapter(adapter);
+        SessionAdapter adapter = new SessionAdapter(this, GrammarManager.getSessions(getApplicationContext()));
+        sessionList.setAdapter(adapter);
+    }
+
+    /**
+     * Dispatch onResume() to fragments.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    /**
+     * Dispatch onPause() to fragments.
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     @Override

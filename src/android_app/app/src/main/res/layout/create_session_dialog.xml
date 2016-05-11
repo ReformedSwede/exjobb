@@ -4,6 +4,11 @@
     android:layout_height="match_parent"
     android:id="@+id/layout_root">
 
+    <EditText
+        android:id="@+id/name_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name of the session"/>
     <!--Replace these with drop down combo boxes later-->
     <EditText
         android:id="@+id/native_field"

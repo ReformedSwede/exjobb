@@ -9,16 +9,16 @@ import java.util.regex.Pattern;
 
 /**
  * This class is for manipulating GF-files. Can parse a .gf file and insert new data, or remove existing data.
- * Also contains static methods for initializing abstract or concrete files.
- * Use: Specify a file to edit in the constructor. Then call insert() or delete() as desired.
+ * Also contains static methods for initializing abstract or concrete .gf files.
+ * How to use: Specify a file to edit in the constructor. Then call insert() or delete() as desired.
  * After all changes have been made, call saveToFile()
  */
 class GfFileEditor {
-
-    private File file;
-    private LinkedHashMap<String, ArrayList<String>> fileContent;
-
+    //Static list of Gf keywords. Used when parsing .gf files
     private static final String[] sections = {"open", "flags", "cat", "fun", "lincat", "lin", "params", "oper"};
+
+    private File file; //The file to edit
+    private LinkedHashMap<String, ArrayList<String>> fileContent; //The parsed contents of the file
 
     /**
      * Creates a new instance of GfFileEditor. The specified file will be parsed for use.
@@ -29,7 +29,7 @@ class GfFileEditor {
 
         try(BufferedReader br = new BufferedReader(
                 new InputStreamReader(new FileInputStream(file), "UTF8"))){
-            //Read file and store in String
+            //Read file and store contents in String
             char[] buff = new char[(int)file.length()];
             br.read(buff);
             String content = new String(buff);
@@ -42,7 +42,7 @@ class GfFileEditor {
             fileContent.get("title").add(content.substring(0, matcher.start()).trim());
             content = content.substring(matcher.start()+1, content.length());
 
-            //Put each section into map
+            //Put each remaining section into map
             for(int i = 0; i < sections.length; i++) {
                 //Check if section exists
                 matcher = matchRegex("\\s+" + sections[i] + "\\s", content);
@@ -72,23 +72,20 @@ class GfFileEditor {
                     if (matcher.find()) {
                         fileContent.get(sections[i]).add(content.substring(0, matcher.start()).trim());
                         content = content.substring(matcher.end(), content.length());
-                    }else
+                    } else
                         break;
                 }
             }
         }catch (IOException e){
             e.printStackTrace();
+        }catch (Exception e){
+            System.out.println(file.getName());
+            throw e;
         }
     }
 
     /**
-     * Initialized an abstract gf file. I.E. creates a new file and fills it with data.
-     * A freshly initialized file will have the following content:
-            abstract Words =  {
-            cat Noun;
-            Verb;
-            Adjective;
-            fun }
+     * Initializes an abstract gf file. I.E. creates a new file and fills it with data.
      * @param path Path indicating where the file should be created, including filename.
      */
     static void initAbstractFile(String path){
@@ -96,14 +93,32 @@ class GfFileEditor {
 
         try(BufferedWriter br = new BufferedWriter(new FileWriter(file))){
             file.createNewFile();
+
+            //Start filling file with contents
             br.write("abstract Words =  { ");
             br.newLine();
+            br.write("flags startcat = Word ;");
+            br.newLine();
             br.write("cat ");
-            for(String cat : Utils.getGfCats()) {
-                br.write(cat + ";");
+            br.write("Word ;");
+            br.newLine();
+            for(String cat : ResourceManager.getPartOfSpeechCats()) {
+                br.write(cat + " ;" + cat + "Form ;");
                 br.newLine();
             }
-            br.write("fun }");
+            br.newLine();
+            br.write("fun");
+            br.newLine();
+            for(String cat : ResourceManager.getPartOfSpeechCats()){
+                br.write(cat.substring(0, 1) + "FormFun :" + cat + " -> " + cat + "Form -> Word ;");
+                br.newLine();
+                for(String inflection : ResourceManager.getInflectionRealNamesByCat(cat)) {
+                    br.write(inflection + " : " + cat + "Form ;");
+                    br.newLine();
+                }
+                br.newLine();
+            }
+            br.write("}");
             br.newLine();
             br.flush();
             br.close();
@@ -113,31 +128,46 @@ class GfFileEditor {
     }
 
     /**
-     * Initialized a concrete gf file. I.E. creates a new file and fills it with data.
-     * A freshly initialized file for the English language will have the following content:
-             concrete WordsEng of Words = open CatEng, ParadigmsEng in {
-             lincat Noun = N;
-             Verb = V;
-             Adjective = A;
-             lin }
+     * Initializes a concrete gf file. I.E. creates a new file and fills it with data.
      * @param path Path indicating where the file should be created, including filename.
-     * @param language The language of the concrete gf file.
+     * @param language The name of the language to init.
      */
     static void initConcreteFile(String path, String language){
         File file = new File(path);
-        String capitalizedLangCode = language.substring(0,1).toUpperCase() + language.substring(1, 3).toLowerCase();
+        String lowercaseLangCode = language.substring(0,3).toLowerCase();
 
         try(BufferedWriter br = new BufferedWriter(new FileWriter(file))){
             file.createNewFile();
-            br.write("concrete " + Utils.nameToGf(language) + " of Words = open Cat" + capitalizedLangCode +
-                    ", Paradigms" + capitalizedLangCode + " in { ");
+
+            //Start filling file with content
+            br.write("concrete " + ResourceManager.nameToGf(language) + " of Words = open " +
+                    ResourceManager.getLangFilesByLang(lowercaseLangCode) + " in { ");
             br.newLine();
             br.write("lincat ");
-            for(String cat : Utils.getGfCats()) {
-                br.write(cat + " = " + Utils.getGfCatByName(cat) + ";");
+            br.write("Word = Str ;");
+            for(String cat : ResourceManager.getPartOfSpeechCats()) {
+                br.write(cat + " = " + ResourceManager.getParadigmCatByName(cat) + " ;");
+                br.newLine();
+                br.write(cat + "Form = {" + cat.substring(0, 1).toLowerCase() + "f:" +
+                        ResourceManager.getLincatRecord(lowercaseLangCode, cat) + ";s:Str};");
                 br.newLine();
             }
-            br.write("lin }");
+            br.write("lin");
+            br.newLine();
+            for(String cat : ResourceManager.getPartOfSpeechCats()) {
+                String catFirstLetter = cat.substring(0, 1).toLowerCase();
+                br.write(ResourceManager.getPartOfSpeechLinCatByName(cat) + " " + catFirstLetter + " f = f.s++" +
+                    catFirstLetter + ".s ! f." + catFirstLetter + "f " +
+                        ResourceManager.getLinSelect(lowercaseLangCode, cat) + " ;");
+                br.newLine();
+                for(String inflection : ResourceManager.getInflectionRealNamesByCat(cat)){
+                    br.write(inflection + " = {" + catFirstLetter + "f=" +
+                            ResourceManager.getInflectionGfNamesByCat(lowercaseLangCode, cat, inflection)
+                            + " ; s=\"\"} ;");
+                    br.newLine();
+                }
+            }
+            br.write("}");
             br.newLine();
             br.flush();
             br.close();
@@ -194,7 +224,7 @@ class GfFileEditor {
     }
 
     /**
-     * Saves the data to to file specified in the constructor.
+     * Saves the parsed (and edited) contents of the map into a real file, formatted as a .gf file should be.
      */
     void saveToFile(){
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(file))){
@@ -211,22 +241,5 @@ class GfFileEditor {
         }catch(IOException e){
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Pretty prints a parsed file
-     */
-    void printFile(){
-        System.out.println("Printing " + file.getAbsolutePath());
-        for(Map.Entry<String, ArrayList<String>> element : fileContent.entrySet()){
-            if(element.getKey().equals("title")){
-                System.out.println(element.getValue().get(0) + " {");
-            }else{
-                System.out.println("\n\t" + element.getKey());
-                for(String row : element.getValue())
-                    System.out.println("\t\t" + row + " ;");
-            }
-        }
-        System.out.println("}\n");
     }
 }

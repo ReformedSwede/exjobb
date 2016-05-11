@@ -135,10 +135,9 @@ public class Model {
 
     /**
     * Removes a word from the file system.
-    * @param cat The type of the word (Keep first letter capitalized!)
     * @param fun The GF function of the word
     */
-    public void removeWord(String cat, String fun){
-        manager.removeWord(cat, fun);
+    public void removeWord(String fun){
+        manager.removeWord(fun);
     }
 }

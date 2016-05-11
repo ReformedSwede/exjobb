@@ -132,8 +132,8 @@ public class EditController implements InflectionCallback {
      */
     public void removeWord(){
         //Remove from file
-        model.removeWord(catBox.getValue(),
-                model.getWordByString(catBox.getValue(), wordList.getSelectionModel().getSelectedItem()).getFunction());
+        model.removeWord(model.getWordByString(
+                catBox.getValue(), wordList.getSelectionModel().getSelectedItem()).getFunction());
 
         //Clean up gui
         infoPanel.getChildren().clear();
@@ -189,7 +189,7 @@ public class EditController implements InflectionCallback {
      */
     @Override
     public void call(String category, String function, List<String> nativeInflections, List<String> foreignInflections) {
-        model.removeWord(category, function);
+        model.removeWord(function);
         model.addWordWithInflections(category, nativeInflections, foreignInflections);
 
         //Refresh view

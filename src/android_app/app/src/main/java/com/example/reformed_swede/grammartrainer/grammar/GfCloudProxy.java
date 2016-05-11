@@ -1,16 +1,11 @@
 package com.example.reformed_swede.grammartrainer.grammar;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import javax.net.ssl.HttpsURLConnection;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class GfCloudProxy {
 
@@ -112,7 +107,7 @@ public class GfCloudProxy {
         int response = sendGet("/cloud?dir=" + dir + "&command=ls&ext=" + extension);
 
         if(response != 200)
-            throw new Exception("GfCloudProxy.ls got response " + response);
+            throw new Exception("Get HTTP response: " + response);
 
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         String inputLine;

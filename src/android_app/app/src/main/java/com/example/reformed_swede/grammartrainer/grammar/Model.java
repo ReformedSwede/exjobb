@@ -1,8 +1,6 @@
 package com.example.reformed_swede.grammartrainer.grammar;
 
 
-import org.grammaticalframework.pgf.Concr;
-
 import java.util.*;
 
 /**
@@ -11,26 +9,23 @@ import java.util.*;
  */
 public class Model {
 
-    private String nativeLangCode;
-    private String foreignLangCode;
+    private Session session;
     private GrammarManager manager;
 
     /**
      * Starts a new session
-     * @param nativeLang The native language of the session
-     * @param foreignLang The foreign language of the session
+     * @param session the session
      */
-    public void initialize(String nativeLang, String foreignLang){
-        this.nativeLangCode = nativeLang;
-        this.foreignLangCode = foreignLang;
-        manager = new GrammarManager(nativeLang, foreignLang);
+    public void initialize(Session session){
+        this.session = session;
+        manager = new GrammarManager(session);
     }
 
     /**
      * Ends the initialized session session. If no session was ever initialized, nothing interesting happens.
      */
     public void endSession(){
-        nativeLangCode = foreignLangCode = null;
+        session = null;
         manager = null;
     }
 
@@ -41,7 +36,7 @@ public class Model {
      * @return the native language code
      */
     public String getNativeLangCode() {
-        return nativeLangCode;
+        return session.getNativeCode();
     }
 
     /**
@@ -49,7 +44,7 @@ public class Model {
      * @return the foreign language code
      */
     public String getForeignLangCode() {
-        return foreignLangCode;
+        return session.getForeignCode();
     }
 
     /**
@@ -58,19 +53,20 @@ public class Model {
      * @return a random Word
      */
     public Word getRandomWord(String... doNotInclude){
-        List<String> catsToInclude = manager.getAllCategories();
+        List<String> catsToInclude = ResourceManager.getPartOfSpeechCats();
         if(doNotInclude.length != 0) {
-            final List<String> catsToRemove = Arrays.asList(doNotInclude);
-            for (Iterator<String> iterator = catsToInclude.iterator(); iterator.hasNext(); ) {
-                String cat = iterator.next();
-                if (catsToRemove.contains(cat))
-                    iterator.remove();
+            final List<String> list = Arrays.asList(doNotInclude);
+
+            for(Iterator<String> it = catsToInclude.iterator(); it.hasNext();){
+                String cat = it.next();
+                if(list.contains(cat))
+                    it.remove();
             }
         }
 
         List<Word> words = new ArrayList<>();
-        for(String cat : catsToInclude)
-            words.addAll(manager.getAllWords(cat));
+        for(String s : catsToInclude)
+            words.addAll(getAllWords(s));
         return words.get(new Random().nextInt(words.size()));
     }
 
@@ -78,14 +74,7 @@ public class Model {
      * Returns all categories
      */
     public List<String> getAllCategories(){
-        return manager.getAllCategories();
-    }
-
-    /**
-     * Returns all words
-     */
-    public List<Word> getAllWords(){
-        return manager.getAllWords();
+        return ResourceManager.getPartOfSpeechCats();
     }
 
     /**
@@ -98,9 +87,20 @@ public class Model {
     }
 
     /**
+     * Returns the total number of words in the database
+     * @return # of words
+     */
+    public int getNrOfWords(){
+        int nr = 0;
+        for(String partOspeech : ResourceManager.getPartOfSpeechCats())
+            nr += manager.getAllWords(partOspeech).size();
+        return nr;
+    }
+
+    /**
      * Returns a Word object from the specified category, corresponding to the specified foreign word
      * @param category A category
-     * @param foreignWord A word in the foreign language
+     * @param foreignWord A word in the foreign language, inflected in the first listen form
      * @return A Word
      */
     public Word getWordByString(String category, String foreignWord){
@@ -118,9 +118,9 @@ public class Model {
      * @param cat The type of the word, gf category (Keep first letter capitalized!)
      * @param nativeWord The new word in the user's native language
      * @param foreignWord The new word in the foreign language
-     * @return True, if the insertion succeeded
+     * @return The just inserted word, as a Word object, or null if it already exists.
      */
-    public boolean addNewWord(String cat, String nativeWord, String foreignWord){
+    public Word addNewWord(String cat, String nativeWord, String foreignWord){
         return manager.addWord(cat, nativeWord, foreignWord);
     }
 
@@ -129,31 +129,17 @@ public class Model {
      * @param category The type of the word, gf category (Keep first letter capitalized!)
      * @param nativeWords All inflection forms of the new word in the user's native language
      * @param foreignWords All inflection forms of the new word in the foreign language
-     * @return True, if the insertion succeeded
+     * @return The just inserted word, as a Word object, or null if it already exists.
      */
-    public boolean addWordWithInflections(String category, List<String> nativeWords, List<String> foreignWords){
+    public Word addWordWithInflections(String category, List<String> nativeWords, List<String> foreignWords){
         return manager.addWordWithInflections(category, nativeWords, foreignWords);
     }
 
     /**
     * Removes a word from the file system.
-    * @param cat The type of the word (Keep first letter capitalized!)
     * @param fun The GF function of the word
     */
-    public void removeWord(String cat, String fun){
-        manager.removeWord(cat, fun);
-    }
-
-    /*******Extras********/
-
-    /**
-     * Translates a word from one language in the session to the other
-     * @param word The word to translate
-     * @param cat It's category
-     * @param fromForeign If true, translation will happen into the native language. O/w into the foreign
-     * @return The translation
-     */
-    public String translate(String word, String cat, boolean fromForeign){
-        return manager.translate(word, cat, fromForeign);
+    public void removeWord(String fun){
+        manager.removeWord(fun);
     }
 }
