@@ -6,7 +6,6 @@ Files for my degree project (Bachleor thesis)
 
     exjobb
     |
-    |-----doc *(Planning reports and other non-code stuff)*
     |-----src *(All code)*
     	|
         |-----android_app *(Android studio project)*
@@ -29,7 +28,3 @@ Files for my degree project (Bachleor thesis)
     	
 
 
-
-####Dependencies:
-
-GrammaticalFramework, JPGF library
