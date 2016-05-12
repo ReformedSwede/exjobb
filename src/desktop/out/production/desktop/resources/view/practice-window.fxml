@@ -11,7 +11,6 @@
 <?import javafx.scene.image.Image?>
 
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ToggleButton?>
 <BorderPane fx:controller="controllers.PracticeController"
             xmlns:fx="http://javafx.com/fxml">
@@ -49,7 +48,7 @@
                           GridPane.rowIndex="0"
                           onAction="#toggleLanguage"/>
 
-            <VBox fx:id="catRadioList"
+            <VBox fx:id="catCheckList"
                     GridPane.columnIndex="1"
                     GridPane.rowIndex="1"
                     GridPane.rowSpan="2">
@@ -59,7 +58,7 @@
             <VBox  GridPane.columnIndex="1"
                    GridPane.rowIndex="3">
                 <Label text="Inflection forms to practice"/>
-                <VBox fx:id="inflectionRadioList"/>
+                <VBox fx:id="inflectionCheckList"/>
             </VBox>
         </GridPane>
     </center>

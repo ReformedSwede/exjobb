@@ -152,12 +152,12 @@ public class GrammarManager {
 
 		//Insert into native concrete
 		editor = new GfFileEditor(nativeConcreteFile);
-		editor.insert(fun + " = mk" + category.charAt(0) + " \"" + nativeWord + "\"", "lin");
+		editor.insert(fun + " = " + ResourceManager.getOperationByCatName(category) + " \"" + nativeWord + "\"", "lin");
 		editor.saveToFile();
 
 		//Insert into foreign concrete
 		editor = new GfFileEditor(foreignConcreteFile);
-		editor.insert(fun + " = mk" + category.charAt(0) + " \"" + foreignWord + "\"", "lin");
+		editor.insert(fun + " = " + ResourceManager.getOperationByCatName(category) + " \"" + foreignWord + "\"", "lin");
 		editor.saveToFile();
 
 		//Compile
@@ -196,7 +196,7 @@ public class GrammarManager {
 
 		//Insert into native concrete
 		editor = new GfFileEditor(nativeConcreteFile);
-        StringBuilder stringToInsert = new StringBuilder(fun + " = mk" + category.charAt(0)); //e.g. "mkV" for verbs
+        StringBuilder stringToInsert = new StringBuilder(fun + " = m" + ResourceManager.getOperationByCatName(category)); //e.g. "mkV" for verbs
         for(String word : nativeWords)
             stringToInsert.append(" \"").append(word).append("\"");
 		editor.insert(stringToInsert.toString(), "lin");
@@ -204,7 +204,7 @@ public class GrammarManager {
 
 		//Insert into foreign concrete
 		editor = new GfFileEditor(foreignConcreteFile);
-        stringToInsert = new StringBuilder(fun + " = mk" + category.charAt(0));
+        stringToInsert = new StringBuilder(fun + " = " + ResourceManager.getOperationByCatName(category));
         for(String word : foreignWords)
             stringToInsert.append(" \"").append(word).append("\"");
 		editor.insert(stringToInsert.toString(), "lin");
@@ -266,15 +266,11 @@ public class GrammarManager {
 				.collect(Collectors.toList());
 	}
 
-	void tmp(){
-		System.out.println(ResourceManager.getLangFilesByLang("swe"));
-	}
-
 	/*****Private methods******/
 
     /**
 	 * Check if a string is made up of only ASCII characters or not.
-     * If s if not purely ascii, it is converted to a pseudo-random ascii string. o/w the original string is returned.
+     * If it is not purely ascii, it is converted to a pseudo-random ascii string. o/w the original string is returned.
      * @param s The string to check
      */
     private String convertToASCII(String s){

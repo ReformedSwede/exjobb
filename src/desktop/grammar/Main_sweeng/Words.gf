@@ -33,4 +33,5 @@ abstract Words = {
 		Car : Noun ;
 		Man : Noun ;
 		Write : Verb ;
+		Bike : Noun ;
 }

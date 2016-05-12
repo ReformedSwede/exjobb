@@ -8,6 +8,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is under construction, lots of code is still missing!
+ */
 public class GfCloudProxy {
 
     private static final String dir = "/tmp/gfse.3295756966818776490";
@@ -143,7 +146,7 @@ public class GfCloudProxy {
     }
 
     /**
-     *
+     * TODO Fix this !
      * @param command
      * @return
      * @throws Exception
@@ -157,8 +160,8 @@ public class GfCloudProxy {
         return con.getResponseCode();
     }
 
-    /**
-     *
+    /**     *
+     * TODO Fix this!
      * @param params
      * @return
      * @throws Exception

@@ -45,9 +45,9 @@ public class PracticeController{
     @FXML
     ImageView imageView;
     @FXML
-    VBox catRadioList;
+    VBox catCheckList;
     @FXML
-    VBox inflectionRadioList;
+    VBox inflectionCheckList;
     @FXML
     ToggleButton langToggle;
 
@@ -70,13 +70,13 @@ public class PracticeController{
 
         //Init radio buttons
         ResourceManager.getPartOfSpeechCats().forEach(pos -> {
-            RadioButton rb = new RadioButton(pos);
-            rb.setSelected(true);
-            rb.setOnAction(event -> catRadioSelected(rb));
-            catRadioList.getChildren().add(rb);
+            CheckBox cb = new CheckBox(pos);
+            cb.setSelected(true);
+            cb.setOnAction(event -> catCheckSelected(cb));
+            catCheckList.getChildren().add(cb);
             unusedInflections.put(pos, new HashSet<>());
 
-            updateInflectionRadios(ResourceManager.getInflectionRealNamesByCat(pos), true);
+            updateInflectionChecks(ResourceManager.getInflectionRealNamesByCat(pos), true);
         });
 
         langToggle.setSelected(translateToNative = true);
@@ -128,83 +128,83 @@ public class PracticeController{
     }
 
     /**
-     * Called when the user selects or deselects one of the radios for categories
-     * @param rb The radio button that was clicked
+     * Called when the user selects or deselects one of the check boxes for categories
+     * @param cb The check box that was clicked
      */
-    private void catRadioSelected(RadioButton rb){
-        if(rb.isSelected()){
-            //A button was selected and thus, a category should be added
+    private void catCheckSelected(CheckBox cb){
+        if(cb.isSelected()){
+            //A box was selected and thus, a category should be added
 
-            unusedCategories.remove(rb.getText());
-            unusedInflections.get(rb.getText()).clear();
-            updateInflectionRadios(ResourceManager.getInflectionRealNamesByCat(rb.getText()), true);
+            unusedCategories.remove(cb.getText());
+            unusedInflections.get(cb.getText()).clear();
+            updateInflectionChecks(ResourceManager.getInflectionRealNamesByCat(cb.getText()), true);
         }else{
-            //If this was the last radio button to be deselected, it must be selected again.
+            //If this was the last check box to be deselected, it must be selected again.
             //Otherwise there would be no categories to generation a random word from!
             if(unusedCategories.size() + 1 == model.getAllCategories().size()) {
-                rb.setSelected(true);
+                cb.setSelected(true);
                 return;
             }
 
             //A button was deselected and thus, a category should be removed
-            List<String> inflections = ResourceManager.getInflectionRealNamesByCat(rb.getText());
-            unusedCategories.add(rb.getText());
-            unusedInflections.put(rb.getText(), new HashSet<>(inflections));
-            updateInflectionRadios(inflections, false);
+            List<String> inflections = ResourceManager.getInflectionRealNamesByCat(cb.getText());
+            unusedCategories.add(cb.getText());
+            unusedInflections.put(cb.getText(), new HashSet<>(inflections));
+            updateInflectionChecks(inflections, false);
 
             setNextWord();
         }
     }
 
     /**
-     * Called when the user selects or deselects one of the radios for inflections
-     * @param rb The radio button that was clicked
+     * Called when the user selects or deselects one of the boxes for inflections
+     * @param cb The box that was clicked
      */
-    private void inflectionRadioSelected(RadioButton rb){
-        //Find out which part of speech this radio button belongs to
+    private void inflectionChecksSelected(CheckBox cb){
+        //Find out which part of speech this box belongs to
         String partOspeech = "";
         for(String s : ResourceManager.getPartOfSpeechCats())
             for(String i : ResourceManager.getInflectionRealNamesByCat(s))
-                if(rb.getText().equals(i))
+                if(cb.getText().equals(i))
                     partOspeech = s;
 
         //Handle event
-        if(rb.isSelected()){
+        if(cb.isSelected()){
             //A button was selected and thus, a inflection form should be added
-            unusedInflections.get(partOspeech).remove(rb.getText());
+            unusedInflections.get(partOspeech).remove(cb.getText());
         }else{
-            //A button was deselected and thus, a inflection form should be removed
-            //If this was the last radio button to be deselected, it must be selected again.
+            //A box was deselected and thus, a inflection form should be removed
+            //If this was the last box to be deselected, it must be selected again.
             //Otherwise there would be no inflections to generation a random word from!
             if(unusedInflections.get(partOspeech).size() + 1
                     == ResourceManager.getInflectionRealNamesByCat(partOspeech).size()) {
-                rb.setSelected(true);
+                cb.setSelected(true);
                 return;
             }
-            unusedInflections.get(partOspeech).add(rb.getText());
+            unusedInflections.get(partOspeech).add(cb.getText());
 
             setNextWord();
         }
     }
 
     /**
-     * Update the radio buttons in the inflection radio list
+     * Update the check boxes in the inflection radio list
      * @param inflections Collection of inflections to either remove or insert
      * @param insert If true, the collection will be inserted, o/w they will be removed
      */
-    private void updateInflectionRadios(Collection<String> inflections, boolean insert){
+    private void updateInflectionChecks(Collection<String> inflections, boolean insert){
         if(insert){
             //Insert inflections into the list
             inflections.forEach(inflection -> {
-                RadioButton rbtn = new RadioButton(inflection);
-                rbtn.setSelected(true);
-                rbtn.setOnAction(event -> inflectionRadioSelected(rbtn));
-                inflectionRadioList.getChildren().add(rbtn);
+                CheckBox cb = new CheckBox(inflection);
+                cb.setSelected(true);
+                cb.setOnAction(event -> inflectionChecksSelected(cb));
+                inflectionCheckList.getChildren().add(cb);
             });
         }else{
             //Filter inflections from the list
-            inflectionRadioList.getChildren().setAll(inflectionRadioList.getChildren().stream()
-                    .filter(btn -> !inflections.contains(((RadioButton)btn).getText()))
+            inflectionCheckList.getChildren().setAll(inflectionCheckList.getChildren().stream()
+                    .filter(btn -> !inflections.contains(((CheckBox)btn).getText()))
                     .collect(Collectors.toList()));
         }
     }

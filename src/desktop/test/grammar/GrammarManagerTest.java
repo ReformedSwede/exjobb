@@ -1,6 +1,7 @@
 package grammar;
 
 import main.Session;
+import org.junit.After;
 
 import static org.junit.Assert.*;
 
@@ -10,71 +11,39 @@ public class GrammarManagerTest {
 
     @org.junit.Before
     public void setUp() throws Exception {
-        manager = new GrammarManager(new Session("swe", "eng", "main"));
+        GrammarManager.createSession("ATest", "Swedish", "English");
+        manager = new GrammarManager(new Session("swe", "eng", "ATest"));
     }
 
     @org.junit.Test
-    public void addWord() throws Exception {
-        System.out.println("***Test: addWord***");
-        manager.addWord("Noun", "hallå", "hello");
+    public void testAddAndRemoveWord() throws Exception {
+        //ADD
+        Word word = manager.addWord("Noun", "katt", "cat");
 
         boolean added = false;
-        for(Word s : manager.getAllWords()){
-            if(s.getForeign().equals("hello")){
+        for(Word w : manager.getAllWords("Noun")){
+            if(w.equals(word)){
                 added = true;
                 break;
             }
         }
-        assertTrue(added);
-    }
+        assertTrue(added && manager.getAllWords("Noun").size() == 1);
 
-    @org.junit.Test
-    public void removeWord() throws  Exception{
-        System.out.println("***Test: removeWord***");
-        manager.removeWord("Noun", "hello");
+        //Remove
+        manager.removeWord("Cat");
 
         boolean removed = true;
-        for(Word s : manager.getAllWords()){
+        for(Word s : manager.getAllWords("Noun")){
             if(s.getForeign().equals("hello")){
                 removed = false;
                 break;
             }
         }
-        assertTrue(removed);
+        assertTrue(removed && manager.getAllWords("Noun").size() == 0);
     }
 
-    @org.junit.Test
-    public void getAllPartOfSpeech() throws Exception {
-        System.out.println("***Test: getAllCategories***");
-        int prevSize = manager.getAllCategories().size();
-
-        boolean test = false;
-        for(String s : manager.getAllCategories()){
-            if(s.equals("Noun")){
-                test = true;
-                break;
-            }
-        }
-        assertTrue(manager.getAllCategories().size() == prevSize + 1 && test);
+    @After
+    public void breakDown(){
+        manager.removeSession("ATest");
     }
-
-    @org.junit.Test
-    public void getAllWords() throws Exception {
-        System.out.println("***Test: getAllWords***");
-        manager.getAllWords().forEach(word -> System.out.println(word.getForeign()));
-        assertTrue(manager.getAllWords().size() > 0);
-    }
-
-    @org.junit.Test
-    public void getAllWordsPos() throws Exception {
-        System.out.println("***Test: getAllWords***");
-        manager.getAllWords("V").forEach(word -> System.out.println(word.getForeign()));
-        assertTrue(manager.getAllWords().size() > 0);
-    }
-
-    @org.junit.Test
-    public void tmp() throws Exception{
-        manager.tmp();
-    }
-
 }

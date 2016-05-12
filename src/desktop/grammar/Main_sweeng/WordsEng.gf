@@ -37,4 +37,5 @@ concrete WordsEng of Words = open ResEng, CatEng, ParadigmsEng in {
 		Car = mkN "car" ;
 		Man = mkN "man" "men" ;
 		Write = mkV "write" "wrote" "written" ;
+		Bike = mkN "bike" ;
 }

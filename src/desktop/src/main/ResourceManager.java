@@ -113,6 +113,15 @@ public class ResourceManager {
     }
 
     /**
+     * Returns the name of the operation for this category
+     * @param catName The name of a category
+     * @return The corresponding gf operation
+     */
+    public static String getOperationByCatName(String catName){
+        return (String)createXPath(gfXML, "//cat[@name='" + catName + "']/@oper", XPathConstants.STRING);
+    }
+
+    /**
      * Returns a list containing the names of the inflection forms.
      * @param catName The name of the part of speech (e.g. Noun or Verb)
      * @return A list of all inflection form names

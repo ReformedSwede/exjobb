@@ -37,4 +37,5 @@ concrete WordsSwe of Words = open CommonScand, CatSwe, ParadigmsSwe in {
 		Car = mkN "bil" ;
 		Man = mkN "man" "män" ;
 		Write = mkV "skriva" "skrev" "skrivit" ;
+		Bike = mkN "cykel" ;
 }

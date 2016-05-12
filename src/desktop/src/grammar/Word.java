@@ -171,7 +171,7 @@ public class Word {
             return true;
         if(obj instanceof Word){
             Word word = (Word)obj;
-             return this.function.equals(word.function);
+            return this.function.equals(word.function);
         }
         return false;
     }
