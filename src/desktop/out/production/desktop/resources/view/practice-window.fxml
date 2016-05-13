@@ -26,17 +26,18 @@
     </top>
     <center>
         <GridPane styleClass="center" hgap="200">
-            <Label fx:id="practiceWordLbl" text="No data"
+
+            <Label fx:id="infoLbl"
                    GridPane.columnIndex="0"
                    GridPane.rowIndex="0"/>
+
+            <Label fx:id="practiceWordLbl" text="No data"
+                   GridPane.columnIndex="0"
+                   GridPane.rowIndex="1"/>
 
             <TextField fx:id="inputFld"
                        promptText="Write something..."
                        onKeyPressed="#submit"
-                   GridPane.columnIndex="0"
-                   GridPane.rowIndex="1"/>
-
-            <Label fx:id="infoLbl"
                    GridPane.columnIndex="0"
                    GridPane.rowIndex="2"/>
 

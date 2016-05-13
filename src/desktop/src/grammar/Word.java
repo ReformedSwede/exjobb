@@ -151,6 +151,11 @@ public class Word {
      * @return true if correct translation, false o/w
      */
     public boolean checkAnswer(String answer, String inflectionName, boolean translateToNative) {
+        //Check if answer was correct
+        if((translateToNative ? getNativeInflectionFormByName(inflectionName)
+                : getForeignInflectionFormByName(inflectionName)).equals(answer))
+            return true;
+
         //Check for correct translation among other inflections
         List<String> otherInflections = ResourceManager.getInflectionRealNamesByCat(category);
         otherInflections.remove(inflectionName);
@@ -160,9 +165,7 @@ public class Word {
                 getWordInflectionFormByName(inflection, translateToNative).equals(answer))
                     return true;
 
-        //Check correct answer in specified inflection
-        return (translateToNative ? getNativeInflectionFormByName(inflectionName)
-                : getForeignInflectionFormByName(inflectionName)).equals(answer);
+        return false;
     }
 
     @Override
