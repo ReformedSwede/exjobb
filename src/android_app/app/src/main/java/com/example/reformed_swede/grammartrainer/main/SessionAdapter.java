@@ -14,29 +14,23 @@ import com.example.reformed_swede.grammartrainer.R;
 import com.example.reformed_swede.grammartrainer.grammar.Session;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 class SessionAdapter extends BaseAdapter {
-    Context context;
-    List<String> natives = new ArrayList<>();
-    List<String> foreigns = new ArrayList<>();
+    StartActivity startActivity;
+    List<Session> sessions = new ArrayList<>();
 
     private static LayoutInflater inflater=null;
 
     public SessionAdapter(StartActivity startActivity, List<Session> sessions) {
-        context = startActivity;
-        for(Session sess : sessions){
-            natives.add(sess.getNativeCode());
-            foreigns.add(sess.getForeignCode());
-        }
-        inflater = ( LayoutInflater )context.
+        this.startActivity = startActivity;
+        this.sessions = sessions;
+        inflater = ( LayoutInflater ) this.startActivity.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
     @Override
     public int getCount() {
-        return natives.size();
+        return sessions.size();
     }
 
     @Override
@@ -51,6 +45,7 @@ class SessionAdapter extends BaseAdapter {
 
     public class Holder
     {
+        TextView titleLabel;
         TextView nativeLabel;
         TextView foreignLabel;
         Button launchBtn;
@@ -62,23 +57,24 @@ class SessionAdapter extends BaseAdapter {
         Holder holder=new Holder();
         View rowView;
         rowView = inflater.inflate(R.layout.session_element, null);
+        holder.titleLabel = (TextView) rowView.findViewById(R.id.title_label);
         holder.nativeLabel = (TextView) rowView.findViewById(R.id.native_label);
         holder.foreignLabel = (TextView) rowView.findViewById(R.id.foreign_label);
         holder.launchBtn = (Button) rowView.findViewById(R.id.launch_button);
         holder.deleteBtn = (Button) rowView.findViewById(R.id.delete_button);
 
-        holder.nativeLabel.setText(natives.get(position));
-        holder.foreignLabel.setText(foreigns.get(position));
+        holder.titleLabel.setText(sessions.get(position).getTitle());
+        holder.nativeLabel.setText(sessions.get(position).getNativeCode());
+        holder.foreignLabel.setText(sessions.get(position).getForeignCode());
         holder.launchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("session list", "you launched a session!");
+                startActivity.launch(sessions.get(position));
             }
         });
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Log.i("session list", "you deleted a session!");
+            public void onClick(View v) {startActivity.delete();
             }
         });
 

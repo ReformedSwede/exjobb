@@ -18,6 +18,7 @@
         <VBox fx:id="topBar">
             <HBox spacing="20">
                 <Button text="Exit" onAction="#exit"/>
+                <Button text="Sync" onAction="#synchronize"/>
                 <Button text="Edit session" onAction="#editSession"/>
             </HBox>
             <Label fx:id="sessionTitle"/>

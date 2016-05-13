@@ -13,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import main.Model;
+import main.SyncThread;
 
 import java.io.IOException;
 import java.net.URL;
@@ -86,7 +87,7 @@ public class PracticeController{
     }
 
     /**
-     * Called to display a new random word to the user
+     * Displays a new random word to the user
      */
     private void setNextWord(){
         inputFld.clear();
@@ -103,6 +104,7 @@ public class PracticeController{
     }
 
     /**
+     * Checks whether the user's answer is correct
      * Called when the user hits the enter key in the input field
      * @param e The key event that was triggered
      */
@@ -218,6 +220,12 @@ public class PracticeController{
         setNextWord();
     }
 
+    /**
+     * Sends grammar to android app
+     */
+    public void synchronize(){
+        SyncThread.sendFile(model.getAllGrammar());
+    }
 
     /****Navigation methods****/
 

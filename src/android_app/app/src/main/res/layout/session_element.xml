@@ -11,13 +11,30 @@
         android:layout_row="0"
         android:layout_column="0"
         android:textSize="15sp"
+        android:text="Name:" />
+    <TextView
+        android:id="@+id/title_label"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:textSize="20sp"
+        android:text="Title" />
+    <TextView
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:textSize="15sp"
         android:text="Native:" />
     <TextView
         android:id="@+id/native_label"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_row="0"
+        android:layout_row="1"
         android:layout_column="1"
         android:textSize="20sp"
         android:text="Klingon" />
@@ -25,7 +42,7 @@
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_row="1"
+        android:layout_row="2"
         android:layout_column="0"
         android:textSize="15sp"
         android:text="Foreign:" />
@@ -34,7 +51,7 @@
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_row="1"
+        android:layout_row="2"
         android:layout_column="1"
         android:textSize="20sp"
         android:text="Latin" />
@@ -43,14 +60,14 @@
         android:id="@+id/launch_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_row="2"
+        android:layout_row="3"
         android:layout_column="0"
         android:text="Launch session"/>
     <Button
         android:id="@+id/delete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_row="2"
+        android:layout_row="3"
         android:layout_column="1"
         android:text="Delete session"/>
 

@@ -1,9 +1,11 @@
 package main;
 
+import java.io.Serializable;
+
 /**
  * Represents a session for practising foreign words
  */
-public class Session {
+public class Session implements Serializable {
     private String nativeCode;
     private String foreignCode;
     private String title;
