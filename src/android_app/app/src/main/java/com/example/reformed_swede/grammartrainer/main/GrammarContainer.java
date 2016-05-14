@@ -29,6 +29,7 @@ public class GrammarContainer implements Serializable{
 
     public void addPartOfSpeech(String pos, List<String> inflections){
         partsOfSpeechAndInflections.put(pos, inflections);
+        words.put(pos, new ArrayList<Word>());
     }
 
     public void addWord(String pos, List<String> nativeInflections, List<String> foreignInflections){
@@ -36,7 +37,6 @@ public class GrammarContainer implements Serializable{
         w.partOfSpeech = pos;
         w.nativeInflections = nativeInflections;
         w.foreignInflections = foreignInflections;
-        words.put(pos, new ArrayList<Word>());
         words.get(pos).add(w);
     }
 

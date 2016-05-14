@@ -1,6 +1,8 @@
 package com.example.reformed_swede.grammartrainer.main;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -51,23 +53,59 @@ public class StartActivity extends AppCompatActivity {
         LinkedHashMap<String, List<List<String>>> natives = (LinkedHashMap<String, List<List<String>>>)stuff[2];
         LinkedHashMap<String, List<List<String>>> foreigns = (LinkedHashMap<String, List<List<String>>>)stuff[3];
 
-        GrammarContainer gc = new GrammarContainer(new Session(meta[1], meta[2], meta[0]));
+        final GrammarContainer gc = new GrammarContainer(new Session(meta[1], meta[2], meta[0]));
         for(Map.Entry<String, List<String>> e : partsOfSpeech.entrySet())
             gc.addPartOfSpeech(e.getKey(), e.getValue());
 
-        for(String pos : natives.keySet()){
-            for (int i = 0; i < natives.get(pos).size(); i++) {
+        for(String pos : natives.keySet())
+            for (int i = 0; i < natives.get(pos).size(); i++)
                 gc.addWord(pos, natives.get(pos).get(i), foreigns.get(pos).get(i));
-            }
-        }
+
+        new AlertDialog.Builder(this)
+                .setTitle("New grammar received: \"" + gc.getSession().getTitle() + "\"")
+                .setMessage("Do you want to save this grammar?")
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        checkGrammarDuplicate(gc);
+                    }})
+                .setNegativeButton(android.R.string.no, null)
+                .show();
 
         //TODO Prompt user
         //TODO Check if file exists. Ask user overwrite or not
 
-        String file = getFilesDir().getAbsoluteFile() + File.separator
+
+    }
+
+    public void checkGrammarDuplicate(final GrammarContainer gc){
+        final String path = getFilesDir().getAbsoluteFile() + File.separator
+                + "grammar" + File.separator + gc.getSession().getTitle();
+        final File file = new File(path);
+        if(file.exists()){
+            new AlertDialog.Builder(this)
+                    .setTitle("File conflict!")
+                    .setMessage("\"" + gc.getSession().getTitle() + "\"" + " already exists." +
+                            "\nDo you want to overwrite it?")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            file.delete();
+                            saveGrammar(gc);
+                            refreshSessionList();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show();
+        }else
+           saveGrammar(gc);
+    }
+
+    private void saveGrammar(final GrammarContainer gc){
+        final String path = getFilesDir().getAbsoluteFile() + File.separator
                 + "grammar" + File.separator + gc.getSession().getTitle();
         try {
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
             oos.writeObject(gc);
             oos.flush();
             oos.close();

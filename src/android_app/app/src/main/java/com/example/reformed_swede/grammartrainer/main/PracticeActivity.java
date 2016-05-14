@@ -1,6 +1,7 @@
 package com.example.reformed_swede.grammartrainer.main;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.reformed_swede.grammartrainer.R;
@@ -24,6 +26,7 @@ public class PracticeActivity extends AppCompatActivity {
     EditText inputFld;
     TextView practiceWordLbl;
     TextView infoLbl;
+    LinearLayout container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,7 @@ public class PracticeActivity extends AppCompatActivity {
                 intent.getStringExtra("title")), this);
 
         //Set ui components
+        container = (LinearLayout)findViewById(R.id.container);
         inputFld = (EditText)findViewById(R.id.inputField);
         practiceWordLbl = (TextView)findViewById(R.id.practiceWordLabel);
         infoLbl = (TextView)findViewById(R.id.infoLabel);
@@ -48,7 +52,7 @@ public class PracticeActivity extends AppCompatActivity {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)){
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     submit();
                 }
                 return false;
@@ -63,8 +67,6 @@ public class PracticeActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-        infoLbl.setText(String.valueOf(grammar.getNrOfWords()));
 
         //Start!
         setNextWord();
@@ -101,9 +103,11 @@ public class PracticeActivity extends AppCompatActivity {
 
         //Handle both cases
         if(correct){
+            container.setBackgroundColor(Color.GREEN);
             infoLbl.setText("Correct! \"" + practiceWordLbl.getText() +
                     "\" translates to \"" + inputFld.getText() + "\".");
         }else {
+            container.setBackgroundColor(Color.RED);
             infoLbl.setText("Incorrect! \"" + practiceWordLbl.getText() +
                     "\" does not translate to  \"" + inputFld.getText() + "\".\n" + "The correct answer was \"" +
                     (translateToNative ? currentWord.nativeInflections.get(inflectionForm)
