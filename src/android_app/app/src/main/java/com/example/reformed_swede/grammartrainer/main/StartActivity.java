@@ -8,9 +8,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.example.reformed_swede.grammartrainer.Adapters.SessionAdapter;
 import com.example.reformed_swede.grammartrainer.R;
 import com.example.reformed_swede.grammartrainer.grammar.GrammarManager;
 import com.example.reformed_swede.grammartrainer.grammar.Session;
@@ -40,8 +40,7 @@ public class StartActivity extends AppCompatActivity {
 
     private void refreshSessionList(){
         ListView sessionList = (ListView)findViewById(R.id.session_list);
-        SessionAdapter adapter = new SessionAdapter(this, GrammarManager.getSessions(getApplicationContext()));
-        sessionList.setAdapter(adapter);
+        sessionList.setAdapter(new SessionAdapter(this, GrammarManager.getSessions(getApplicationContext())));
     }
 
     public void handleReceivedData(Object obj){
@@ -152,7 +151,7 @@ public class StartActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -165,5 +164,5 @@ public class StartActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }

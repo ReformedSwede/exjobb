@@ -2,14 +2,16 @@ package com.example.reformed_swede.grammartrainer.main;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.reformed_swede.grammartrainer.R;
@@ -20,20 +22,20 @@ public class PracticeActivity extends AppCompatActivity {
 
     private GrammarManager grammar;
     private GrammarContainer.Word currentWord, prevWord = null; //Used in random word generation
-    private int inflectionForm; //Used in random word generation
+    private int inflectionId; //Used in random word generation
     private boolean translateToNative = true; //Determines if the user is to translate the given word to the native lang
 
     EditText inputFld;
     TextView practiceWordLbl;
     TextView infoLbl;
-    LinearLayout container;
+    RelativeLayout container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practice);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
         //Get intent extras
         Intent intent = getIntent();
@@ -42,7 +44,7 @@ public class PracticeActivity extends AppCompatActivity {
                 intent.getStringExtra("title")), this);
 
         //Set ui components
-        container = (LinearLayout)findViewById(R.id.container);
+        container = (RelativeLayout)findViewById(R.id.container);
         inputFld = (EditText)findViewById(R.id.inputField);
         practiceWordLbl = (TextView)findViewById(R.id.practiceWordLabel);
         infoLbl = (TextView)findViewById(R.id.infoLabel);
@@ -83,12 +85,12 @@ public class PracticeActivity extends AppCompatActivity {
             currentWord = grammar.getRandomWord();
         }while(currentWord.equals(prevWord) && grammar.getNrOfWords() > 1);
         prevWord = currentWord;
-        inflectionForm = grammar.getRandomInflectionId(currentWord.partOfSpeech);
+        inflectionId = grammar.getRandomInflectionId(currentWord.partOfSpeech);
 
         //Update the view
         practiceWordLbl.setText(
-                translateToNative ? currentWord.foreignInflections.get(inflectionForm)
-                        : currentWord.nativeInflections.get(inflectionForm));
+                translateToNative ? currentWord.foreignInflections.get(inflectionId)
+                        : currentWord.nativeInflections.get(inflectionId));
     }
 
     /**
@@ -98,21 +100,70 @@ public class PracticeActivity extends AppCompatActivity {
         //Check if answer was correct
         boolean correct;
         String answer = inputFld.getText().toString().trim();
-        correct = translateToNative ? currentWord.nativeInflections.get(inflectionForm).equals(answer)
-                : currentWord.foreignInflections.get(inflectionForm).equals(answer);
+        correct = checkAnswer(answer);
 
         //Handle both cases
         if(correct){
-            container.setBackgroundColor(Color.GREEN);
-            infoLbl.setText("Correct! \"" + practiceWordLbl.getText() +
-                    "\" translates to \"" + inputFld.getText() + "\".");
+            inputFld.setBackgroundColor(Color.rgb(100, 200, 100));
+            infoLbl.setText(String.format("Correct! \"%s\" translates to \"%s\".", practiceWordLbl.getText(), inputFld.getText()));
         }else {
-            container.setBackgroundColor(Color.RED);
-            infoLbl.setText("Incorrect! \"" + practiceWordLbl.getText() +
-                    "\" does not translate to  \"" + inputFld.getText() + "\".\n" + "The correct answer was \"" +
-                    (translateToNative ? currentWord.nativeInflections.get(inflectionForm)
-                    : currentWord.foreignInflections.get(inflectionForm)) + "\".");
+            inputFld.setBackgroundColor(Color.rgb(200, 100, 100));
+            infoLbl.setText(String.format("Incorrect! \"%s\" does not translate to  \"%s\".\nThe correct answer was \"%s\".",
+                    practiceWordLbl.getText(),
+                    inputFld.getText(), translateToNative ? currentWord.nativeInflections.get(inflectionId)
+                    : currentWord.foreignInflections.get(inflectionId)));
         }
-            setNextWord();
+        setNextWord();
     }
+
+    private boolean checkAnswer(String answer) {
+        //Iterate over all inflections. If one is equal to the one being shown, check if it equals answer
+        if(translateToNative){
+            if(currentWord.nativeInflections.get(inflectionId).equals(answer))
+                return  true;
+
+            for(int i = 0; i < currentWord.foreignInflections.size(); i ++){
+                if(currentWord.foreignInflections.get(inflectionId).equals(currentWord.foreignInflections.get(i))
+                        && currentWord.nativeInflections.get(i).equals(answer))
+                    return true;
+            }
+        }else{
+            if(currentWord.foreignInflections.get(inflectionId).equals(answer))
+                return  true;
+
+            for(int i = 0; i < currentWord.nativeInflections.size(); i ++){
+                if(currentWord.nativeInflections.get(inflectionId).equals(currentWord.nativeInflections.get(i))
+                        && currentWord.foreignInflections.get(i).equals(answer))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_viewList) {
+            Intent intent = new Intent(this, WordListActivity.class);
+            Session session = grammar.getCurrentSession();
+            intent.putExtra("title", session.getTitle());
+            intent.putExtra("native", session.getNativeCode());
+            intent.putExtra("foreign", session.getForeignCode());
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

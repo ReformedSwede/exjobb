@@ -32,7 +32,6 @@ public class SyncThread {
 
     private class ReceiveThread extends Thread{
         private final StartActivity activity;
-        public final static int FILE_SIZE = 100000;
         private ServerSocket serverSocket = null;
 
         ReceiveThread(StartActivity activity){

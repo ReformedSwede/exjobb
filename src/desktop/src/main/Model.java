@@ -16,6 +16,7 @@ public class Model {
 
     private Session session;
     private GrammarManager manager;
+    private Stats stats;
 
     /**
      * Starts a new session
@@ -24,6 +25,7 @@ public class Model {
     public void initialize(Session session){
         this.session = session;
         manager = new GrammarManager(session);
+        stats = new Stats();
     }
 
     /**
@@ -32,9 +34,18 @@ public class Model {
     public void endSession(){
         session = null;
         manager = null;
+        stats = null;
     }
 
     /*****Getters*****/
+
+    /**
+     * Returns the stats object
+     * @return the stats
+     */
+    public Stats getStats() {
+        return stats;
+    }
 
     /**
      * Gives the language code for the native language of the session (i.e. "eng" for English)

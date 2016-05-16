@@ -125,6 +125,8 @@ public class PracticeController{
                         "\" does not translate to  \"" + inputFld.getText() + "\".\n" + "The correct answer was \"" +
                         currentWord.getWordInflectionFormByName(inflectionForm, translateToNative) + "\".");
             }
+            model.getStats().pushStats(currentWord, inflectionForm, correct);
+
             setNextWord();
         }
     }

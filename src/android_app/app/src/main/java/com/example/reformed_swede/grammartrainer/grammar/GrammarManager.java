@@ -45,6 +45,14 @@ public class GrammarManager {
         return sessions;
     }
 
+    public List<String> getPartsOfSpeech(){
+        return container.getPartsOfSpeech();
+    }
+
+    public List<GrammarContainer.Word> getAllWords(String partOfSpeech){
+        return container.getAllWords(partOfSpeech);
+    }
+
     public GrammarContainer.Word getRandomWord(){
         List<String> partsOfSpeech = container.getPartsOfSpeech();
         String randPos = partsOfSpeech.get(new Random().nextInt(partsOfSpeech.size()));
@@ -62,5 +70,9 @@ public class GrammarManager {
 
     public int getRandomInflectionId(String pos){
         return new Random().nextInt(container.getInflectionsByPartOfSpeech(pos).size());
+    }
+
+    public Session getCurrentSession(){
+        return container.getSession();
     }
 }
