@@ -5,13 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.example.reformed_swede.grammartrainer.Adapters.PartOfSpeechAdapter;
+import com.example.reformed_swede.grammartrainer.Adapters.WordAdapter;
 import com.example.reformed_swede.grammartrainer.R;
+import com.example.reformed_swede.grammartrainer.grammar.GrammarContainer;
 import com.example.reformed_swede.grammartrainer.grammar.GrammarManager;
 import com.example.reformed_swede.grammartrainer.grammar.Session;
 
@@ -39,25 +39,19 @@ public class WordListActivity extends AppCompatActivity {
         PartOfSpeechAdapter adapter = new PartOfSpeechAdapter(this,
                 android.R.layout.simple_spinner_dropdown_item,grammar.getPartsOfSpeech());
         spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                spinnerItemSelected((int)id);
+                spinnerItemSelected((int) id);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
     }
 
     public void spinnerItemSelected(int itemId){
-        List<GrammarContainer.Word> words = grammar.getAllWords(grammar.getPartsOfSpeech().get(itemId));
-        List<String> collection = new ArrayList<>();
-        for(GrammarContainer.Word w : words)
-            collection.add(w.nativeInflections.get(0) + " - " + w.foreignInflections.get(0));
-
-        wordList.setAdapter(new PartOfSpeechAdapter(this,
-                android.R.layout.simple_list_item_1, collection));
+        wordList.setAdapter(new WordAdapter(grammar.getAllWords(grammar.getPartsOfSpeech().get(itemId))));
     }
 }

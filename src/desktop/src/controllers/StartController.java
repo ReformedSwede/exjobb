@@ -1,11 +1,17 @@
 package controllers;
 
 import grammar.GrammarManager;
+import javafx.animation.FadeTransition;
+import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.util.Duration;
 import main.ResourceManager;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

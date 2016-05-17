@@ -10,7 +10,6 @@
     tools:context="com.example.reformed_swede.grammartrainer.main.PracticeActivity"
     android:id="@+id/container">
 
-
     <TextView
         android:id="@+id/practiceWordLabel"
         android:text="Word to translate"
@@ -24,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/practiceWordLabel"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         android:inputType="text"
         android:imeOptions="actionGo"/>
 
@@ -34,8 +33,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/inputField"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         android:textSize="16sp"/>
 
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginTop="40dp"
+        android:layout_below="@id/infoLabel"
+        android:background="@color/colorPrimaryDark"/>
+
+    <LinearLayout
+        android:layout_below="@id/separator"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+            <ListView
+                android:id="@+id/posCheckboxes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"/>
+
+            <ListView
+                android:id="@+id/inflCheckboxes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"/>
+    </LinearLayout>
 
 </RelativeLayout>

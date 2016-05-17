@@ -1,4 +1,4 @@
-package com.example.reformed_swede.grammartrainer.main;
+package com.example.reformed_swede.grammartrainer.grammar;
 
 import com.example.reformed_swede.grammartrainer.grammar.Session;
 
@@ -54,6 +54,10 @@ public class GrammarContainer implements Serializable{
 
     public List<String> getInflectionsByPartOfSpeech(String partOfSpeech){
         return partsOfSpeechAndInflections.get(partOfSpeech);
+    }
+
+    public int getInflectionId(String partOfSpeech, String inflection){
+        return partsOfSpeechAndInflections.get(partOfSpeech).indexOf(inflection);
     }
 
     public List<Word> getAllWords(String partOfSpeech){

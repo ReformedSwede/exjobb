@@ -10,13 +10,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.example.reformed_swede.grammartrainer.Adapters.CheckboxAdapter;
 import com.example.reformed_swede.grammartrainer.R;
+import com.example.reformed_swede.grammartrainer.grammar.GrammarContainer;
 import com.example.reformed_swede.grammartrainer.grammar.GrammarManager;
 import com.example.reformed_swede.grammartrainer.grammar.Session;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PracticeActivity extends AppCompatActivity {
 
@@ -29,6 +34,8 @@ public class PracticeActivity extends AppCompatActivity {
     TextView practiceWordLbl;
     TextView infoLbl;
     RelativeLayout container;
+    ListView posCheckboxes;
+    ListView inflCheckboxes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +55,8 @@ public class PracticeActivity extends AppCompatActivity {
         inputFld = (EditText)findViewById(R.id.inputField);
         practiceWordLbl = (TextView)findViewById(R.id.practiceWordLabel);
         infoLbl = (TextView)findViewById(R.id.infoLabel);
+        posCheckboxes = (ListView)findViewById(R.id.posCheckboxes);
+        inflCheckboxes = (ListView)findViewById(R.id.inflCheckboxes);
 
         //Init components
         inputFld.setOnKeyListener(new View.OnKeyListener() {
@@ -69,6 +78,10 @@ public class PracticeActivity extends AppCompatActivity {
                 return false;
             }
         });
+        posCheckboxes.setAdapter(new CheckboxAdapter(this, grammar.getPartsOfSpeech()));
+        inflCheckboxes.setAdapter(new CheckboxAdapter(this, new ArrayList<String>()));
+        for(String pos : grammar.getPartsOfSpeech())
+            ((CheckboxAdapter)inflCheckboxes.getAdapter()).addItems(grammar.getInflections(pos));
 
         //Start!
         setNextWord();
@@ -82,10 +95,10 @@ public class PracticeActivity extends AppCompatActivity {
 
         //Generate a word, distinct from the previous one
         do{
-            currentWord = grammar.getRandomWord();
+            currentWord = grammar.getRandomWord(getUsablePartsOfSpeech());
         }while(currentWord.equals(prevWord) && grammar.getNrOfWords() > 1);
         prevWord = currentWord;
-        inflectionId = grammar.getRandomInflectionId(currentWord.partOfSpeech);
+        inflectionId = grammar.getRandomInflectionId(currentWord.partOfSpeech, getUsableInflections(currentWord.partOfSpeech));
 
         //Update the view
         practiceWordLbl.setText(
@@ -139,6 +152,79 @@ public class PracticeActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    private List<String> getUsablePartsOfSpeech(){
+        List<String> list = new ArrayList<>();
+        for(String pos : grammar.getPartsOfSpeech())
+            if(((CheckboxAdapter)posCheckboxes.getAdapter()).getCheckedState(pos))
+                list.add(pos);
+        return list;
+    }
+
+    private List<String> getUsableInflections(String partOfSpeech){
+        List<String> list = new ArrayList<>();
+        for(String inflection : grammar.getInflections(partOfSpeech))
+            if(((CheckboxAdapter)inflCheckboxes.getAdapter()).getCheckedState(inflection))
+                list.add(inflection);
+        return list;
+    }
+
+    public void checkboxChecked(String boxName, boolean isChecked){
+        //Determine if checkbox was pos or inflection
+        boolean isPos = false;
+        for(String pos : grammar.getPartsOfSpeech())
+            if(pos.equals(boxName)){
+                isPos = true;
+                break;
+            }
+        if(isPos){
+            if(!isChecked) {
+                //Check if last deselected
+                int nrSelected = 0;
+                for (String pos : grammar.getPartsOfSpeech())
+                    if (((CheckboxAdapter) posCheckboxes.getAdapter()).getCheckedState(pos))
+                        nrSelected++;
+                //If so, fix it
+                if (nrSelected == 0) {
+                    ((CheckboxAdapter) posCheckboxes.getAdapter()).setCheckedState(boxName, true);
+                    return;
+                }
+            }
+
+            //Change inflection boxes
+            for(String inflection : grammar.getInflections(boxName))
+                ((CheckboxAdapter)inflCheckboxes.getAdapter()).setCheckedState(inflection, isChecked);
+
+            setNextWord();
+
+        }else{
+            if(!isChecked) {
+                //Find out what pos it belongs to
+                String pos = null;
+                for (String s : grammar.getPartsOfSpeech())
+                    for (String i : grammar.getInflections(s))
+                        if (i.equals(boxName)) {
+                            pos = s;
+                            break;
+                        }
+
+                    //Check if this was last to be deselected
+                int nrSelected = 0;
+                for (String infl : grammar.getInflections(pos))
+                    if (((CheckboxAdapter) inflCheckboxes.getAdapter()).getCheckedState(infl))
+                        nrSelected++;
+                //If so, fix it
+                System.out.println(nrSelected);
+                if(nrSelected == 0) {
+                    ((CheckboxAdapter) inflCheckboxes.getAdapter()).setCheckedState(boxName, true);
+                    return;
+                }
+
+                setNextWord();
+            }
+            //TODO: If a pos is deselected and one of its inflections is selected, select pos again
+        }
     }
 
     @Override

@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import com.example.reformed_swede.grammartrainer.Adapters.SessionAdapter;
 import com.example.reformed_swede.grammartrainer.R;
+import com.example.reformed_swede.grammartrainer.grammar.GrammarContainer;
 import com.example.reformed_swede.grammartrainer.grammar.GrammarManager;
 import com.example.reformed_swede.grammartrainer.grammar.Session;
 
@@ -70,11 +71,6 @@ public class StartActivity extends AppCompatActivity {
                     }})
                 .setNegativeButton(android.R.string.no, null)
                 .show();
-
-        //TODO Prompt user
-        //TODO Check if file exists. Ask user overwrite or not
-
-
     }
 
     public void checkGrammarDuplicate(final GrammarContainer gc){
