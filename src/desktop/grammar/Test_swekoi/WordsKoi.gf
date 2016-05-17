@@ -32,4 +32,8 @@ concrete WordsKoi of Words = open MorphoKoi in {
 		XJWJM = mkN "λογος" "λογοι" ;
 		DDNOYPT = mkV "πιστευω" "επιστευσα" "πεπιστευκα" ;
 		OUFFT = mkV "βαλλω" "εβαλα" "βέβληκα" ;
+		WULXDU = mkN "καρδια" "καρδιοι" ;
+		NEJPT = mkV "ακουω" "ηκουσα" "ηκουωξα" ;
+		XPT = mkV "λυω" "ελυσα" "λελυκα" ;
+		PLUQB = mkN "γραφη" "γραφοι" ;
 }

@@ -19,7 +19,7 @@
         <VBox fx:id="topBar">
             <HBox spacing="20">
                 <Button text="Exit" onAction="#exit"/>
-                <Button text="Practice" onAction="#practice"/>
+                <Button text="Back" onAction="#practice"/>
             </HBox>
             <Label fx:id="sessionTitle"/>
         </VBox>

@@ -29,4 +29,8 @@ concrete WordsSwe of Words = open CommonScand, CatSwe, ParadigmsSwe in {
 		XJWJM = mkN "ord" "ord" ;
 		DDNOYPT = mkV "tro" "trodde" "trott" ;
 		OUFFT = mkV "kasta" "kastade" "kastat" ;
+		WULXDU = mkN "hjärta" "hjärtan" ;
+		NEJPT = mkV "höra" "hörde" "hört" ;
+		XPT = mkV "skilja" "skiljde" "skiljt" ;
+		PLUQB = mkN "skrift" "skrifter" ;
 }

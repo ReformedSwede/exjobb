@@ -232,7 +232,7 @@ public class PracticeController{
     /****Navigation methods****/
 
     /**
-     * Called when the exit button is clicked
+     * Fills the stage content with the start fxml
      */
     public void exit(){
         model.endSession();
@@ -255,7 +255,28 @@ public class PracticeController{
     }
 
     /**
-     * Called when switching to the edit frame
+     * Fills the stage content with the statistics fxml
+     */
+    public void statistics(){
+        //Load FXML
+        URL url = getClass().getResource("/resources/view/stats-window.fxml");
+        FXMLLoader fxmlloader = new FXMLLoader();
+        fxmlloader.setLocation(url);
+        fxmlloader.setBuilderFactory(new JavaFXBuilderFactory());
+
+        pContent.getChildren().clear();
+        try {
+            pContent.getChildren().add(fxmlloader.load(url.openStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //Init edit controller
+        ((StatisticsController)fxmlloader.getController()).init(model, pContent);
+    }
+
+    /**
+     * Fills the stage content with the edit fxml
      */
     public void editSession(){
         //Load FXML

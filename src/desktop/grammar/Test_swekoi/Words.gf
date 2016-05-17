@@ -25,4 +25,8 @@ abstract Words = {
 		XJWJM : Noun ;
 		DDNOYPT : Verb ;
 		OUFFT : Verb ;
+		WULXDU : Noun ;
+		NEJPT : Verb ;
+		XPT : Verb ;
+		PLUQB : Noun ;
 }
