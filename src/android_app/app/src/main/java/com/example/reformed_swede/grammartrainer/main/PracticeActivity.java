@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.example.reformed_swede.grammartrainer.Adapters.CheckboxAdapter;
 import com.example.reformed_swede.grammartrainer.R;
@@ -30,6 +31,7 @@ public class PracticeActivity extends AppCompatActivity {
     private int inflectionId; //Used in random word generation
     private boolean translateToNative = true; //Determines if the user is to translate the given word to the native lang
 
+    ToggleButton toggle;
     EditText inputFld;
     TextView practiceWordLbl;
     TextView infoLbl;
@@ -51,6 +53,7 @@ public class PracticeActivity extends AppCompatActivity {
                 intent.getStringExtra("title")), this);
 
         //Set ui components
+        toggle = (ToggleButton)findViewById(R.id.langToggle);
         container = (RelativeLayout)findViewById(R.id.container);
         inputFld = (EditText)findViewById(R.id.inputField);
         practiceWordLbl = (TextView)findViewById(R.id.practiceWordLabel);
@@ -152,6 +155,11 @@ public class PracticeActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    public void toggleLang(View view){
+        translateToNative = !translateToNative;
+        setNextWord();
     }
 
     private List<String> getUsablePartsOfSpeech(){
