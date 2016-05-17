@@ -196,7 +196,7 @@ public class GrammarManager {
 
 		//Insert into native concrete
 		editor = new GfFileEditor(nativeConcreteFile);
-        StringBuilder stringToInsert = new StringBuilder(fun + " = m" + ResourceManager.getOperationByCatName(category)); //e.g. "mkV" for verbs
+        StringBuilder stringToInsert = new StringBuilder(fun + " = " + ResourceManager.getOperationByCatName(category)); //e.g. "mkV" for verbs
         for(String word : nativeWords)
             stringToInsert.append(" \"").append(word).append("\"");
 		editor.insert(stringToInsert.toString(), "lin");

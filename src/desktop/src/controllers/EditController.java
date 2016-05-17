@@ -6,24 +6,27 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
-import javafx.scene.Scene;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import main.InflectionCallback;
+import javafx.util.Pair;
 import main.Model;
 import main.ResourceManager;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * Controller for the Edit frame. Contains methods for handling displaying of words and addition of new words.
  */
-public class EditController implements InflectionCallback {
+public class EditController{
 
     private Model model;
 
@@ -146,27 +149,82 @@ public class EditController implements InflectionCallback {
      * @param word The inserted word
      */
     private void openConfirmDialog(Word word) {
-        //Load FXML file containing the view
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(getClass().getResource("/resources/view/confirm-dialog.fxml"));
-        fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
-        try {
-            fxmlLoader.setRoot(
-                    fxmlLoader.load(getClass().getResource("/resources/view/confirm-dialog.fxml").openStream()));
-        } catch (IOException e) {
-            e.printStackTrace();
+        List<TextField> nativeFields = new ArrayList<>();
+        List<TextField> foreignFields = new ArrayList<>();
+        final boolean[] editing = {false};
+
+        // Create a custom dialog.
+        Dialog<Pair<List<String>, List<String>>> dialog = new Dialog<>();
+        dialog.setTitle("Confirm or edit " + word.getCategory());
+        dialog.getDialogPane().getStylesheets().add("/resources/css/dialog-style.css");
+
+        // Set the button types.
+        ButtonType editButtonType = new ButtonType("Edit", ButtonBar.ButtonData.OTHER);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, editButtonType);
+
+        // Create all labels and fields
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(10, 10, 10, 10));
+
+        grid.add(new Label(word.getNativeLanguage()), 1, 0);
+        grid.add(new Label(word.getForeignLanguage()), 2, 0);
+        int row = 1;
+        for(String s : ResourceManager.getInflectionRealNamesByCat(word.getCategory())){
+            grid.add(new Label(s), 0, row);
+            TextField tf = new TextField(word.getNativeInflectionFormByName(s));
+            tf.setEditable(false);
+            grid.add(tf, 1, row);
+            nativeFields.add(tf);
+            tf = new TextField(word.getForeignInflectionFormByName(s));
+            tf.setEditable(false);
+            grid.add(tf, 2, row);
+            foreignFields.add(tf);
+            row++;
         }
-        //init scene and stage
-        Scene scene = new Scene(fxmlLoader.getRoot(), 800, 400);
-        scene.getStylesheets().add("/resources/css/dialog-style.css");
+        dialog.getDialogPane().setContent(grid);
 
-        Stage dialog = new Stage();
-        dialog.setTitle("Does this look alright?");
-        dialog.setScene(scene);
-        dialog.show();
+        // Set edit button onClick
+        Node editButton = dialog.getDialogPane().lookupButton(editButtonType);
+        editButton.setDisable(false);
+        editButton.setOnMouseClicked(event -> {
+            for(TextField tf : nativeFields)
+                tf.setEditable(true);
+            for(TextField tf : foreignFields)
+                tf.setEditable(true);
+            editing[0] = true;
+            editButton.setDisable(true);
+        });
 
-        //Init controller
-        ((DialogController)fxmlLoader.getController()).init(word, this, dialog);
+        // Convert the result to a pair when ok button is clicked.
+        dialog.setResultConverter(dialogButton -> {
+            System.out.println("A button was clicked" + dialogButton);
+            if (dialogButton == ButtonType.OK) {
+                if(editing[0]){
+                    return new Pair<>(nativeFields.stream()
+                                            .map((textField) -> textField.getText().trim())
+                                            .collect(Collectors.toList()),
+                                    foreignFields.stream()
+                                            .map((textField1) -> textField1.getText().trim())
+                                            .collect(Collectors.toList()));
+                }
+                return new Pair<>(null, null);
+            }
+            return null;
+        });
+
+        Optional<Pair<List<String>, List<String>>> result = dialog.showAndWait();
+        result.ifPresent(pair -> {
+            if(pair.getValue() != null) {
+                model.removeWord(word.getFunction());
+                model.addWordWithInflections(word.getCategory(),
+                        pair.getKey(), pair.getValue());
+
+                //Refresh view
+                refreshWordList();
+            }
+        });
     }
 
     /**
@@ -177,23 +235,6 @@ public class EditController implements InflectionCallback {
         list.addAll(model.getAllWords(catBox.getValue()).stream()
                 .map(Word::getForeign).collect(Collectors.toList()));
         wordList.setItems(list);
-    }
-
-    /**
-     * This is a callback method for the confirm dialog. If the user edits the words in the confirm dialog,
-     * then clicks OK, this method is called.
-     * @param category The category of the inserted word
-     * @param function The function of the inserted word
-     * @param foreignInflections A list of native inflection forms
-     * @param nativeInflections A list of foreign inflection forms
-     */
-    @Override
-    public void call(String category, String function, List<String> nativeInflections, List<String> foreignInflections) {
-        model.removeWord(function);
-        model.addWordWithInflections(category, nativeInflections, foreignInflections);
-
-        //Refresh view
-        refreshWordList();
     }
 
     /****Navigation Methods****/

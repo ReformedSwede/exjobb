@@ -34,4 +34,6 @@ abstract Words = {
 		Man : Noun ;
 		Write : Verb ;
 		Bike : Noun ;
+		House : Noun ;
+		Yell : Verb ;
 }
