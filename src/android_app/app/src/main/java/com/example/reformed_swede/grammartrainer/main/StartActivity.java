@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.example.reformed_swede.grammartrainer.Adapters.SessionAdapter;
@@ -26,8 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 public class StartActivity extends AppCompatActivity {
-
-    SyncThread receiver = new SyncThread();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,21 +122,20 @@ public class StartActivity extends AppCompatActivity {
     }
 
     /**
-     * Dispatch onResume() to fragments.
+     * Called when an activity started with "startActivityForResult()" has finished.
+     * @param requestCode indicates which request this method call is a response to
+     * @param resultCode the result of the request
+     * @param data the data from the finished activity.
      */
     @Override
-    protected void onResume() {
-        super.onResume();
-        receiver.startListening(this);
-    }
-
-    /**
-     * Dispatch onPause() to fragments.
-     */
-    @Override
-    protected void onPause() {
-        receiver.stopListening();
-        super.onPause();
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if(resultCode == RESULT_OK && requestCode == 1)
+        {
+            String scannedCode = data.getExtras().getString("result");
+            SyncThread.connectToPc(scannedCode, this);
+            //TODO Do stuff with SynchThread!
+        }
     }
 
     @Override
@@ -147,7 +145,7 @@ public class StartActivity extends AppCompatActivity {
         return true;
     }
 
-    /*@Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -155,10 +153,11 @@ public class StartActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.scan) {
+            startActivityForResult(new Intent(this, ScanActivity.class), 1);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }*/
+    }
 }

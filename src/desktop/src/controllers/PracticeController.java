@@ -5,8 +5,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.control.*;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import main.QRGen;
 import main.ResourceManager;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,6 +18,7 @@ import javafx.scene.input.KeyEvent;
 import main.Model;
 import main.SyncThread;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -226,7 +230,28 @@ public class PracticeController{
      * Sends grammar to android app
      */
     public void synchronize(){
-        SyncThread.sendFile(model.getAllGrammar());
+        // Create the custom dialog.
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+        BufferedImage bf = new QRGen().getQR("hej");
+        WritableImage wr = null;
+        if (bf != null) {
+            wr = new WritableImage(bf.getWidth(), bf.getHeight());
+            PixelWriter pw = wr.getPixelWriter();
+            for (int x = 0; x < bf.getWidth(); x++) {
+                for (int y = 0; y < bf.getHeight(); y++) {
+                    pw.setArgb(x, y, bf.getRGB(x, y));
+                }
+            }
+        }
+        alert.setGraphic(new ImageView(wr));
+        alert.setTitle("Scan");
+        alert.setHeaderText(null);
+        alert.setContentText("Open the scanner in your app." + "\nScan this QR code");
+        alert.showAndWait();
+
+        //TODO handle result
+        //SyncThread.sendFile(model.getAllGrammar());
     }
 
     /****Navigation methods****/

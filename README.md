@@ -28,3 +28,9 @@ Files for my degree project (Bachleor thesis)
     	
 
 
+####Dependencies
+GF
+JPGF
+ZBar
+ZXing
+
