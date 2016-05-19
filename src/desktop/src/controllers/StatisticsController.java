@@ -5,14 +5,22 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import main.Model;
 import main.ResourceManager;
 import main.Stats;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class StatisticsController {
 
@@ -46,14 +54,26 @@ public class StatisticsController {
         totNr.setText("Correct answers: " + stats.getNrOfRights() + " / " +
                 (stats.getNrOfRights() + stats.getNrOfWrongs()));
 
-        for(String word : stats.getStatsForWords().keySet())
-            words.getChildren().add(new Label(word + ": " + stats.getStatsForWords().get(word) + "%"));
+        List<String> list = new ArrayList<>(stats.getStatsForWords().keySet());
+        list.sort((o1, o2) -> stats.getStatsForWords().get(o2).compareTo(stats.getStatsForWords().get(o1)));
+        for(String word : list){
+            Label label = new Label(word + ": " + stats.getStatsForWords().get(word) + "%");
+            words.getChildren().add(label);
+        }
 
-        for(String inflection : stats.getStatsForInflections().keySet())
-            inflections.getChildren().add(new Label(inflection + ": " + stats.getStatsForInflections().get(inflection) + "%"));
+        list = new ArrayList<>(stats.getStatsForInflections().keySet());
+        list.sort((o1, o2) -> stats.getStatsForInflections().get(o2).compareTo(stats.getStatsForInflections().get(o1)));
+        for(String inflection : list){
+            Label label = new Label(inflection + ": " + stats.getStatsForInflections().get(inflection) + "%");
+            inflections.getChildren().add(label);
+        }
 
-        for(String pos : stats.getStatsForPartsOfSpeech().keySet())
-            partsOfSpeech.getChildren().add(new Label(pos + ": " + stats.getStatsForPartsOfSpeech().get(pos) + "%"));
+        list = new ArrayList<>(stats.getStatsForPartsOfSpeech().keySet());
+        list.sort((o1, o2) -> stats.getStatsForPartsOfSpeech().get(o2).compareTo(stats.getStatsForPartsOfSpeech().get(o1)));
+        for(String pos : list){
+            Label label = new Label(pos + ": " + stats.getStatsForPartsOfSpeech().get(pos) + "%");
+            partsOfSpeech.getChildren().add(label);
+        }
     }
 
 

@@ -5,6 +5,8 @@
 
 <?import javafx.scene.layout.BorderPane?>
 
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
 <BorderPane fx:controller="controllers.StatisticsController"
             xmlns:fx="http://javafx.com/fxml">
     <top>

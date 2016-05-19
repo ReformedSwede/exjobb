@@ -226,6 +226,10 @@ public class PracticeController{
         setNextWord();
     }
 
+    /**
+     * returns current ip
+     * @return
+     */
     private InetAddress getCurrentIp() {
         try {
             Enumeration<NetworkInterface> networkInterfaces = NetworkInterface
@@ -316,7 +320,7 @@ public class PracticeController{
      */
     public void statistics(){
         //Load FXML
-        URL url = getClass().getResource("/resources/view/stats-window.fxml");
+        URL url = getClass().getResource("/resources/view/statistics-window.fxml");
         FXMLLoader fxmlloader = new FXMLLoader();
         fxmlloader.setLocation(url);
         fxmlloader.setBuilderFactory(new JavaFXBuilderFactory());
