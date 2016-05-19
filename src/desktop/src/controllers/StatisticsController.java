@@ -1,31 +1,31 @@
 package controllers;
 
-import grammar.Word;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import main.Model;
 import main.ResourceManager;
 import main.Stats;
+import main.SyncThread;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 public class StatisticsController {
 
     private Model model;
     private Stats stats;
+    private final int goodLimit = 90;
+    private final int badLimit = 30;
+    private final String goodColor = "#00aa00";
+    private final String badColor = "#cc0000";
 
     //Components
     private Pane pContent;
@@ -34,14 +34,14 @@ public class StatisticsController {
     @FXML
     private Label totNr;
     @FXML
-    private VBox words;
+    private ListView<Label> words;
     @FXML
-    private VBox partsOfSpeech;
+    private ListView<Label> partsOfSpeech;
     @FXML
-    private VBox inflections;
+    private ListView<Label> inflections;
 
 
-    public void init(Model model, Pane pane){
+    void init(Model model, Pane pane){
         pContent = pane;
         this.model = model;
         stats = model.getStats();
@@ -56,24 +56,37 @@ public class StatisticsController {
 
         List<String> list = new ArrayList<>(stats.getStatsForWords().keySet());
         list.sort((o1, o2) -> stats.getStatsForWords().get(o2).compareTo(stats.getStatsForWords().get(o1)));
-        for(String word : list){
+        words.setItems(FXCollections.observableList(list.stream().map(word -> {
+            int percent = stats.getStatsForWords().get(word);
+            String color = percent > goodLimit ? goodColor : percent < badLimit ? badColor : "#000000";
             Label label = new Label(word + ": " + stats.getStatsForWords().get(word) + "%");
-            words.getChildren().add(label);
-        }
-
-        list = new ArrayList<>(stats.getStatsForInflections().keySet());
-        list.sort((o1, o2) -> stats.getStatsForInflections().get(o2).compareTo(stats.getStatsForInflections().get(o1)));
-        for(String inflection : list){
-            Label label = new Label(inflection + ": " + stats.getStatsForInflections().get(inflection) + "%");
-            inflections.getChildren().add(label);
-        }
+            label.setStyle("-fx-text-fill:" + color + ";");
+            System.out.println(word);
+            return label;
+        }).collect(Collectors.toList())));
 
         list = new ArrayList<>(stats.getStatsForPartsOfSpeech().keySet());
         list.sort((o1, o2) -> stats.getStatsForPartsOfSpeech().get(o2).compareTo(stats.getStatsForPartsOfSpeech().get(o1)));
-        for(String pos : list){
-            Label label = new Label(pos + ": " + stats.getStatsForPartsOfSpeech().get(pos) + "%");
-            partsOfSpeech.getChildren().add(label);
-        }
+        partsOfSpeech.setItems(FXCollections.observableList(list.stream().map(partOfSpeech -> {
+            int percent = stats.getStatsForPartsOfSpeech().get(partOfSpeech);
+            String color = percent > goodLimit ? goodColor : percent < badLimit ? badColor : "#000000";
+            Label label = new Label(partOfSpeech + ": " + stats.getStatsForPartsOfSpeech().get(partOfSpeech) + "%");
+            label.setStyle("-fx-text-fill:" + color + ";");
+            System.out.println(partOfSpeech);
+            return label;
+        }).collect(Collectors.toList())));
+
+        list = new ArrayList<>(stats.getStatsForInflections().keySet());
+        list.sort((o1, o2) -> stats.getStatsForInflections().get(o2).compareTo(stats.getStatsForInflections().get(o1)));
+        inflections.setItems(FXCollections.observableList(list.stream().map(inflection -> {
+            int percent = stats.getStatsForInflections().get(inflection);
+            String color = percent > goodLimit ? goodColor : percent < badLimit ? badColor : "#000000";
+            Label label = new Label(inflection + ": " + stats.getStatsForInflections().get(inflection) + "%");
+            label.setStyle("-fx-text-fill:" + color + ";");
+
+            System.out.println(inflection);
+            return label;
+        }).collect(Collectors.toList())));
     }
 
 

@@ -19,11 +19,22 @@
         </VBox>
     </top>
     <center>
-        <Label fx:id="totNr"/>
-        <HBox>
-            <VBox fx:id="words"/>
-            <VBox fx:id="partsOfSpeech"/>
-            <VBox fx:id="inflections"/>
-        </HBox>
+        <VBox>
+            <Label fx:id="totNr"/>
+            <HBox>
+                <VBox>
+                    <Label text="Words"/>
+                    <ListView fx:id="words"/>
+                </VBox>
+                <VBox>
+                    <Label text="Parts of speech"/>
+                    <ListView fx:id="partsOfSpeech"/>
+                </VBox>
+                <VBox>
+                    <Label text="Inflections"/>
+                    <ListView fx:id="inflections"/>
+                </VBox>
+            </HBox>
+        </VBox>
     </center>
 </BorderPane>
