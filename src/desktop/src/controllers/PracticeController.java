@@ -20,7 +20,7 @@ import main.SyncThread;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URL;
+import java.net.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -226,6 +226,29 @@ public class PracticeController{
         setNextWord();
     }
 
+    private InetAddress getCurrentIp() {
+        try {
+            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface
+                    .getNetworkInterfaces();
+            while (networkInterfaces.hasMoreElements()) {
+                NetworkInterface ni = networkInterfaces
+                        .nextElement();
+                Enumeration<InetAddress> nias = ni.getInetAddresses();
+                while(nias.hasMoreElements()) {
+                    InetAddress ia= nias.nextElement();
+                    if (!ia.isLinkLocalAddress()
+                            && !ia.isLoopbackAddress()
+                            && ia instanceof Inet4Address) {
+                        return ia;
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * Sends grammar to android app
      */
@@ -233,7 +256,12 @@ public class PracticeController{
         // Create the custom dialog.
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
 
-        BufferedImage bf = new QRGen().getQR("hej");
+        //Start listening for incoming connections
+        SyncThread thread = new SyncThread(alert, model.getAllGrammar());
+        thread.startListening();
+
+        //Display QR
+        BufferedImage bf = new QRGen().getQR(getCurrentIp().getHostAddress());
         WritableImage wr = null;
         if (bf != null) {
             wr = new WritableImage(bf.getWidth(), bf.getHeight());
@@ -244,14 +272,18 @@ public class PracticeController{
                 }
             }
         }
-        alert.setGraphic(new ImageView(wr));
+        ImageView view = new ImageView(wr);
+        view.setFitHeight(300);
+        view.setFitWidth(300);
+        alert.setGraphic(view);
         alert.setTitle("Scan");
         alert.setHeaderText(null);
-        alert.setContentText("Open the scanner in your app." + "\nScan this QR code");
-        alert.showAndWait();
-
-        //TODO handle result
-        //SyncThread.sendFile(model.getAllGrammar());
+        alert.setContentText("Open the scanner in your app and scan this QR code.");
+        alert.getDialogPane().getStylesheets().add("/resources/css/dialog-style.css");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK){
+            thread.stopListening();
+        }
     }
 
     /****Navigation methods****/

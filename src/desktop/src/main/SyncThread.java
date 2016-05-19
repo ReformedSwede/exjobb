@@ -1,18 +1,30 @@
 package main;
 
-import java.io.*;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
- * Used for sending grammars to android app
+ * A thread used for synchronizing data to android app
  */
 public class SyncThread {
 
     private static final int PORT_NR = 7890;
     private boolean listening = false;
     private Thread receiverThread;
+    private Alert alert;
+    private Object dataToSend;
+
+    public SyncThread(Alert alert, Object data) {
+        this.alert = alert;
+        dataToSend = data;
+    }
 
     public void startListening(){
         if(receiverThread == null || !receiverThread.isAlive()) {
@@ -39,14 +51,15 @@ public class SyncThread {
                     serverSocket.bind(new InetSocketAddress(PORT_NR));
 
                     Socket socket = serverSocket.accept();
-
-                    ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-                    Object data = ois.readObject();
-                    reportResult(data);
-                    ois.close();
+                    ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                    oos.writeObject(dataToSend);
+                    oos.flush();
+                    oos.close();
                     socket.close();
                     serverSocket.close();
-                } catch (IOException | ClassNotFoundException e) {
+
+                    finish();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -63,8 +76,9 @@ public class SyncThread {
             super.interrupt();
         }
 
-        private void reportResult(final Object obj){
-
+        private void finish(){
+            stopListening();
+            Platform.runLater(() -> alert.close());
         }
     }
 }

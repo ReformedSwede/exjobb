@@ -96,7 +96,7 @@ public class StartActivity extends AppCompatActivity {
     }
 
     private void saveGrammar(final GrammarContainer gc){
-        final String path = getFilesDir().getAbsoluteFile() + File.separator
+        final String path = getFilesDir().getAbsolutePath() + File.separator
                 + "grammar" + File.separator + gc.getSession().getTitle();
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
@@ -117,8 +117,11 @@ public class StartActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void delete(){
-
+    public void delete(Session session){
+        File file = new File(getFilesDir().getAbsolutePath() + File.separator +
+                        "grammar" + File.separator + session.getTitle());
+        file.delete();
+        refreshSessionList();
     }
 
     /**
@@ -134,7 +137,6 @@ public class StartActivity extends AppCompatActivity {
         {
             String scannedCode = data.getExtras().getString("result");
             SyncThread.connectToPc(scannedCode, this);
-            //TODO Do stuff with SynchThread!
         }
     }
 

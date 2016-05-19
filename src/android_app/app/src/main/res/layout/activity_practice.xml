@@ -39,7 +39,6 @@
 
     <TextView
         android:id="@+id/infoLabel"
-        android:text="Extra information is shown here"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/inputField"
@@ -51,7 +50,8 @@
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
             <ListView
                 android:id="@+id/posCheckboxes"
                 android:layout_width="wrap_content"

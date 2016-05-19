@@ -75,7 +75,7 @@ public class SessionAdapter extends BaseAdapter {
         });
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {startActivity.delete();
+            public void onClick(View v) {startActivity.delete(sessions.get(position));
             }
         });
 
