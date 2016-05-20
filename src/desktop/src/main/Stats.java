@@ -52,6 +52,7 @@ public class Stats {
         words = new HashMap<>();
         inflections = new HashMap<>();
         partsOfSpeech = new HashMap<>();
+        nrOfWrongs = nrOfRights = 0;
     }
 
     /**

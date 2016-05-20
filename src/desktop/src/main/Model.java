@@ -37,6 +37,13 @@ public class Model {
         stats = null;
     }
 
+    /**
+     * Clears all statistical data
+     */
+    public void resetStats(){
+        stats.reset();
+    }
+
     /*****Getters*****/
 
     /**

@@ -13,6 +13,7 @@
         <VBox fx:id="topBar">
             <HBox spacing="20">
                 <Button text="Exit" onAction="#exit"/>
+                <Button text="Reset statistics" onAction="#resetStats"/>
                 <Button text="Back" onAction="#back"/>
             </HBox>
             <Label fx:id="sessionTitle"/>

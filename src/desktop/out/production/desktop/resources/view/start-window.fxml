@@ -14,10 +14,10 @@
         <Label styleClass="title" text="Sessions"/>
         <GridPane fx:id="sessionsList"/>
         <HBox>
-            <TextField fx:id="titleField" promptText="Enter title"/>
-            <ComboBox fx:id="nativeBox" promptText="Choose native"/>
-            <ComboBox fx:id="foreignBox" promptText="Choose foreign"/>
-            <Button fx:id="addNew" text="Add" onAction="#addNewSession"/>
+            <TextField fx:id="titleField" promptText="Enter title" styleClass="small-margin"/>
+            <ComboBox fx:id="nativeBox" promptText="Choose native" styleClass="small-margin"/>
+            <ComboBox fx:id="foreignBox" promptText="Choose foreign" styleClass="small-margin"/>
+            <Button fx:id="addNew" text="Add" onAction="#addNewSession" styleClass="small-margin"/>
         </HBox>
     </VBox>
 </StackPane>

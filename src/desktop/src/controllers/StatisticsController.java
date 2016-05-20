@@ -40,7 +40,11 @@ public class StatisticsController {
     @FXML
     private ListView<Label> inflections;
 
-
+    /**
+     * Initialize window and display statistics
+     * @param model The model
+     * @param pane The view
+     */
     void init(Model model, Pane pane){
         pContent = pane;
         this.model = model;
@@ -61,7 +65,6 @@ public class StatisticsController {
             String color = percent > goodLimit ? goodColor : percent < badLimit ? badColor : "#000000";
             Label label = new Label(word + ": " + stats.getStatsForWords().get(word) + "%");
             label.setStyle("-fx-text-fill:" + color + ";");
-            System.out.println(word);
             return label;
         }).collect(Collectors.toList())));
 
@@ -72,7 +75,6 @@ public class StatisticsController {
             String color = percent > goodLimit ? goodColor : percent < badLimit ? badColor : "#000000";
             Label label = new Label(partOfSpeech + ": " + stats.getStatsForPartsOfSpeech().get(partOfSpeech) + "%");
             label.setStyle("-fx-text-fill:" + color + ";");
-            System.out.println(partOfSpeech);
             return label;
         }).collect(Collectors.toList())));
 
@@ -83,13 +85,21 @@ public class StatisticsController {
             String color = percent > goodLimit ? goodColor : percent < badLimit ? badColor : "#000000";
             Label label = new Label(inflection + ": " + stats.getStatsForInflections().get(inflection) + "%");
             label.setStyle("-fx-text-fill:" + color + ";");
-
-            System.out.println(inflection);
             return label;
         }).collect(Collectors.toList())));
     }
 
+    /**
+     * Clear all statistical data and refresh view
+     */
+    public void resetStats(){
+        model.resetStats();
+        init(model, pContent);
+    }
 
+    /**
+     * Return to practice window
+     */
     public void back(){
         //Load FXML
         URL url = getClass().getResource("/resources/view/practice-window.fxml");
@@ -108,6 +118,9 @@ public class StatisticsController {
         ((PracticeController)fxmlloader.getController()).init(model, pContent);
     }
 
+    /**
+     * Exit session to start window
+     */
     public void exit(){
         model.endSession();
 

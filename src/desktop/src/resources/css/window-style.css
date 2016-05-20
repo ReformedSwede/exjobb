@@ -21,6 +21,12 @@
 .center{
 -fx-padding: 30;
 }
+.small-margin{
+-fx-padding: 10px;
+-fx-border-insets: 5px;
+-fx-background-insets: 5px;
+}
+
 /******IDs******/
 #practiceWordLbl{
 -fx-font-size: 50pt;
