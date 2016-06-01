@@ -18,12 +18,6 @@ public class GfFileEditorTest {
         editor = new GfFileEditor("Test.gf");
     }
 
-    @Test
-    public void testDuplicateInsertion(){
-        editor.insert("Stuff", "lin");
-        assertTrue(editor.isDuplicateInsertion("Stuff", "lin").equals("Stuff"));
-    }
-
     @After
     public void breakDown(){
         editor.delete("Stuff", "lin");

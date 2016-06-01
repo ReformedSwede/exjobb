@@ -134,18 +134,10 @@ public class GrammarManager {
 		String abstractFile = dir + File.separator + "Words.gf";
 		String nativeConcreteFile = dir + File.separator + ResourceManager.codeToGF(nativeLangCode) + ".gf";
 		String foreignConcreteFile = dir + File.separator + ResourceManager.codeToGF(foreignLangCode) + ".gf";
-		String fun = Character.toUpperCase(foreignWord.charAt(0)) + foreignWord.toLowerCase().substring(1);
-        fun = convertToASCII(fun);
 
 		GfFileEditor editor = new GfFileEditor(abstractFile);
+		String fun = "fun" + editor.getNextFunctionNumber();
 
-        //Check for duplicate entry
-        String duplicate;
-        if((duplicate = editor.isDuplicateInsertion(fun, "fun")) != null){
-            if(duplicate.endsWith(category))
-                return null;
-            fun = fun + category.substring(0, 1).toUpperCase();
-        }
 		//Insert into abstract
 		editor.insert(fun + " : " + category, "fun");
 		editor.saveToFile();
@@ -177,26 +169,17 @@ public class GrammarManager {
 		String abstractFile = dir + File.separator + "Words.gf";
 		String nativeConcreteFile = dir + File.separator + ResourceManager.codeToGF(nativeLangCode) + ".gf";
 		String foreignConcreteFile = dir + File.separator + ResourceManager.codeToGF(foreignLangCode) + ".gf";
-		String fun = Character.toUpperCase(foreignWords.get(0).charAt(0))
-				+ foreignWords.get(0).toLowerCase().substring(1);
-        fun = convertToASCII(fun);
 
 		GfFileEditor editor = new GfFileEditor(abstractFile);
+		String fun = "fun" + editor.getNextFunctionNumber();
 
-        //Check for duplicate entry
-        String duplicate;
-        if((duplicate = editor.isDuplicateInsertion(fun, "fun")) != null){
-            if(duplicate.endsWith(category))
-                return null;
-            fun = fun + category.substring(0, 1).toUpperCase();
-        }
         //Insert into abstract
 		editor.insert(fun + " : " + category, "fun");
 		editor.saveToFile();
 
 		//Insert into native concrete
 		editor = new GfFileEditor(nativeConcreteFile);
-        StringBuilder stringToInsert = new StringBuilder(fun + " = " + ResourceManager.getOperationByCatName(category)); //e.g. "mkV" for verbs
+        StringBuilder stringToInsert = new StringBuilder(fun + " = " + ResourceManager.getOperationByCatName(category));
         for(String word : nativeWords)
             stringToInsert.append(" \"").append(word).append("\"");
 		editor.insert(stringToInsert.toString(), "lin");
@@ -267,21 +250,6 @@ public class GrammarManager {
 	}
 
 	/*****Private methods******/
-
-    /**
-	 * Check if a string is made up of only ASCII characters or not.
-     * If it is not purely ascii, it is converted to a pseudo-random ascii string. o/w the original string is returned.
-     * @param s The string to check
-     */
-    private String convertToASCII(String s){
-        if(!s.matches("\\A\\p{ASCII}*\\z")) {
-            char[] chars = s.toCharArray();
-            for (int i = 0; i < chars.length; i++)
-                chars[i] = (char) (((int) chars[i] % (65 - 90)) + 65);
-            return new String(chars);
-        }else
-            return s;
-    }
 
 	/**
 	 * Compiles .gf files to .pgf files, then updates the pgf and Concr objects.

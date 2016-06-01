@@ -1,9 +1,7 @@
 package grammar;
 
 import main.ResourceManager;
-import org.grammaticalframework.pgf.Concr;
-import org.grammaticalframework.pgf.Expr;
-import org.grammaticalframework.pgf.PGF;
+import org.grammaticalframework.pgf.*;
 
 import java.util.*;
 
@@ -144,27 +142,30 @@ public class Word {
 
     /**
      * Checks if the answer is a correct translation of the word and in the correct inflection form.
-     * Also returns true if there is another inflection form, that would have the same form. E.g:
-     * fish (sing) and fish (plur) will both be acceptable answers to fish.
+     * Also returns true if there are several inflection forms that look the same. Or if two words can be translated
+     * the same in the other language.
      * @param answer A word in the foreign language
      * @param inflectionName The form that the answer is supposed to be inflected in.
      * @return true if correct translation, false o/w
      */
     public boolean checkAnswer(String answer, String inflectionName, boolean translateToNative) {
-        //Check if answer was correct
-        if((translateToNative ? getNativeInflectionFormByName(inflectionName)
-                : getForeignInflectionFormByName(inflectionName)).equals(answer))
-            return true;
-
-        //Check for correct translation among other inflections
-        List<String> otherInflections = ResourceManager.getInflectionRealNamesByCat(category);
-        otherInflections.remove(inflectionName);
-        for(String inflection : otherInflections)
-            if(getWordInflectionFormByName(inflection, !translateToNative)
-                    .equals(getWordInflectionFormByName(inflectionName, !translateToNative)) &&
-                getWordInflectionFormByName(inflection, translateToNative).equals(answer))
+        List<String> allPossibleParsesOfAnswer = new ArrayList<>();
+        List<String> allPossibleParsesOfWord = new ArrayList<>();
+        try {
+            Iterable<ExprProb> ansParses = (translateToNative ? nativeConcr : foreignConcr).parse("Word", answer);
+            Iterable<ExprProb> wordParses = (translateToNative ? foreignConcr : nativeConcr).parse("Word",
+                    translateToNative ? getForeignInflectionFormByName(inflectionName) : getNativeInflectionFormByName(inflectionName));
+            ansParses.forEach(exprProb -> allPossibleParsesOfAnswer.add(exprProb.getExpr().toString()));
+            wordParses.forEach(exprProb -> allPossibleParsesOfWord.add(exprProb.getExpr().toString()));
+        } catch (ParseError parseError) {
+            parseError.printStackTrace();
+        }
+        for(String word : allPossibleParsesOfWord){
+            for(String ans : allPossibleParsesOfAnswer){
+                if(word.equals(ans))
                     return true;
-
+            }
+        }
         return false;
     }
 

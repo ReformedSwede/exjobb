@@ -199,7 +199,6 @@ public class EditController{
 
         // Convert the result to a pair when ok button is clicked.
         dialog.setResultConverter(dialogButton -> {
-            System.out.println("A button was clicked" + dialogButton);
             if (dialogButton == ButtonType.OK) {
                 if(editing[0]){
                     return new Pair<>(nativeFields.stream()

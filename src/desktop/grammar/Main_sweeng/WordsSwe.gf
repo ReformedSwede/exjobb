@@ -40,4 +40,5 @@ concrete WordsSwe of Words = open CommonScand, CatSwe, ParadigmsSwe in {
 		Bike = mkN "cykel" ;
 		House = mkN "hus" "hus" ;
 		Yell = mkV "ropa" "ropade" "ropat" ;
+		fun0 = mkN "tårta" ;
 }

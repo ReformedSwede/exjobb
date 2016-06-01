@@ -5,6 +5,7 @@ import main.ResourceManager;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -201,17 +202,23 @@ class GfFileEditor {
     }
 
     /**
-     * Checks whether the text already exists in the file or not.
-     * @param text The text for which to look
-     * @param atSection The section at which the text should be inserted
-     * @return The duplicate line, if any. Otherwise null
+     * Calculates the number of the next function to be written into the abstract syntax file.
+     * Remember! Only use on abstract syntax!
      */
-    String isDuplicateInsertion(String text, String atSection){
-        for(String line : fileContent.get(atSection)){
-            if(line.startsWith(text))
-                return line;
+    int getNextFunctionNumber(){
+        List<String> funcs = fileContent.get("fun");
+        String last = funcs.get(funcs.size()-1);
+        Matcher matcher = matchRegex(":", last);
+        matcher.find();
+        int number;
+        try {
+            System.out.println(last.substring(3, matcher.start() - 1));
+            number = Integer.parseInt(last.substring(3, matcher.start() - 1)) + 1;
+        }catch(NumberFormatException e){
+            number = 0;
         }
-        return null;
+        System.out.println(number);
+        return number;
     }
 
     /**

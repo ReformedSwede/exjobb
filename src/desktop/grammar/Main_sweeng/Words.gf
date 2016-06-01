@@ -36,4 +36,5 @@ abstract Words = {
 		Bike : Noun ;
 		House : Noun ;
 		Yell : Verb ;
+		fun0 : Noun ;
 }

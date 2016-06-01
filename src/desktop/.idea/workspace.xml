@@ -65,11 +65,51 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="window-style.css" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/resources/css/window-style.css">
+      <file leaf-file-name="QRGen.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/QRGen.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="351">
-              <caret line="22" column="1" selection-start-line="22" selection-start-column="1" selection-end-line="22" selection-end-column="1" />
+            <state relative-caret-position="18">
+              <caret line="4" column="41" selection-start-line="4" selection-start-column="41" selection-end-line="4" selection-end-column="41" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GrammarManager.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/grammar/GrammarManager.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="799">
+              <caret line="252" column="0" selection-start-line="252" selection-start-column="0" selection-end-line="252" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Word.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/grammar/Word.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="441">
+              <caret line="161" column="9" selection-start-line="161" selection-start-column="9" selection-end-line="161" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GfFileEditor.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/grammar/GfFileEditor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="232">
+              <caret line="222" column="0" selection-start-line="222" selection-start-column="0" selection-end-line="222" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PracticeController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/controllers/PracticeController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1728">
+              <caret line="118" column="0" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -99,9 +139,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/ui/startTab.fxml" />
-        <option value="$PROJECT_DIR$/src/ui/main-window.fxml" />
-        <option value="$PROJECT_DIR$/src/resources/style.css" />
         <option value="$PROJECT_DIR$/src/ui/Controller.java" />
         <option value="$PROJECT_DIR$/src/resources/view/start-windows.fxml" />
         <option value="$PROJECT_DIR$/src/ui/Context.java" />
@@ -124,18 +161,12 @@
         <option value="$PROJECT_DIR$/src/grammar/GfCloudProxy.java" />
         <option value="$PROJECT_DIR$/src/resources/xml/gf-resources.xml" />
         <option value="$PROJECT_DIR$/src/main/ResourceManager.java" />
-        <option value="$PROJECT_DIR$/test/grammar/WordTest.java" />
-        <option value="$PROJECT_DIR$/src/grammar/GfFileEditor.java" />
-        <option value="$PROJECT_DIR$/test/grammar/GfFileEditorTest.java" />
         <option value="$PROJECT_DIR$/test/grammar/GrammarManagerTest.java" />
         <option value="$PROJECT_DIR$/src/main/Session.java" />
         <option value="$PROJECT_DIR$/src/main/GrammarContainer.java" />
-        <option value="$PROJECT_DIR$/src/grammar/Word.java" />
         <option value="$PROJECT_DIR$/src/controllers/StartController.java" />
         <option value="$PROJECT_DIR$/grammar/Main_sweeng/WordsSwe.gf" />
-        <option value="$PROJECT_DIR$/src/grammar/GrammarManager.java" />
         <option value="$PROJECT_DIR$/src/resources/css/dialog-style.css" />
-        <option value="$PROJECT_DIR$/src/controllers/EditController.java" />
         <option value="$PROJECT_DIR$/src/resources/view/edit-window.fxml" />
         <option value="$PROJECT_DIR$/src/controllers/StatsController.java" />
         <option value="$PROJECT_DIR$/src/resources/view/stats-window.fxml" />
@@ -150,6 +181,15 @@
         <option value="$PROJECT_DIR$/src/resources/view/statistics-window.fxml" />
         <option value="$PROJECT_DIR$/src/resources/view/start-window.fxml" />
         <option value="$PROJECT_DIR$/src/resources/css/window-style.css" />
+        <option value="$PROJECT_DIR$/src/controllers/EditController.java" />
+        <option value="$PROJECT_DIR$/test/grammar/WordTest.java" />
+        <option value="$PROJECT_DIR$/grammar/Engelskaövningar_sweeng/WordsEng.gf" />
+        <option value="$PROJECT_DIR$/grammar/Engelskaövningar_sweeng/WordsSwe.gf" />
+        <option value="$PROJECT_DIR$/grammar/Engelskaövningar_sweeng/Words.gf" />
+        <option value="$PROJECT_DIR$/src/grammar/Word.java" />
+        <option value="$PROJECT_DIR$/test/grammar/GfFileEditorTest.java" />
+        <option value="$PROJECT_DIR$/src/grammar/GfFileEditor.java" />
+        <option value="$PROJECT_DIR$/src/grammar/GrammarManager.java" />
       </list>
     </option>
   </component>
@@ -197,6 +237,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -217,6 +258,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="desktop" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="desktop" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="desktop" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="grammar" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -364,14 +423,13 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Main_sweeng" />
+              <option name="myItemId" value="Engelskaövningar_sweeng" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
       <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -806,9 +864,9 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.GrammarManagerTest" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.GfFileEditorTest" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.WordTest" />
+        <item index="0" class="java.lang.String" itemvalue="JUnit.WordTest" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.GrammarManagerTest" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.GfFileEditorTest" />
         <item index="3" class="java.lang.String" itemvalue="JUnit.GrammarManagerTest.tmp" />
         <item index="4" class="java.lang.String" itemvalue="JUnit.WordTest.compareInflections" />
       </list>
@@ -836,12 +894,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="GfFileEditorTest - 2016.05.12 at 10h 40m 41s.xml">
-      <configuration name="GfFileEditorTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="GfFileEditorTest - 2016.05.12 at 10h 41m 20s.xml">
-      <configuration name="GfFileEditorTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="GfFileEditorTest - 2016.05.12 at 10h 52m 09s.xml">
       <configuration name="GfFileEditorTest" configurationId="JUnit" />
     </history-entry>
@@ -866,6 +918,12 @@
     <history-entry file="GrammarManagerTest - 2016.05.12 at 10h 58m 10s.xml">
       <configuration name="GrammarManagerTest" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="WordTest - 2016.06.01 at 10h 17m 45s.xml">
+      <configuration name="WordTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="WordTest - 2016.06.01 at 10h 19m 20s.xml">
+      <configuration name="WordTest" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="1302000" />
@@ -881,7 +939,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="21" width="1922" height="1059" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32942432" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -896,6 +954,7 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1547492" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32942432" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -912,7 +971,6 @@
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32942432" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -937,16 +995,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/grammar/GfFileManager.java" />
-    <entry file="file://$PROJECT_DIR$/src/grammar/GfFileEditor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="23" column="0" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sample/Main.java" />
-    <entry file="file://$PROJECT_DIR$/src/sample/Controller.java" />
     <entry file="file://$PROJECT_DIR$/src/sample/sample.fxml" />
     <entry file="file://$PROJECT_DIR$/src/sample/Controller.java" />
     <entry file="file://$PROJECT_DIR$/src/sample/sample.fxml" />
@@ -980,24 +1028,10 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/InflectionCallback.java" />
-    <entry file="file://$PROJECT_DIR$/test/grammar/WordTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="53">
-          <caret line="6" column="0" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="450">
           <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/grammar/GfFileEditorTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-13">
-          <caret line="12" column="32" selection-start-line="12" selection-start-column="32" selection-end-line="12" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -1023,38 +1057,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/grammar/GfFileEditor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3420">
-          <caret line="199" column="0" selection-start-line="199" selection-start-column="0" selection-end-line="199" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/resources/xml/gf-resources.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="18">
           <caret line="1" column="11" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/grammar/Word.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="158" column="31" selection-start-line="158" selection-start-column="31" selection-end-line="158" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/grammar/Main_sweeng/WordsEng.gf">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-270">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/grammar/GrammarManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="179" column="0" selection-start-line="179" selection-start-column="0" selection-end-line="179" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1068,31 +1074,24 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/resources/view/edit-window.fxml">
+      <provider editor-type-id="JavaFX-Scene-Builder">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
           <caret line="16" column="46" selection-start-line="16" selection-start-column="46" selection-end-line="16" selection-end-column="46" />
           <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/resources/view/practice-window.fxml">
       <provider editor-type-id="JavaFX-Scene-Builder">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/resources/view/practice-window.fxml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
           <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/QRGen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="106">
-          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -1100,14 +1099,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="675">
           <caret line="78" column="30" selection-start-line="78" selection-start-column="30" selection-end-line="78" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/controllers/EditController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="398">
-          <caret line="157" column="65" selection-start-line="157" selection-start-column="65" selection-end-line="158" selection-end-column="87" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1129,7 +1120,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="295">
           <caret line="96" column="15" selection-start-line="90" selection-start-column="8" selection-end-line="96" selection-end-column="15" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1140,33 +1130,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/controllers/PracticeController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="572">
-          <caret line="285" column="67" selection-start-line="285" selection-start-column="52" selection-end-line="285" selection-end-column="67" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/resources/css/list-label-style.css" />
     <entry file="file://$PROJECT_DIR$/src/controllers/StatisticsController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1089">
           <caret line="86" column="59" selection-start-line="86" selection-start-column="59" selection-end-line="86" selection-end-column="59" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/Model.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="37" column="5" selection-start-line="37" selection-start-column="5" selection-end-line="37" selection-end-column="5" />
-          <folding>
-            <element signature="e#968#969#0" expanded="true" />
-            <element signature="e#997#998#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1174,38 +1142,148 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="810">
           <caret line="54" column="36" selection-start-line="54" selection-start-column="36" selection-end-line="54" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/resources/view/statistics-window.fxml">
+      <provider editor-type-id="JavaFX-Scene-Builder">
+        <state />
+      </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="414">
           <caret line="23" column="12" selection-start-line="23" selection-start-column="12" selection-end-line="23" selection-end-column="12" />
           <folding />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/resources/view/start-window.fxml">
       <provider editor-type-id="JavaFX-Scene-Builder">
         <state />
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/resources/view/start-window.fxml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
           <caret line="7" column="35" selection-start-line="7" selection-start-column="35" selection-end-line="7" selection-end-column="35" />
           <folding />
         </state>
       </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/resources/css/window-style.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="351">
           <caret line="22" column="1" selection-start-line="22" selection-start-column="1" selection-end-line="22" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grammar/Main_sweeng/WordsEng.gf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/QRGen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="4" column="41" selection-start-line="4" selection-start-column="41" selection-end-line="4" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/grammar/WordTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="43" column="5" selection-start-line="43" selection-start-column="5" selection-end-line="43" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grammar/Main_sweeng/Words.gf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grammar/Engelskaövningar_sweeng/WordsEng.gf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="23" column="15" selection-start-line="23" selection-start-column="15" selection-end-line="23" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/Model.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2286">
+          <caret line="37" column="5" selection-start-line="37" selection-start-column="5" selection-end-line="37" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grammar/Engelskaövningar_sweeng/Words.gf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="18" column="25" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/grammar/Engelskaövningar_sweeng/WordsSwe.gf">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="23" column="15" selection-start-line="23" selection-start-column="15" selection-end-line="23" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controllers/EditController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3312">
+          <caret line="205" column="14" selection-start-line="205" selection-start-column="14" selection-end-line="205" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controllers/PracticeController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1728">
+          <caret line="118" column="0" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/grammar/Word.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="161" column="9" selection-start-line="161" selection-start-column="9" selection-end-line="161" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/grammar/GfFileEditorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/grammar/GfFileEditor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="232">
+          <caret line="222" column="0" selection-start-line="222" selection-start-column="0" selection-end-line="222" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/grammar/GrammarManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="799">
+          <caret line="252" column="0" selection-start-line="252" selection-start-column="0" selection-end-line="252" selection-end-column="0" />
           <folding />
         </state>
       </provider>
