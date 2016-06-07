@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="javase-3.2.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/javase-3.2.1.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/core-3.2.1.jar!/" />
+      <root url="jar:///usr/lib/jpgf.jar!/" />
+      <root url="file:///usr/lib" />
+      <root url="file:///usr/lib" />
+    </CLASSES>
+    <JAVADOC />
+    <NATIVE>
+      <root url="file:///usr/lib" />
+    </NATIVE>
+    <SOURCES />
+    <jarDirectory url="file:///usr/lib" recursive="false" />
+  </library>
+</component>

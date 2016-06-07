@@ -25,4 +25,6 @@ concrete WordsSwe of Words = open CommonScand, CatSwe, ParadigmsSwe in {
 		fun0 = mkN "pil" ;
 		fun1 = mkN "pil" ;
 		fun2 = mkN "pil" ;
+		fun3 = mkN "fisk" "fiskar" ;
+		fun4 = mkV "fiska" ;
 }
