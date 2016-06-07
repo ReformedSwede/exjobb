@@ -1,5 +1,6 @@
 package controllers;
 
+import grammar.GrammarManager;
 import grammar.Word;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -97,9 +98,18 @@ public class PracticeController{
         inputFld.clear();
 
         //Generate a word, distinct from the previous one
+        if(model.getNrOfWordsInPartsOfSpeech(unusedCategories) == 0)
+            new Alert(Alert.AlertType.WARNING, "No words found! Unexpected behavior might occur.").showAndWait();
+
         do{
-            currentWord = model.getRandomWord(unusedCategories.toArray(new String[0]));
-        }while(currentWord.equals(prevWord) && model.getNrOfWords() > 1);
+            try {
+                currentWord = model.getRandomWord(unusedCategories.toArray(new String[0]));
+            }catch(IllegalArgumentException e){
+                practiceWordLbl.setText("No Data");
+                infoLbl.setText("");
+                return;
+            }
+        }while(currentWord.equals(prevWord) && model.getNrOfWordsInPartsOfSpeech(unusedCategories) > 1);
         prevWord = currentWord;
         inflectionForm = currentWord.getRandomInflectionName(unusedInflections.get(currentWord.getCategory()));
 

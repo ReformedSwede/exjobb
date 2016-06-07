@@ -115,6 +115,19 @@ public class Model {
     }
 
     /**
+     * Returns the total number of words in the database
+     * @return # of words
+     */
+    public int getNrOfWordsInPartsOfSpeech(Set<String> doNotInclude){
+        int nr = 0;
+        for(String partOspeech : ResourceManager.getPartOfSpeechCats()) {
+            if(!doNotInclude.contains(partOspeech))
+                nr += manager.getAllWords(partOspeech).size();
+        }
+        return nr;
+    }
+
+    /**
      * Returns a Word object from the specified category, corresponding to the specified foreign word
      * @param category A category
      * @param foreignWord A word in the foreign language, inflected in the first listen form

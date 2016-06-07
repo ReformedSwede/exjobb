@@ -22,5 +22,4 @@ abstract Words = {
 		fun1 : Noun ;
 		fun2 : Noun ;
 		fun3 : Noun ;
-		fun4 : Verb ;
 }

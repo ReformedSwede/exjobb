@@ -26,5 +26,4 @@ concrete WordsEng of Words = open ResEng, CatEng, ParadigmsEng in {
 		fun1 = mkN "dart" ;
 		fun2 = mkN "willow" ;
 		fun3 = mkN "fish" "fish" ;
-		fun4 = mkV "fish" ;
 }
