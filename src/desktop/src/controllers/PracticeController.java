@@ -105,7 +105,7 @@ public class PracticeController{
             try {
                 currentWord = model.getRandomWord(unusedCategories.toArray(new String[0]));
             }catch(IllegalArgumentException e){
-                practiceWordLbl.setText("No Data");
+                practiceWordLbl.setText("No data");
                 infoLbl.setText("");
                 return;
             }

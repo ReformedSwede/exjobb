@@ -9,6 +9,8 @@ import javafx.fxml.JavaFXBuilderFactory;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -128,6 +130,12 @@ public class EditController{
         foreignField.clear();
         nativeField.clear();
         removeBtn.setVisible(false);
+    }
+
+    public void enterPress(KeyEvent e){
+        if(e.getCode().equals(KeyCode.ENTER) &&
+            (!nativeField.getText().equals("") && !foreignField.getText().equals("")))
+            addNewWord();
     }
 
     /**
